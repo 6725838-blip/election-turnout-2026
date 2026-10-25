@@ -1,0 +1,9 @@
+original-backup/
+.local/
+__pycache__/
+*.pyc
+_site/
+node_modules/
+.env
+.env.*
+דשבור הבחירות גרסת האתר.html

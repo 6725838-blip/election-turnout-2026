@@ -1,0 +1,58 @@
+name: Update and deploy election turnout dashboard
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      refresh_verified_feed:
+        description: Refresh an already verified and adapted official feed
+        type: boolean
+        default: false
+  # Deliberately no schedule until an official source and election date are verified.
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: election-pages
+  cancel-in-progress: false
+jobs:
+  update-and-deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Refresh only an explicitly verified source
+        if: inputs.refresh_verified_feed && vars.OFFICIAL_FEED_VERIFIED == 'true'
+        env:
+          OFFICIAL_FEED_VERIFIED: ${{ vars.OFFICIAL_FEED_VERIFIED }}
+          OFFICIAL_FEED_URL: ${{ vars.OFFICIAL_FEED_URL }}
+          ELECTION_DATE: ${{ vars.ELECTION_DATE }}
+        run: python3 scripts/update_live.py
+      - name: Validate data and dashboard
+        run: |
+          python3 -m unittest discover -s tests
+          node tests/dashboard.test.cjs
+          python3 scripts/validate_live.py live-turnout.json
+      - name: Preserve successful data snapshot
+        run: |
+          if ! git diff --quiet -- live-turnout.json; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add live-turnout.json
+            git commit -m "Update verified turnout snapshot"
+            git push origin HEAD:main
+          fi
+      # Deploy in this SAME run: GITHUB_TOKEN pushes do not trigger another workflow.
+      - name: Package public files including the updated data
+        run: python3 scripts/prepare_site.py
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+      - name: Deploy website and data together
+        id: deployment
+        uses: actions/deploy-pages@v4
