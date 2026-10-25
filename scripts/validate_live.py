@@ -31,13 +31,17 @@ def validate(feed):
     national = feed.get('national_turnout_pct')
     if national is not None:
         number(national, 'national_turnout_pct', 100)
+        if feed.get('national_as_of'):
+            timestamp(feed['national_as_of'])
     if feed['records'] or national is not None or feed.get('updated_at') is not None:
         timestamp(feed.get('updated_at'))
     seen = set()
     for row in feed['records']:
         if not isinstance(row, dict) or not isinstance(row.get('city'), str) or not row['city'].strip():
             raise ValueError('Each row requires city')
-        city = row['city'].strip()
+        import re
+        import unicodedata
+        city = re.sub(r'''[\s״׳'"־–-]''', '', unicodedata.normalize('NFKC', row['city'])).lower()
         if city in seen:
             raise ValueError('Duplicate city: ' + city)
         seen.add(city)

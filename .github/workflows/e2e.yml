@@ -1,0 +1,147 @@
+name: Public end-to-end demo cycle
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: election-pages
+  cancel-in-progress: false
+jobs:
+  test:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.first.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser test dependency
+        run: |
+          npm install --no-save --package-lock=false playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Validate and preserve production fingerprint
+        run: |
+          python3 -m unittest discover -s tests
+          node tests/dashboard.test.cjs
+          sha256sum live-turnout.json > "$RUNNER_TEMP/production.sha256"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - uses: actions/configure-pages@v5
+      - name: Commit test snapshot one
+        run: |
+          python3 scripts/update_demo.py one
+          git add test/live-turnout.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Test snapshot one (demo only)"
+            git push origin HEAD:main
+          fi
+          sha256sum --check "$RUNNER_TEMP/production.sha256"
+          python3 scripts/prepare_site.py
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          name: pages-first
+          path: _site
+      - id: first
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_name: pages-first
+      - name: Verify public snapshot one
+        env:
+          PAGE_URL: ${{ steps.first.outputs.page_url }}
+        run: python3 scripts/verify_public.py "$PAGE_URL"
+      - name: Start browser and keep page open across deployments
+        env:
+          PAGE_URL: ${{ steps.first.outputs.page_url }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/poll"
+          node tests/public_poll.cjs "$PAGE_URL" "$RUNNER_TEMP/poll" > "$RUNNER_TEMP/poll/browser.log" 2>&1 &
+          for i in $(seq 1 60); do
+            if [ -f "$RUNNER_TEMP/poll/ready" ]; then exit 0; fi
+            if [ -f "$RUNNER_TEMP/poll/failed" ]; then cat "$RUNNER_TEMP/poll/browser.log"; exit 1; fi
+            sleep 2
+          done
+          cat "$RUNNER_TEMP/poll/browser.log"
+          exit 1
+      - name: Commit test snapshot two
+        run: |
+          python3 scripts/update_demo.py two
+          git add test/live-turnout.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Test snapshot two (demo only)"
+            git push origin HEAD:main
+          fi
+          sha256sum --check "$RUNNER_TEMP/production.sha256"
+          python3 scripts/prepare_site.py
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          name: pages-second
+          path: _site
+      - id: second
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_name: pages-second
+      - name: Verify public snapshot two
+        env:
+          PAGE_URL: ${{ steps.second.outputs.page_url }}
+        run: python3 scripts/verify_public.py "$PAGE_URL"
+      - name: Wait for automatic two-minute browser refresh (no reload)
+        run: |
+          for i in $(seq 1 60); do
+            if [ -f "$RUNNER_TEMP/poll/second" ]; then cat "$RUNNER_TEMP/poll/browser.log"; exit 0; fi
+            if [ -f "$RUNNER_TEMP/poll/failed" ]; then cat "$RUNNER_TEMP/poll/browser.log"; exit 1; fi
+            sleep 5
+          done
+          cat "$RUNNER_TEMP/poll/browser.log"
+          exit 1
+      - name: Commit test snapshot clear
+        if: always()
+        run: |
+          python3 scripts/update_demo.py clear
+          git add test/live-turnout.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Test snapshot clear (demo only)"
+            git push origin HEAD:main
+          fi
+          sha256sum --check "$RUNNER_TEMP/production.sha256"
+          python3 scripts/prepare_site.py
+      - uses: actions/upload-pages-artifact@v4
+        if: always()
+        with:
+          name: pages-clean
+          path: _site
+      - id: clean
+        if: always()
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_name: pages-clean
+      - name: Verify public snapshot clear
+        if: always()
+        env:
+          PAGE_URL: ${{ steps.clean.outputs.page_url }}
+        run: python3 scripts/verify_public.py "$PAGE_URL"
+      - name: Verify automatic return to waiting state
+        if: always()
+        run: |
+          for i in $(seq 1 60); do
+            if [ -f "$RUNNER_TEMP/poll/done" ]; then cat "$RUNNER_TEMP/poll/report.json" >> "$GITHUB_STEP_SUMMARY"; exit 0; fi
+            if [ -f "$RUNNER_TEMP/poll/failed" ]; then cat "$RUNNER_TEMP/poll/browser.log"; exit 1; fi
+            sleep 5
+          done
+          cat "$RUNNER_TEMP/poll/browser.log"
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: public-browser-evidence
+          path: ${{ runner.temp }}/poll
+          retention-days: 7

@@ -6,6 +6,7 @@ from pathlib import Path
 import urllib.parse
 import urllib.request
 from validate_live import validate, timestamp
+from merge_live import merge_snapshot
 
 DEST = Path(__file__).resolve().parents[1] / 'live-turnout.json'
 
@@ -37,6 +38,7 @@ def main():
     existing = json.loads(DEST.read_text(encoding='utf-8-sig')) if DEST.exists() else {}
     if existing.get('updated_at') and updated < timestamp(existing['updated_at']):
         raise ValueError('Refusing an older snapshot')
+    feed = merge_snapshot(existing, feed)
     temporary = DEST.with_suffix('.json.tmp')
     temporary.write_text(json.dumps(feed, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
     temporary.replace(DEST)

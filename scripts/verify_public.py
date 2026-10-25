@@ -15,12 +15,12 @@ def main(base):
         raise ValueError('Public HTTPS URL required')
     for attempt in range(30):
         try:
-            for name in ('index.html', 'live-turnout.json'):
+            for name in ('index.html', 'live-turnout.json','test/index.html','test/live-turnout.json'):
                 url=base.rstrip('/')+'/'+name+'?deployment_check='+str(time.time_ns())
                 request=urllib.request.Request(url, headers={'Cache-Control':'no-cache', 'User-Agent':'ElectionDashboard-DeploymentCheck'})
                 with urllib.request.urlopen(request, timeout=20) as response:
                     actual=response.read(2_000_001)
-                expected=(ROOT/name).read_bytes()
+                expected=(ROOT/'_site'/name).read_bytes()
                 if actual != expected:
                     raise ValueError(f'{name}: public content does not match the deployed commit yet')
                 if name.endswith('.json'):

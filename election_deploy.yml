@@ -5,58 +5,87 @@ on:
   workflow_dispatch:
     inputs:
       refresh_verified_feed:
-        description: Refresh an already verified and adapted official feed
+        description: Refresh an already verified official feed
         type: boolean
         default: false
-  # Deliberately no schedule until an official source and election date are verified.
+  schedule:
+    # UTC; 07:07-23:47 Israel time on 27 October (UTC+2).
+    - cron: '7,27,47 5-21 27 10 *'
 permissions:
-  contents: write
-  pages: write
-  id-token: write
+  contents: read
 concurrency:
   group: election-pages
   cancel-in-progress: false
 jobs:
-  update-and-deploy:
+  update:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      contents: write
+    outputs:
+      sha: ${{ steps.revision.outputs.sha }}
+      deploy: ${{ steps.revision.outputs.deploy }}
     steps:
       - uses: actions/checkout@v4
-      - name: Refresh only an explicitly verified source
-        if: inputs.refresh_verified_feed && vars.OFFICIAL_FEED_VERIFIED == 'true'
+        with:
+          ref: main
+      - id: gate
+        run: python3 scripts/schedule_gate.py
+      - name: Refresh only verified data in the election window
+        if: vars.OFFICIAL_FEED_VERIFIED == 'true' && (inputs.refresh_verified_feed || (github.event_name == 'schedule' && steps.gate.outputs.active == 'true'))
         env:
           OFFICIAL_FEED_VERIFIED: ${{ vars.OFFICIAL_FEED_VERIFIED }}
           OFFICIAL_FEED_URL: ${{ vars.OFFICIAL_FEED_URL }}
           ELECTION_DATE: ${{ vars.ELECTION_DATE }}
         run: python3 scripts/update_live.py
-      - name: Validate data and dashboard
+      - name: Validate
         run: |
           python3 -m unittest discover -s tests
           node tests/dashboard.test.cjs
           python3 scripts/validate_live.py live-turnout.json
-      - name: Preserve successful data snapshot
+      - id: revision
+        name: Commit valid changes and select exact deployment revision
         run: |
+          changed=false
           if ! git diff --quiet -- live-turnout.json; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add live-turnout.json
             git commit -m "Update verified turnout snapshot"
             git push origin HEAD:main
+            changed=true
           fi
-      # Deploy in this SAME run: GITHUB_TOKEN pushes do not trigger another workflow.
-      - name: Package public files including the updated data
-        run: python3 scripts/prepare_site.py
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          if [ "$GITHUB_EVENT_NAME" != schedule ] || [ "$changed" = true ]; then
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "deploy=false" >> "$GITHUB_OUTPUT"
+            echo "No new verified data; existing website preserved." >> "$GITHUB_STEP_SUMMARY"
+          fi
+  deploy:
+    needs: update
+    if: needs.update.outputs.deploy == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.update.outputs.sha }}
+          persist-credentials: false
+      - run: python3 scripts/prepare_site.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
           path: _site
-      - name: Deploy website and data together
-        id: deployment
+      - id: deployment
         uses: actions/deploy-pages@v4
-      - name: Verify public website and data match this commit
+      - name: Verify public HTML and JSON
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
         run: python3 scripts/verify_public.py "$PAGE_URL"
