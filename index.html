@@ -101,6 +101,22 @@
 .scenario-details .scenario-foot{font-size:11px;color:#846d47;margin:10px 0 0;line-height:1.75}
 @media(max-width:650px){.simulation-launch{flex-direction:column;align-items:stretch}.scenario-button{white-space:normal}.scenario-kpis{grid-template-columns:1fr}}
 @media print{.simulation-launch{display:none}.scenario-details{break-inside:avoid}}
+
+/* Election-day countdown in header */
+.election-timer{margin-top:16px;padding:14px 16px;border-radius:14px;border:1px solid #ffffff35;background:linear-gradient(120deg,#ffffff14,#ffffff08)}
+.election-timer-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.election-timer-label{font-size:13px;font-weight:800;color:#e8f3fc;margin:0 0 4px}
+.election-timer-sub{font-size:12px;color:#b7d0e4;margin:0;max-width:52ch;line-height:1.65}
+.election-timer-digits{display:flex;gap:8px;flex-wrap:wrap;direction:ltr;unicode-bidi:isolate;font-variant-numeric:tabular-nums}
+.timer-unit{min-width:58px;padding:8px 10px;border-radius:10px;background:#0c223ab8;border:1px solid #ffffff22;text-align:center}
+.timer-unit b{display:block;font-size:22px;line-height:1.15;color:#fff;font-weight:800}
+.timer-unit span{display:block;font-size:10px;color:#9eb8ce;margin-top:3px;direction:rtl;unicode-bidi:embed}
+.election-timer-note{margin:10px 0 0;font-size:11px;color:#9eb9cf;line-height:1.6}
+.election-timer[data-phase=voting]{border-color:#59cf9e66;background:linear-gradient(120deg,#1a4d3f33,#ffffff08)}
+.election-timer[data-phase=closed]{border-color:#ffffff28;opacity:.96}
+.election-timer[data-phase=closed] .election-timer-digits{display:none}
+@media(max-width:600px){.timer-unit{min-width:48px;padding:7px 8px}.timer-unit b{font-size:18px}.election-timer-sub{max-width:none}}
+@media print{.election-timer{border-color:#ccc;background:#f7f7f7;color:#222}.election-timer-label,.timer-unit b{color:#111}.election-timer-sub,.election-timer-note,.timer-unit span{color:#444}.timer-unit{background:#eee;border-color:#ddd}}
 </style>
 </head>
 <body><main class="wrap">
@@ -108,6 +124,21 @@
  <div class="eyebrow">דשבורד ניסיוני · בחירות לכנסת ה־26 · 27.10.2026</div>
  <h1>מדד השתתפות ביישובים</h1>
  <div class="sub">מעקב לפי יישובים וקבוצות מחקר, עם השוואה לשיעורי ההצבעה ב־2020–2022. הנתונים העכשוויים יופיעו רק כשהתקבלו ממקור נתונים; אין כאן תחזית מנדטים.</div>
+ <div class="election-timer" id="electionTimer" data-phase="before" aria-label="ספירה לאחור ליום הבחירות">
+  <div class="election-timer-top">
+   <div>
+    <p class="election-timer-label" id="timerLabel">עד פתיחת הקלפיות</p>
+    <p class="election-timer-sub" id="timerSub" aria-live="polite">אחרי 07:00 נוכל לעקוב איך שיעור ההצבעה מתקדם בכל קבוצה לעומת 2022</p>
+   </div>
+   <div class="election-timer-digits" id="timerDigits" aria-hidden="true">
+    <div class="timer-unit" data-unit="days"><b id="tDays">—</b><span>ימים</span></div>
+    <div class="timer-unit" data-unit="hours"><b id="tHours">—</b><span>שעות</span></div>
+    <div class="timer-unit" data-unit="mins"><b id="tMins">—</b><span>דקות</span></div>
+    <div class="timer-unit" data-unit="secs"><b id="tSecs">—</b><span>שניות</span></div>
+   </div>
+  </div>
+  <p class="election-timer-note">ברוב הקלפיות 07:00–22:00 · ביישובים קטנים, בתי חולים, בתי סוהר ובתי אבות — 08:00–20:00</p>
+ </div>
  <div class="statbar"><span class="pill"><span class="dot" id="connDot"></span><span id="connStatus">ממתין לנתונים חיים</span></span><span class="pill" id="lastUpdate">עודכן לאחרונה: —</span><span class="pill" id="sourceName">מקור: לא מחובר</span></div>
 </header>
 <div id="demoBanner" style="display:none;background:#fff1cb;border:2px solid #e7ae37;border-radius:12px;padding:13px 18px;margin:14px 0;font-weight:bold;color:#704400;text-align:center" role="status">⚠ נתוני הדגמה בלבד — אלה אינם נתוני בחירות אמיתיים. נועדו רק לבדיקת פעולת האתר.</div>
@@ -546,6 +577,59 @@ $('refresh').onclick=()=>fetchFeed();$('feedUrl').onchange=()=>{if(testEnvironme
 $('filterCity').oninput=render;$('sort').onchange=render;$('print').onclick=()=>window.print();$('upload').onchange=async ev=>{let f=ev.target.files?.[0];if(!f)return;try{const text=await f.text();let obj=f.name.toLowerCase().endsWith('.csv')?csvToFeed(text):JSON.parse(text);ingest(obj,'קובץ מקומי')}catch(e){setStatus('קובץ לא תקין: '+e.message,'err')}ev.target.value=''};
 $('export').onclick=()=>{let header=['קבוצה','יישוב','נבחר','תמיכה 2022','הצבעה 2020','הצבעה 2021','הצבעה 2022','הצבעה 2026','פער 2026-2022','דיווח מלא'];let lines=[header];rows.forEach(x=>{let live=getLive(x.name),p=livePct(live);lines.push([groups.find(g=>g.id===x.group).title,x.name,state.selected.has(x.key)?'כן':'לא',x.subshare2022??x.share2022??'',x.p2020??'',x.p2021,x.p2022,p??'',p!=null?(p-x.p2022).toFixed(2):'',complete(live)?'כן':'לא'])});let output='\uFEFF'+lines.map(r=>r.map(c=>'"'+String(c).replaceAll('"','""')+'"').join(',')).join('\r\n');let blob=new Blob([output],{type:'text/csv;charset=utf-8'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='election-turnout-dashboard-2026.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
 try{let stored=testEnvironment?null:localStorage.getItem('election_feed_url');if(stored)$('feedUrl').value=stored}catch{}
+
+/* Asia/Jerusalem wall times for election day (DST ended 25.10.2026 → UTC+2). */
+const POLL_OPEN=new Date('2026-10-27T07:00:00+02:00');
+const POLL_CLOSE=new Date('2026-10-27T22:00:00+02:00');
+let timerPhase=null,timerMinuteKey=null;
+function pad2(n){return String(n).padStart(2,'0')}
+function splitRemain(ms){
+ const total=Math.max(0,Math.floor(ms/1000));
+ return {days:Math.floor(total/86400),hours:Math.floor((total%86400)/3600),mins:Math.floor((total%3600)/60),secs:total%60};
+}
+function timerCopy(phase){
+ const live=state.live.size>0;
+ if(phase==='before')return{label:'עד פתיחת הקלפיות',sub:live?'המדד כבר מחובר לנתונים — אחרי 07:00 נעקוב אחרי התקדמות ההצבעה בכל קבוצה':'אחרי 07:00 נוכל לעקוב איך שיעור ההצבעה מתקדם בכל קבוצה לעומת 2022'};
+ if(phase==='voting')return{label:'הקלפיות פתוחות · עד הסגירה',sub:live?'המדד מעודכן מנתונים חיים — משווים התקדמות השתתפות לפי קבוצה מול הארצי, לא תחזית תוצאות':'המדד משווה התקדמות השתתפות לפי קבוצה מול הארצי — לא תחזית תוצאות'};
+ return{label:'הקלפיות נסגרו',sub:live?'הדיווחים ממשיכים להתעדכן; המדד נשאר השוואת השתתפות לפי קבוצה':'הדיווחים ממשיכים להתעדכן כשיתפרסמו; המדד נשאר השוואת השתתפות לפי קבוצה'};
+}
+function updateElectionTimer(now=new Date()){
+ const root=$('electionTimer');if(!root)return;
+ let phase='before',target=POLL_OPEN;
+ if(now>=POLL_CLOSE){phase='closed';target=null}
+ else if(now>=POLL_OPEN){phase='voting';target=POLL_CLOSE}
+ root.dataset.phase=phase;
+ const copy=timerCopy(phase);
+ const minuteKey=Math.floor(now.getTime()/60000);
+ const liveFlag=state.live.size>0?'1':'0';
+ if(phase!==timerPhase||minuteKey!==timerMinuteKey||root.dataset.live!==liveFlag){
+  $('timerLabel').textContent=copy.label;
+  $('timerSub').textContent=copy.sub;
+  let spoken=copy.label+'. '+copy.sub;
+  if(phase!=='closed'&&target){
+   const rem=splitRemain(target-now);
+   const parts=rem.days>0?[rem.days+' ימים']:[];
+   parts.push(rem.hours+' שעות',rem.mins+' דקות');
+   spoken=copy.label+': '+parts.join(', ')+'. '+copy.sub;
+  }
+  root.setAttribute('aria-label',spoken);
+  root.dataset.live=liveFlag;
+  timerPhase=phase;timerMinuteKey=minuteKey;
+ }
+ if(phase==='closed')return;
+ const rem=splitRemain(target-now);
+ const showDays=rem.days>0;
+ root.querySelector('[data-unit=days]').hidden=!showDays;
+ $('tDays').textContent=String(rem.days);
+ $('tHours').textContent=pad2(rem.hours);
+ $('tMins').textContent=pad2(rem.mins);
+ $('tSecs').textContent=pad2(rem.secs);
+}
+const _render=render;
+render=function(){_render();updateElectionTimer()};
+updateElectionTimer();
+setInterval(()=>updateElectionTimer(),1000);
+
 render();if(location.protocol==='http:'||location.protocol==='https:')fetchFeed(true);else setStatus('הקובץ נפתח מהמחשב. אפשר לייבא קובץ נתונים; לצורך רענון אוטומטי יש לפתוח אותו באמצעות אתר מאוחסן.');setInterval(()=>{if(location.protocol==='http:'||location.protocol==='https:')fetchFeed(true)},120000);
 })();
 </script></body></html>
