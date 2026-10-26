@@ -1,21 +1,27 @@
 name: Refresh Polymarket snapshot
+# GitHub `schedule` cron never fires on this repo (0 schedule runs ever).
+# Instead: self-chain via workflow_dispatch + sleep (public repo = free minutes).
 on:
-  schedule:
-    # GitHub may delay cron under load; */10 is more reliable than */5.
-    - cron: '3,13,23,33,43,53 * * * *'
   workflow_dispatch:
+  # Kept as a free bonus if GitHub cron ever starts working.
+  schedule:
+    - cron: '7 * * * *'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/polymarket_refresh.yml'
+      - 'scripts/update_polymarket.py'
 permissions:
   contents: write
+  actions: write
+  pages: write
+  id-token: write
 concurrency:
   group: polymarket-refresh
   cancel-in-progress: false
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -25,9 +31,12 @@ jobs:
         with:
           node-version: '20'
       - name: Refresh Polymarket snapshot
+        id: snap
+        continue-on-error: true
         run: python3 scripts/update_polymarket.py
       - name: Commit when snapshot changed
         id: commit
+        if: steps.snap.outcome == 'success'
         run: |
           if git diff --quiet -- polymarket-pm.json; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
@@ -38,7 +47,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add polymarket-pm.json
           git commit -m "Refresh Polymarket same-origin snapshot"
-          # GITHUB_TOKEN pushes do not re-trigger workflows — deploy Pages here.
+          # GITHUB_TOKEN push does not re-trigger workflows — Pages deploy below.
           git push origin HEAD:main
           echo "changed=true" >> "$GITHUB_OUTPUT"
       - name: Package site
@@ -53,4 +62,12 @@ jobs:
       - id: deployment
         if: steps.commit.outputs.changed == 'true'
         uses: actions/deploy-pages@v4
-        # Deploy without environment protection so scheduled runs are not blocked.
+      - name: Wait then queue next refresh
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # ~8 minutes between snapshots (runner sleep is free on public repos).
+          sleep 480
+          gh workflow run "Refresh Polymarket snapshot" --ref main
+          echo "Queued next Polymarket refresh." >> "$GITHUB_STEP_SUMMARY"
