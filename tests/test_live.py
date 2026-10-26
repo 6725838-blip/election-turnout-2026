@@ -62,4 +62,22 @@ class SnapshotTests(unittest.TestCase):
                 with self.assertRaises(ValueError): update_live.main()
                 self.assertEqual(json.loads(dest.read_text()), previous)
 
+    def test_html_feed_soft_exits(self):
+        previous=dict(format_version=1, source='Not connected', updated_at=None, national_turnout_pct=None, records=[])
+        with tempfile.TemporaryDirectory() as folder:
+            dest=Path(folder)/'live-turnout.json'
+            dest.write_text(json.dumps(previous), encoding='utf-8')
+            with patch.object(update_live, 'DEST', dest), patch.dict(os.environ, {
+                'OFFICIAL_FEED_VERIFIED':'true',
+                'OFFICIAL_FEED_URL':'https://example.invalid/fixture',
+                'OFFICIAL_FEED_FORMAT':'govmap_municipal',
+                'ELECTION_DATE':'2026-10-27',
+            }), patch.object(update_live.urllib.request, 'urlopen') as request:
+                response=request.return_value.__enter__.return_value
+                response.status=200
+                response.url='https://example.invalid/fixture'
+                response.read.return_value=b'<!DOCTYPE html><html></html>'
+                update_live.main()
+                self.assertEqual(json.loads(dest.read_text(encoding='utf-8')), previous)
+
 if __name__ == '__main__': unittest.main()

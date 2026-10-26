@@ -32,7 +32,7 @@
 
 Repository Variables לאחר אימות:
 
-- `OFFICIAL_FEED_VERIFIED`: `true` רק לאחר אימות.
+- `OFFICIAL_FEED_VERIFIED`: `true` אחרי שה־URL והפורמט הוגדרו. אם הכתובת עדיין מחזירה HTML/404, העדכון יוצא בשקט ושומר את הגרסה הקודמת (בלי להכשיל את Actions).
 - `OFFICIAL_FEED_URL`: למשל `https://elections.govmap.gov.il/data/votes/26/municipal_data.json` (HTTPS, בלי סיסמאות).
 - `OFFICIAL_FEED_FORMAT`: `govmap_municipal` לפיד GovMap, או `live` אם ה־URL כבר בסכמת `live-turnout.json`.
 - `ELECTION_DATE`: `2026-10-27`.
