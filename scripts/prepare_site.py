@@ -9,10 +9,11 @@ for name in ('index.html', 'live-turnout.json', 'turnout-history.json', 'polymar
     src = ROOT / name
     if src.exists():
         shutil.copyfile(src, target / name)
-data_src = ROOT / 'data' / 'national_hourly_history.json'
-if data_src.exists():
-    (target / 'data').mkdir(exist_ok=True)
-    shutil.copyfile(data_src, target / 'data' / 'national_hourly_history.json')
+(target / 'data').mkdir(exist_ok=True)
+for name in ('national_hourly_history.json', 'historical_group_turnout.json'):
+    data_src = ROOT / 'data' / name
+    if data_src.exists():
+        shutil.copyfile(data_src, target / 'data' / name)
 test=target/'test'
 test.mkdir(exist_ok=True)
 html=(ROOT/'index.html').read_text(encoding='utf-8')

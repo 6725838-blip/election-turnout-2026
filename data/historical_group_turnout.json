@@ -1,0 +1,255 @@
+{
+  "format_version": 1,
+  "method": "official_voters_over_eligible_fixed_membership",
+  "method_he": "שיעור קבוצתי = סך מצביעים ÷ סך זכאים באותה שנה, על אותם יישובים פעילים בקבוצה כיום. מקור: קובצי ישובים של ועדת הבחירות (data.gov.il).",
+  "national_final_pct": {
+    "2020": 71.52,
+    "2021": 67.44,
+    "2022": 70.63
+  },
+  "active_n": 44,
+  "groups": {
+    "right": {
+      "id": "right",
+      "n": 10,
+      "cities": [
+        "מעלה אדומים",
+        "דימונה",
+        "שדרות",
+        "קריית שמונה",
+        "טירת כרמל",
+        "באר שבע",
+        "קריית אתא",
+        "עפולה",
+        "אילת",
+        "אשקלון"
+      ],
+      "years": {
+        "2020": {
+          "turnout_pct": 61.822845449487474,
+          "eligible": 530215,
+          "voters": 327794,
+          "n": 10,
+          "missing_cities": [],
+          "complete": true,
+          "gap_vs_national_pp": -9.697154550512522
+        },
+        "2021": {
+          "turnout_pct": 57.16023231723987,
+          "eligible": 537713,
+          "voters": 307358,
+          "n": 10,
+          "missing_cities": [],
+          "complete": true,
+          "gap_vs_national_pp": -10.27976768276013
+        },
+        "2022": {
+          "turnout_pct": 61.22947659549051,
+          "eligible": 552479,
+          "voters": 338280,
+          "n": 10,
+          "missing_cities": [],
+          "complete": true,
+          "gap_vs_national_pp": -9.400523404509485
+        }
+      },
+      "delta_2021_to_2022_pp": 4.069244278250643
+    },
+    "opp": {
+      "id": "opp",
+      "n": 10,
+      "cities": [
+        "קריית אונו",
+        "כפר סבא",
+        "הרצליה",
+        "רמת גן",
+        "גבעתיים",
+        "הוד השרון",
+        "רמת השרון",
+        "נס ציונה",
+        "שוהם",
+        "זכרון יעקב"
+      ],
+      "years": {
+        "2020": {
+          "turnout_pct": 70.2648819630722,
+          "eligible": 524158,
+          "voters": 368299,
+          "n": 10,
+          "missing_cities": [],
+          "complete": true,
+          "gap_vs_national_pp": -1.2551180369277972
+        },
+        "2021": {
+          "turnout_pct": 69.0228210001277,
+          "eligible": 532492,
+          "voters": 367541,
+          "n": 10,
+          "missing_cities": [],
+          "complete": true,
+          "gap_vs_national_pp": 1.5828210001277085
+        },
+        "2022": {
+          "turnout_pct": 69.16891747326919,
+          "eligible": 546841,
+          "voters": 378244,
+          "n": 10,
+          "missing_cities": [],
+          "complete": true,
+          "gap_vs_national_pp": -1.4610825267308059
+        }
+      },
+      "delta_2021_to_2022_pp": 0.14609647314148333
+    },
+    "haredi": {
+      "id": "haredi",
+      "n": 5,
+      "cities": [
+        "בני ברק",
+        "אלעד",
+        "ביתר עילית",
+        "מודיעין עילית",
+        "רכסים"
+      ],
+      "years": {
+        "2020": {
+          "turnout_pct": 79.83784650227253,
+          "eligible": 193397,
+          "voters": 154404,
+          "n": 5,
+          "missing_cities": [],
+          "complete": true,
+          "gap_vs_national_pp": 8.31784650227253
+        },
+        "2021": {
+          "turnout_pct": 76.51116655144429,
+          "eligible": 199614,
+          "voters": 152727,
+          "n": 5,
+          "missing_cities": [],
+          "complete": true,
+          "gap_vs_national_pp": 9.071166551444293
+        },
+        "2022": {
+          "turnout_pct": 79.21337521493136,
+          "eligible": 208206,
+          "voters": 164927,
+          "n": 5,
+          "missing_cities": [],
+          "complete": true,
+          "gap_vs_national_pp": 8.583375214931365
+        }
+      },
+      "delta_2021_to_2022_pp": 2.7022086634870703
+    },
+    "arab": {
+      "id": "arab",
+      "n": 10,
+      "cities": [
+        "נצרת",
+        "רהט",
+        "טייבה",
+        "סחנין",
+        "שפרעם",
+        "טמרה",
+        "אום אל־פחם",
+        "טירה",
+        "כפר קאסם",
+        "עראבה"
+      ],
+      "years": {
+        "2020": {
+          "turnout_pct": 68.40133937195475,
+          "eligible": 279534,
+          "voters": 191205,
+          "n": 10,
+          "missing_cities": [],
+          "complete": true,
+          "gap_vs_national_pp": -3.118660628045248
+        },
+        "2021": {
+          "turnout_pct": 46.35523828059834,
+          "eligible": 287728,
+          "voters": 133377,
+          "n": 10,
+          "missing_cities": [],
+          "complete": true,
+          "gap_vs_national_pp": -21.084761719401655
+        },
+        "2022": {
+          "turnout_pct": 55.12989357150497,
+          "eligible": 299168,
+          "voters": 164931,
+          "n": 10,
+          "missing_cities": [],
+          "complete": true,
+          "gap_vs_national_pp": -15.500106428495023
+        }
+      },
+      "delta_2021_to_2022_pp": 8.77465529090663
+    },
+    "zionism": {
+      "id": "zionism",
+      "n": 9,
+      "cities": [
+        "טלמון",
+        "בית אל",
+        "קדומים",
+        "קריית ארבע",
+        "יד בנימין",
+        "כפר חב״ד",
+        "קרני שומרון",
+        "אלקנה",
+        "אפרת"
+      ],
+      "years": {
+        "2020": {
+          "turnout_pct": 75.90448835117648,
+          "eligible": 34467,
+          "voters": 26162,
+          "n": 9,
+          "missing_cities": [],
+          "complete": true,
+          "gap_vs_national_pp": 4.384488351176486
+        },
+        "2021": {
+          "turnout_pct": 73.14988938053098,
+          "eligible": 36160,
+          "voters": 26451,
+          "n": 9,
+          "missing_cities": [],
+          "complete": true,
+          "gap_vs_national_pp": 5.709889380530981
+        },
+        "2022": {
+          "turnout_pct": 73.55606189063163,
+          "eligible": 37744,
+          "voters": 27763,
+          "n": 9,
+          "missing_cities": [],
+          "complete": true,
+          "gap_vs_national_pp": 2.9260618906316296
+        }
+      },
+      "delta_2021_to_2022_pp": 0.4061725101006459
+    }
+  },
+  "coverage_complete": true,
+  "insights": [
+    {
+      "title": "העלייה הגדולה ביותר מ־2021 ל־2022",
+      "body": "בערים ערביות השיעור עלה ב־8.8 נקודות אחוז — עדיין חשוב להסתכל גם על 2020 כרקע למחזוריות.",
+      "group": "arab"
+    },
+    {
+      "title": "יציבות יחסית בין 2021 ל־2022",
+      "body": "בערי מרכז–שמאל (60% ומעלה) השינוי היה כ־+0.1 נקודות אחוז בלבד — בסיס שימושי לבדיקת משקולות בין מערכות.",
+      "group": "opp"
+    },
+    {
+      "title": "פער יציב מול הארצי",
+      "body": "בערי גוש נתניהו הפער מול השיעור הארצי נשאר בסביבות -9.8 נקודות אחוז בשלוש המערכות — רמז לפער השתתפות יחסי יציב, לא רק לרמת הצבעה מוחלטת.",
+      "group": "right"
+    }
+  ]
+}

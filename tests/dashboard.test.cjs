@@ -25,7 +25,7 @@ const context=vm.createContext({
 });
 context.globalThis=context;
 const script=html.match(/<script>\s*([\s\S]*?)<\/script>\s*<\/body>/)[1]
- .replace(/\}\)\(\);\s*$/, 'globalThis.api={state,rows,ingest,fetchFeed,newPulseStats,nationalLive,groupStats};})();');
+ .replace(/\}\)\(\);\s*$/, 'globalThis.api={state,rows,ingest,fetchFeed,newPulseStats,nationalLive,groupStats,buildHistoricalComparison,buildHistoricalInsights,primaryGroups};})();');
 vm.runInContext(script,context);
 const {api}=context;
 assert.equal(api.rows.length,50);assert.equal(api.state.selected.size,44);assert.equal(api.state.live.size,0);
@@ -78,5 +78,17 @@ const empty={format_version:1,source:'Not connected',updated_at:null,national_tu
  element('scenarioDemo').onclick();
  resolve({ok:true,json:async()=>empty});await pending;
  assert.equal(api.newPulseStats(api.rows).completeCount,44,'old request cannot overwrite a newer user selection');
- console.log('Dashboard checks passed: board stats, preservation, partial coverage, demo isolation, refresh, empty snapshots, failures and races.');
+ const hist=api.buildHistoricalComparison(api.rows.filter(r=>r.active&&api.primaryGroups.includes(r.group)));
+ assert.equal(hist.active_n,44);
+ assert.equal(Object.keys(hist.groups).length,5);
+ assert.ok(hist.coverage_complete);
+ for(const gid of api.primaryGroups){
+  assert.ok(hist.groups[gid].years[2022].turnout_pct!=null);
+  assert.ok(hist.groups[gid].years[2021].turnout_pct!=null);
+  assert.ok(hist.groups[gid].years[2020].turnout_pct!=null);
+  assert.ok(hist.groups[gid].delta_2021_to_2022_pp!=null);
+ }
+ assert.ok(Math.abs(hist.groups.arab.delta_2021_to_2022_pp-8.77)<0.05);
+ assert.ok(api.buildHistoricalInsights(hist).length<=3);
+ console.log('Dashboard checks passed: board stats, preservation, partial coverage, demo isolation, refresh, empty snapshots, failures, races, historical panel.');
 })().catch(e=>{console.error(e);process.exitCode=1});
