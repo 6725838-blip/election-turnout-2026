@@ -144,17 +144,32 @@ button.primary:hover{background:#0a5748}
 .pm-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:10px}
 .pm-meta{font-size:.8125rem;color:var(--muted);margin:0 0 12px;line-height:1.55}
 .pm-list{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:var(--radius);background:var(--elev);overflow:hidden}
-.pm-row{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(100px,1.4fr) auto;gap:12px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}
+.pm-row{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(120px,1.5fr) auto;gap:12px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line);cursor:pointer;text-align:start;width:100%;background:transparent;font:inherit;color:inherit;border-inline:0;border-top:0;border-radius:0;transition:background .15s ease}
 .pm-row:last-child{border-bottom:0}
-.pm-name{font-weight:700;font-size:.9375rem;display:flex;gap:10px;align-items:center;min-width:0}
-.pm-name img{width:28px;height:28px;border-radius:2px;object-fit:cover;background:#dce4df;flex-shrink:0}
-.pm-name span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pm-bar{height:8px;background:#d9e2dd;border-radius:2px;overflow:hidden}
-.pm-bar i{display:block;height:100%;background:var(--live);border-radius:2px}
-.pm-pct{font-variant-numeric:tabular-nums;font-weight:800;direction:ltr;unicode-bidi:isolate;text-align:end;min-width:3.5rem}
+.pm-row:hover,.pm-row:focus-visible{background:#f0f4f2;outline:none}
+.pm-row.active{background:#eef3f0;box-shadow:inset 3px 0 0 var(--pm,var(--live))}
+.pm-name{font-weight:700;font-size:.95rem;display:flex;gap:10px;align-items:center;min-width:0}
+.pm-name img{width:36px;height:36px;border-radius:2px;object-fit:cover;background:#dce4df;flex-shrink:0}
+.pm-name .who{min-width:0}.pm-name .who b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:800}
+.pm-name .who small{display:block;color:var(--muted);font-weight:500;font-size:.78rem;margin-top:2px}
+.pm-bar{height:10px;background:#d9e2dd;border-radius:2px;overflow:hidden}
+.pm-bar i{display:block;height:100%;background:var(--pm,var(--live));border-radius:2px}
+.pm-pct{font-variant-numeric:tabular-nums;font-weight:800;font-size:1.15rem;direction:ltr;unicode-bidi:isolate;text-align:end;min-width:4rem;color:var(--navy)}
 .pm-empty{padding:20px;color:var(--muted);font-size:.875rem}
 .pm-note{margin-top:10px;font-size:.8125rem;color:var(--muted);line-height:1.6}
-@media(max-width:600px){.pm-row{grid-template-columns:1fr auto;gap:8px}.pm-bar{grid-column:1/-1}}
+.pm-chart-wrap{margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:var(--radius);background:#0b1218;color:#eef2f0}
+.pm-chart-wrap.hidden{display:none!important}
+.pm-chart-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:10px}
+.pm-chart-top h3{margin:0;font-size:1rem;font-weight:800;color:#fff}
+.pm-chart-top .pm-chart-sub{margin:4px 0 0;font-size:.8125rem;color:#a8b8b1}
+.pm-res{display:flex;gap:4px;flex-wrap:wrap}
+.pm-res button{border:1px solid #2a3a44;background:#151f28;color:#c5d0cb;border-radius:var(--radius);padding:6px 10px;font-size:.75rem;font-weight:700;cursor:pointer}
+.pm-res button.on{background:#b86a0a;border-color:#b86a0a;color:#fff}
+.pm-res button:focus-visible{outline:2px solid #b86a0a;outline-offset:2px}
+#pmChart{width:100%;height:240px;display:block}
+.pm-chart-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:8px;font-size:.75rem;color:#8fa39b;font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+.pm-chart-status{margin-top:8px;font-size:.8125rem;color:#a8b8b1}
+@media(max-width:600px){.pm-row{grid-template-columns:1fr auto;gap:8px}.pm-bar{grid-column:1/-1}#pmChart{height:200px}}
 @keyframes mast{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
 @media(prefers-reduced-motion:reduce){.head,.dot.ok{animation:none}html{scroll-behavior:auto}}
@@ -241,11 +256,28 @@ button.primary:hover{background:#0a5748}
  <div class="pm-head">
   <div>
    <h2 id="pmTitle" style="margin:0">שוק Polymarket: ראש הממשלה הבא</h2>
-   <p class="tiny" style="margin:4px 0 0">סיכויי מסחר חיצוניים · לא חלק ממדד ההשתתפות</p>
+   <p class="tiny" style="margin:4px 0 0">איזנקוט · נתניהו · בנט · סיכויי מסחר חיצוניים, לא חלק ממדד ההשתתפות</p>
   </div>
  </div>
  <p class="pm-meta" id="pmMeta">טוען נתוני שוק…</p>
  <div class="pm-list" id="pmList" role="list"></div>
+ <div class="pm-chart-wrap hidden" id="pmChartWrap">
+  <div class="pm-chart-top">
+   <div>
+    <h3 id="pmChartTitle">מגמת שבוע</h3>
+    <p class="pm-chart-sub" id="pmChartSub">שבעת הימים האחרונים</p>
+   </div>
+   <div class="pm-res" id="pmRes" role="group" aria-label="רזולוציית גרף">
+    <button type="button" data-fid="15">15 דק׳</button>
+    <button type="button" data-fid="60" class="on">שעה</button>
+    <button type="button" data-fid="240">4 שעות</button>
+    <button type="button" data-fid="360">6 שעות</button>
+   </div>
+  </div>
+  <svg id="pmChart" viewBox="0 0 800 240" role="img" aria-label="גרף סיכויים לשבוע האחרון"></svg>
+  <div class="pm-chart-foot"><span id="pmChartMin">—</span><span id="pmChartMax">—</span></div>
+  <div class="pm-chart-status" id="pmChartStatus" aria-live="polite"></div>
+ </div>
  <p class="pm-note" id="pmNote"></p>
 </section>
 
@@ -292,8 +324,17 @@ let feedMode='live', requestVersion=0;
 const state={
  selected:new Set(rows.filter(x=>x.active).map(x=>x.key)),
  live:new Map(),feed:null,source:'לא מחובר',updatedAt:null,rawCount:0,nationalPct:null,
- nationalPreserved:false,history:[],hourlyHistory:null,showForecasts:false,openGroup:null,chartHidden:new Set()
+ nationalPreserved:false,history:[],hourlyHistory:null,showForecasts:false,openGroup:null,chartHidden:new Set(),
+ pm:null,pmSelected:null,pmFidelity:60,pmHistoryCache:new Map(),pmHistoryLoading:false
 };
+const PM_TRACKED=['Gadi Eizenkot','Benjamin Netanyahu','Naftali Bennett'];
+const PM_META={
+ 'Gadi Eizenkot':{name_he:'גדי איזנקוט',color:'#0d6b58'},
+ 'Benjamin Netanyahu':{name_he:'בנימין נתניהו',color:'#b86a0a'},
+ 'Naftali Bennett':{name_he:'נפתלי בנט',color:'#2f5f8a'}
+};
+const PM_GAMMA='https://gamma-api.polymarket.com/events?slug=who-will-be-the-next-prime-minister-of-israel-after-the-next-election';
+const PM_CLOB='https://clob.polymarket.com/prices-history';
 const $=id=>document.getElementById(id),nf=new Intl.NumberFormat('he-IL');
 const fmt=x=>x==null||!Number.isFinite(x)?'—':x.toFixed(1)+'%';
 const dif=x=>x==null||!Number.isFinite(x)?'—':(x>0?'+':x<0?'−':'')+Math.abs(x).toFixed(1);
@@ -625,35 +666,177 @@ function renderTable(){
   </tr>`;
  }).join('');
 }
+function parsePmField(raw){
+ if(raw==null)return null;
+ if(typeof raw==='string'){try{return JSON.parse(raw)}catch{return null}}
+ return raw;
+}
+function yesProbFromMarket(m){
+ const prices=parsePmField(m.outcomePrices);
+ const outcomes=parsePmField(m.outcomes);
+ if(Array.isArray(prices)&&prices.length){
+  if(Array.isArray(outcomes)){
+   const i=outcomes.findIndex(x=>String(x).toLowerCase()==='yes');
+   if(i>=0)return Math.max(0,Math.min(1,Number(prices[i])));
+  }
+  return Math.max(0,Math.min(1,Number(prices[0])));
+ }
+ if(m.lastTradePrice!=null)return Math.max(0,Math.min(1,Number(m.lastTradePrice)));
+ return null;
+}
+function normalizePmCandidates(rawList){
+ const byName=Object.fromEntries((rawList||[]).map(c=>[c.name,c]));
+ return PM_TRACKED.map(name=>{
+  const src=byName[name];if(!src)return null;
+  const meta=PM_META[name];
+  const prob=src.prob!=null?Number(src.prob):((src.pct!=null?Number(src.pct):0)/100);
+  return {
+   name,name_he:src.name_he||meta.name_he,color:src.color||meta.color,
+   prob,pct:src.pct!=null?Number(src.pct):Math.round(prob*1000)/10,
+   volume:src.volume!=null?Number(src.volume):0,
+   image:src.image||null,yes_token:src.yes_token||src.yesToken||null
+  };
+ }).filter(Boolean);
+}
+function eventToPmSnapshot(ev){
+ const byName={};
+ for(const m of (ev.markets||[])){
+  const name=(m.groupItemTitle||'').trim();
+  if(!PM_TRACKED.includes(name))continue;
+  const tokens=parsePmField(m.clobTokenIds)||[];
+  const prob=yesProbFromMarket(m);if(prob==null)continue;
+  byName[name]={
+   name,name_he:PM_META[name].name_he,color:PM_META[name].color,
+   prob,pct:Math.round(prob*1000)/10,volume:Number(m.volume||0),
+   image:m.image||m.icon||null,yes_token:tokens[0]?String(tokens[0]):null
+  };
+ }
+ return {
+  source:'Polymarket',updated_at:new Date().toISOString(),live:true,
+  volume:Number(ev.volume||0),
+  candidates:normalizePmCandidates(Object.values(byName)),
+  disclaimer_he:'סיכויי שוק הימורים (Polymarket), לא סקר ולא תחזית רשמית. מתעדכן בדפדפן כל דקה.'
+ };
+}
+function renderPmChart(points,color){
+ const svg=$('pmChart');if(!svg)return;
+ if(!points||points.length<2){
+  svg.innerHTML='<text x="400" y="120" text-anchor="middle" fill="#8fa39b" font-size="14" font-family="Heebo,sans-serif">אין מספיק נקודות להצגת מגמה</text>';
+  if($('pmChartMin'))$('pmChartMin').textContent='—';
+  if($('pmChartMax'))$('pmChartMax').textContent='—';
+  return;
+ }
+ const W=800,H=240,pad={t:18,r:18,b:28,l:48};
+ const xs=points.map(p=>p.t),ys=points.map(p=>p.p*100);
+ const x0=Math.min(...xs),x1=Math.max(...xs),yMin=Math.min(...ys),yMax=Math.max(...ys);
+ const yPad=Math.max(0.5,(yMax-yMin)*0.12||1);
+ const y0=Math.max(0,yMin-yPad),y1=Math.min(100,yMax+yPad);
+ const xScale=t=>pad.l+(W-pad.l-pad.r)*((t-x0)/Math.max(1,x1-x0));
+ const yScale=v=>pad.t+(H-pad.t-pad.b)*(1-((v-y0)/Math.max(0.01,y1-y0)));
+ const line=points.map((p,i)=>`${i?'L':'M'}${xScale(p.t).toFixed(1)},${yScale(p.p*100).toFixed(1)}`).join(' ');
+ const area=`M${xScale(points[0].t).toFixed(1)},${(H-pad.b).toFixed(1)} `+points.map(p=>`L${xScale(p.t).toFixed(1)},${yScale(p.p*100).toFixed(1)}`).join(' ')+` L${xScale(points.at(-1).t).toFixed(1)},${(H-pad.b).toFixed(1)} Z`;
+ const grid=[0.25,0.5,0.75].map(f=>{
+  const v=y0+(y1-y0)*f;const y=yScale(v);
+  return `<line x1="${pad.l}" x2="${W-pad.r}" y1="${y}" y2="${y}" stroke="#2a3a44" stroke-width="1"/><text x="${pad.l-8}" y="${y+4}" text-anchor="end" fill="#8fa39b" font-size="11" font-variant-numeric="tabular-nums">${v.toFixed(1)}%</text>`;
+ }).join('');
+ const last=points.at(-1);
+ svg.innerHTML=`<rect width="${W}" height="${H}" fill="transparent"/>${grid}<path d="${area}" fill="${color}" opacity=".18"/><path d="${line}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="${xScale(last.t)}" cy="${yScale(last.p*100)}" r="4.5" fill="${color}" stroke="#0b1218" stroke-width="2"/>`;
+ const fmtT=ts=>new Date(ts*1000).toLocaleString('he-IL',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+ if($('pmChartMin'))$('pmChartMin').textContent=fmtT(points[0].t)+' · '+(points[0].p*100).toFixed(1)+'%';
+ if($('pmChartMax'))$('pmChartMax').textContent=fmtT(points.at(-1).t)+' · '+(points.at(-1).p*100).toFixed(1)+'%';
+}
+async function loadPmHistory(token,fidelity){
+ const key=token+'|'+fidelity;
+ if(state.pmHistoryCache.has(key))return state.pmHistoryCache.get(key);
+ const u=new URL(PM_CLOB);
+ u.searchParams.set('market',token);
+ u.searchParams.set('interval','1w');
+ u.searchParams.set('fidelity',String(fidelity));
+ const res=await fetch(u,{cache:'no-store'});
+ if(!res.ok)throw new Error('HTTP '+res.status);
+ const data=await res.json();
+ const history=(data.history||[]).map(p=>({t:Number(p.t),p:Number(p.p)})).filter(p=>Number.isFinite(p.t)&&Number.isFinite(p.p));
+ state.pmHistoryCache.set(key,history);
+ return history;
+}
+async function showPmChart(name){
+ const wrap=$('pmChartWrap');if(!wrap)return;
+ const c=(state.pm?.candidates||[]).find(x=>x.name===name);
+ if(!c||!c.yes_token){
+  wrap.classList.add('hidden');
+  if($('pmChartStatus'))$('pmChartStatus').textContent='אין מזהה שוק למועמד זה.';
+  return;
+ }
+ state.pmSelected=name;
+ wrap.classList.remove('hidden');
+ if($('pmChartTitle'))$('pmChartTitle').textContent=`${c.name_he} · מגמת שבוע`;
+ if($('pmChartSub'))$('pmChartSub').textContent='לחיצה על מועמד מציגה תנועות מחיר Yes בשבעת הימים האחרונים';
+ $('pmRes')?.querySelectorAll('button').forEach(b=>b.classList.toggle('on',Number(b.dataset.fid)===state.pmFidelity));
+ document.querySelectorAll('.pm-row').forEach(el=>el.classList.toggle('active',el.dataset.name===name));
+ const cacheKey=c.yes_token+'|'+state.pmFidelity;
+ const hadCache=state.pmHistoryCache.has(cacheKey);
+ if(!hadCache&&$('pmChartStatus'))$('pmChartStatus').textContent='טוען היסטוריית מחירים…';
+ state.pmHistoryLoading=true;
+ try{
+  const pts=await loadPmHistory(c.yes_token,state.pmFidelity);
+  renderPmChart(pts,c.color||'#b86a0a');
+  if($('pmChartStatus'))$('pmChartStatus').textContent=pts.length?`${pts.length} נקודות · רזולוציה ${state.pmFidelity} דק׳`:'אין נתוני היסטוריה לחלון זה';
+ }catch(e){
+  renderPmChart([],c.color);
+  if($('pmChartStatus'))$('pmChartStatus').textContent='טעינת הגרף נכשלה: '+(e.message||e);
+ }finally{state.pmHistoryLoading=false}
+}
 function renderPolymarket(data){
  const list=$('pmList'),meta=$('pmMeta'),note=$('pmNote');
  if(!list)return;
- if(!data||!Array.isArray(data.candidates)||!data.candidates.length){
+ state.pm=data;
+ const candidates=normalizePmCandidates(data?.candidates||[]);
+ if(!candidates.length){
   list.innerHTML='<div class="pm-empty">אין כרגע נתוני שוק להצגה.</div>';
   if(meta)meta.textContent='';
   if(note)note.textContent='';
+  $('pmChartWrap')?.classList.add('hidden');
   return;
  }
  const vol=data.volume!=null?nf.format(Math.round(data.volume)):'—';
  const when=data.updated_at?new Date(data.updated_at).toLocaleString('he-IL',{dateStyle:'short',timeStyle:'short'}):'—';
- if(meta)meta.textContent=`נפח מסחר מצטבר ≈ $${vol} · עודכן ${when}`;
- if(note)note.textContent=data.disclaimer_he||'סיכויי שוק Polymarket בלבד, לא סקר ולא תחזית רשמית.';
- const top=data.candidates.filter(c=>c.pct>=0.5||data.candidates.indexOf(c)<12).slice(0,12);
- const maxPct=Math.max(...top.map(c=>c.pct||0),1);
- list.innerHTML=top.map(c=>{
-  const label=esc(c.name_he||c.name);
-  const en=c.name_he&&c.name_he!==c.name?` <span class="tiny">(${esc(c.name)})</span>`:'';
-  const img=c.image?`<img src="${esc(c.image)}" alt="" width="28" height="28" loading="lazy" referrerpolicy="no-referrer">`:'';
-  const w=Math.max(2,Math.round(100*(c.pct||0)/maxPct));
-  return `<div class="pm-row" role="listitem"><div class="pm-name">${img}<span>${label}${en}</span></div><div class="pm-bar" aria-hidden="true"><i style="width:${w}%"></i></div><div class="pm-pct">${(c.pct??0).toFixed(1)}%</div></div>`;
+ const liveTag=data.live?' · רענון חי כל דקה':' · מטמון מקומי';
+ if(meta)meta.textContent=`נפח אירוע ≈ $${vol} · עודכן ${when}${liveTag}`;
+ if(note)note.textContent=data.disclaimer_he||'סיכויי שוק Polymarket בלבד. לחצו על מועמד לגרף שבועי.';
+ const maxPct=Math.max(...candidates.map(c=>c.pct||0),1);
+ list.innerHTML=candidates.map(c=>{
+  const img=c.image?`<img src="${esc(c.image)}" alt="" width="36" height="36" loading="lazy" referrerpolicy="no-referrer">`:'';
+  const w=Math.max(3,Math.round(100*(c.pct||0)/maxPct));
+  const active=state.pmSelected===c.name?' active':'';
+  return `<button type="button" class="pm-row${active}" role="listitem" data-name="${esc(c.name)}" style="--pm:${c.color}" aria-pressed="${state.pmSelected===c.name?'true':'false'}">
+   <div class="pm-name">${img}<span class="who"><b>${esc(c.name_he)}</b><small>${esc(c.name)}</small></span></div>
+   <div class="pm-bar" aria-hidden="true"><i style="width:${w}%"></i></div>
+   <div class="pm-pct">${(c.pct??0).toFixed(1)}%</div>
+  </button>`;
  }).join('');
+ list.querySelectorAll('.pm-row').forEach(btn=>{
+  btn.onclick=()=>{const n=btn.dataset.name;if(state.pmSelected===n){state.pmSelected=null;$('pmChartWrap')?.classList.add('hidden');btn.classList.remove('active');btn.setAttribute('aria-pressed','false');return;}showPmChart(n);};
+ });
+ if(state.pmSelected&&candidates.some(c=>c.name===state.pmSelected))showPmChart(state.pmSelected);
+ else if(state.pmSelected){state.pmSelected=null;$('pmChartWrap')?.classList.add('hidden')}
 }
 async function loadPolymarket(){
+ try{
+  const res=await fetch(PM_GAMMA,{cache:'no-store'});
+  if(!res.ok)throw new Error('HTTP '+res.status);
+  const payload=await res.json();
+  const ev=Array.isArray(payload)?payload[0]:payload;
+  if(!ev?.markets)throw new Error('missing markets');
+  renderPolymarket(eventToPmSnapshot(ev));
+  return;
+ }catch{}
  try{
   const u=new URL('./polymarket-pm.json',location.href);u.searchParams.set('t',Date.now());
   const res=await fetch(u,{cache:'no-store'});
   if(!res.ok)throw new Error('HTTP '+res.status);
-  renderPolymarket(await res.json());
+  const data=await res.json();
+  data.live=false;
+  renderPolymarket(data);
  }catch{
   const list=$('pmList');
   if(list)list.innerHTML='<div class="pm-empty">לא ניתן לטעון את נתוני Polymarket כרגע.</div>';
@@ -820,8 +1003,16 @@ globalThis.api={state,rows,ingest,fetchFeed,newPulseStats,nationalLive,groupStat
   await loadPublicHistory();
   await Promise.all([fetchFeed(true),loadPolymarket()]);
   setInterval(()=>fetchFeed(true),120000);
-  setInterval(()=>loadPolymarket(),300000);
- }
+  setInterval(()=>loadPolymarket(),60000);
+  $('pmRes')?.querySelectorAll('button').forEach(btn=>{
+   btn.onclick=()=>{
+    state.pmFidelity=Number(btn.dataset.fid)||60;
+    state.pmHistoryCache.clear();
+    if(state.pmSelected)showPmChart(state.pmSelected);
+    else $('pmRes')?.querySelectorAll('button').forEach(b=>b.classList.toggle('on',Number(b.dataset.fid)===state.pmFidelity));
+   };
+  });
+}
  else setStatus('הקובץ נפתח מהמחשב. אפשר לייבא קובץ; לרענון אוטומטי יש לפתוח מאתר מאוחסן.');
  render();
 })();

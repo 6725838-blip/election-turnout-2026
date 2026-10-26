@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Fetch Polymarket Israel PM market odds into a slim public JSON snapshot.
+"""Fetch Polymarket Israel PM odds for the three tracked candidates.
 
-Soft-fails (exit 0, keep previous file) when the remote API is unreachable or
-returns an unexpected shape — so scheduled CI stays green.
+Soft-fails (exit 0, keep previous file) when the remote API is unreachable.
+Live charts refresh in the browser every minute via gamma/clob CORS;
+this snapshot is a cache for first paint and offline fallback.
 """
 from __future__ import annotations
 
@@ -25,48 +26,38 @@ EVENT_URL = (
 )
 MAX_BYTES = 2_500_000
 
-HE_NAMES = {
-    'Benjamin Netanyahu': 'בנימין נתניהו',
-    'Naftali Bennett': 'נפתלי בנט',
-    'Yair Lapid': 'יאיר לפיד',
-    'Gadi Eizenkot': 'גדי איזנקוט',
-    'Benny Gantz': 'בני גנץ',
-    'Avigdor Lieberman': 'אביגדור ליברמן',
-    'Yossi Cohen': 'יוסי כהן',
-    'Yair Golan': 'יאיר גולן',
-    'Itamar Ben-Gvir': 'איתמר בן גביר',
-    'Itamar Ben Gvir': 'איתמר בן גביר',
-    'Bezalel Smotrich': 'בצלאל סמוטריץ׳',
-    'Ayelet Shaked': 'איילת שקד',
-    "Gideon Sa'ar": 'גדעון סער',
-    'Gideon Saar': 'גדעון סער',
-    'Merav Michaeli': 'מרב מיכאלי',
-    'Mansour Abbas': 'מנסור עבאס',
-    'Ayman Odeh': 'איימן עודה',
-    'Israel Katz': 'ישראל כץ',
-    'Moshe Feiglin': 'משה פייגלין',
-    'Ofer Winter': 'עופר וינטר',
-    'Amir Ohana': 'אמיר אוחנה',
-    'Gilad Erdan': 'גלעד ארדן',
-}
+# Fixed board order (not sorted by odds).
+TRACKED = (
+    {'name': 'Gadi Eizenkot', 'name_he': 'גדי איזנקוט', 'color': '#0d6b58'},
+    {'name': 'Benjamin Netanyahu', 'name_he': 'בנימין נתניהו', 'color': '#b86a0a'},
+    {'name': 'Naftali Bennett', 'name_he': 'נפתלי בנט', 'color': '#2f5f8a'},
+)
+TRACKED_BY_NAME = {t['name']: t for t in TRACKED}
 
 
 class FeedNotReady(Exception):
     pass
 
 
-def _parse_prices(raw) -> list[float] | None:
+def _parse_json_field(raw):
     if raw is None:
         return None
+    if isinstance(raw, (list, dict)):
+        return raw
     if isinstance(raw, str):
         try:
-            raw = json.loads(raw)
+            return json.loads(raw)
         except json.JSONDecodeError:
             return None
-    if not isinstance(raw, list) or not raw:
+    return None
+
+
+def _parse_prices(raw) -> list[float] | None:
+    parsed = _parse_json_field(raw)
+    if not isinstance(parsed, list) or not parsed:
         return None
     out = []
-    for x in raw:
+    for x in parsed:
         try:
             out.append(float(x))
         except (TypeError, ValueError):
@@ -76,13 +67,8 @@ def _parse_prices(raw) -> list[float] | None:
 
 def _yes_prob(market: dict) -> float | None:
     prices = _parse_prices(market.get('outcomePrices'))
-    outcomes = market.get('outcomes')
-    if isinstance(outcomes, str):
-        try:
-            outcomes = json.loads(outcomes)
-        except json.JSONDecodeError:
-            outcomes = None
-    if prices and outcomes and isinstance(outcomes, list):
+    outcomes = _parse_json_field(market.get('outcomes'))
+    if prices and isinstance(outcomes, list):
         for name, price in zip(outcomes, prices):
             if str(name).strip().lower() == 'yes':
                 return max(0.0, min(1.0, price))
@@ -96,52 +82,64 @@ def _yes_prob(market: dict) -> float | None:
     return None
 
 
+def _yes_token(market: dict) -> str | None:
+    tokens = _parse_json_field(market.get('clobTokenIds'))
+    if isinstance(tokens, list) and tokens:
+        return str(tokens[0])
+    return None
+
+
 def build_snapshot(event: dict) -> dict:
-    markets = event.get('markets') or []
+    by_name = {}
+    for m in event.get('markets') or []:
+        name = (m.get('groupItemTitle') or '').strip()
+        if name in TRACKED_BY_NAME:
+            by_name[name] = m
     candidates = []
-    for m in markets:
-        if m.get('closed') is True and m.get('active') is False:
-            continue
-        name = (m.get('groupItemTitle') or m.get('question') or '').strip()
-        if not name:
-            continue
-        # Skip generic multi-outcome question shells without a person label
-        if name == event.get('title'):
+    for meta in TRACKED:
+        m = by_name.get(meta['name'])
+        if not m:
             continue
         prob = _yes_prob(m)
         if prob is None:
             continue
+        token = _yes_token(m)
         try:
             vol = float(m.get('volume') or 0)
         except (TypeError, ValueError):
             vol = 0.0
         candidates.append({
-            'name': name,
-            'name_he': HE_NAMES.get(name, name),
+            'name': meta['name'],
+            'name_he': meta['name_he'],
+            'color': meta['color'],
             'prob': round(prob, 4),
             'pct': round(prob * 100, 1),
             'volume': round(vol, 2),
             'image': m.get('image') or m.get('icon') or None,
+            'yes_token': token,
+            'market_id': str(m.get('id')) if m.get('id') is not None else None,
+            'slug': m.get('slug'),
         })
-    candidates.sort(key=lambda c: (-c['prob'], c['name']))
     try:
         volume = float(event.get('volume') or 0)
     except (TypeError, ValueError):
         volume = 0.0
     return {
-        'format_version': 1,
+        'format_version': 2,
         'source': 'Polymarket',
         'title': event.get('title') or 'Prime Minister of Israel after the next election?',
         'title_he': 'מי יהיה ראש הממשלה אחרי הבחירות הבאות?',
         'slug': event.get('slug'),
         'url': EVENT_URL,
+        'gamma_url': API,
         'updated_at': datetime.now(timezone.utc).isoformat(),
         'event_end': event.get('endDate'),
         'volume': round(volume, 2),
+        'poll_seconds': 60,
         'candidates': candidates,
         'disclaimer_he': (
             'סיכויי שוק הימורים (Polymarket), לא סקר ולא תחזית רשמית. '
-            'אינם קשורים לנתוני ההשתתפות בדשבורד.'
+            'אינם קשורים לנתוני ההשתתפות בדשבורד. מתעדכן בדפדפן כל דקה.'
         ),
     }
 
@@ -151,7 +149,7 @@ def fetch_event() -> dict:
         API,
         headers={
             'Accept': 'application/json',
-            'User-Agent': 'ElectionDashboard-Polymarket/1.0',
+            'User-Agent': 'ElectionDashboard-Polymarket/1.1',
         },
     )
     try:
