@@ -945,9 +945,8 @@ function renderPolymarket(data){
  }
  const vol=data.volume!=null?nf.format(Math.round(data.volume)):'—';
  const when=data.updated_at?new Date(data.updated_at).toLocaleString('he-IL',{dateStyle:'short',timeStyle:'short'}):'—';
- const liveTag=data.delivery==='same-origin-snapshot'?' · מטמון אתר (עוקף חסימות, מתרענן מהשרת כל כמה דקות)':' · מטמון מקומי';
- if(meta)meta.textContent=`נפח אירוע ≈ $${vol} · עודכן ${when}${liveTag}`;
- if(note)note.textContent=data.disclaimer_he||'סיכויי שוק Polymarket בלבד. תחת חסימת רשת הנתונים מגיעים מקובץ באתר (לא מרענון ידני מול Polymarket).';
+ if(meta)meta.textContent=`נפח אירוע ≈ $${vol} · עודכן ${when}`;
+ if(note)note.textContent=data.disclaimer_he||'סיכויי שוק הימורים (Polymarket), לא סקר ולא תחזית רשמית.';
  const maxPct=Math.max(...candidates.map(c=>c.pct||0),1);
  list.innerHTML=candidates.map(c=>{
   const img=c.image?`<img src="${esc(c.image)}" alt="" width="36" height="36" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:'';

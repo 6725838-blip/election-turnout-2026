@@ -244,10 +244,7 @@ def build_snapshot(event: dict, histories: dict[str, list[dict]]) -> dict:
         'history_fidelity': HISTORY_FIDELITY,
         'histories': histories,
         'candidates': candidates,
-        'disclaimer_he': (
-            'סיכויי שוק הימורים (Polymarket), לא סקר ולא תחזית רשמית. '
-            'הנתונים נמשכים בשרת ונשמרים באתר כדי לעבוד גם תחת חסימות רשת.'
-        ),
+        'disclaimer_he': 'סיכויי שוק הימורים (Polymarket), לא סקר ולא תחזית רשמית.',
     }
 
 
