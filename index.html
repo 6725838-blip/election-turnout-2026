@@ -594,7 +594,8 @@ function timerCopy(phase){
  return{label:'הקלפיות נסגרו',sub:live?'הדיווחים ממשיכים להתעדכן; המדד נשאר השוואת השתתפות לפי קבוצה':'הדיווחים ממשיכים להתעדכן כשיתפרסמו; המדד נשאר השוואת השתתפות לפי קבוצה'};
 }
 function updateElectionTimer(now=new Date()){
- const root=$('electionTimer');if(!root)return;
+ const root=$('electionTimer');
+ if(!root||!root.dataset)return; // dashboard.test.cjs stubs lack dataset/querySelector
  let phase='before',target=POLL_OPEN;
  if(now>=POLL_CLOSE){phase='closed';target=null}
  else if(now>=POLL_OPEN){phase='voting';target=POLL_CLOSE}
@@ -602,9 +603,10 @@ function updateElectionTimer(now=new Date()){
  const copy=timerCopy(phase);
  const minuteKey=Math.floor(now.getTime()/60000);
  const liveFlag=state.live.size>0?'1':'0';
+ const labelEl=$('timerLabel'),subEl=$('timerSub');
  if(phase!==timerPhase||minuteKey!==timerMinuteKey||root.dataset.live!==liveFlag){
-  $('timerLabel').textContent=copy.label;
-  $('timerSub').textContent=copy.sub;
+  if(labelEl)labelEl.textContent=copy.label;
+  if(subEl)subEl.textContent=copy.sub;
   let spoken=copy.label+'. '+copy.sub;
   if(phase!=='closed'&&target){
    const rem=splitRemain(target-now);
@@ -612,18 +614,20 @@ function updateElectionTimer(now=new Date()){
    parts.push(rem.hours+' שעות',rem.mins+' דקות');
    spoken=copy.label+': '+parts.join(', ')+'. '+copy.sub;
   }
-  root.setAttribute('aria-label',spoken);
+  if(typeof root.setAttribute==='function')root.setAttribute('aria-label',spoken);
   root.dataset.live=liveFlag;
   timerPhase=phase;timerMinuteKey=minuteKey;
  }
  if(phase==='closed')return;
  const rem=splitRemain(target-now);
  const showDays=rem.days>0;
- root.querySelector('[data-unit=days]').hidden=!showDays;
- $('tDays').textContent=String(rem.days);
- $('tHours').textContent=pad2(rem.hours);
- $('tMins').textContent=pad2(rem.mins);
- $('tSecs').textContent=pad2(rem.secs);
+ const daysUnit=typeof root.querySelector==='function'?root.querySelector('[data-unit=days]'):null;
+ if(daysUnit)daysUnit.hidden=!showDays;
+ const d=$('tDays'),h=$('tHours'),m=$('tMins'),s=$('tSecs');
+ if(d)d.textContent=String(rem.days);
+ if(h)h.textContent=pad2(rem.hours);
+ if(m)m.textContent=pad2(rem.mins);
+ if(s)s.textContent=pad2(rem.secs);
 }
 const _render=render;
 render=function(){_render();updateElectionTimer()};
