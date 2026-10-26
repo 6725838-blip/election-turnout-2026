@@ -33,6 +33,13 @@ const empty={format_version:1,source:'Not connected',updated_at:null,national_tu
  await api.fetchFeed(true);
  assert.equal(api.state.live.size,1);
  assert.ok(element('comparisonProgress').innerHTML.includes('50.0%'),'city and national both reach half the 2022 level');
+ context.fetch=async()=>({ok:true,json:async()=>({...fixture,updated_at:'2026-10-27T13:00:00+02:00',records:[{city:'אלעד',eligible:10000,voted:1000,partial:true}]})});
+ await api.fetchFeed(true);
+ {
+  const row=[...api.state.live.values()][0];
+  assert.equal(row.voted,4218,'client merge must keep full report over newer partial');
+  assert.equal(row.preserved_previous,true);
+ }
  context.fetch=async()=>({ok:true,json:async()=>empty});
  await api.fetchFeed(true);
  assert.equal(api.state.live.size,1,'missing snapshot cannot erase a real report');

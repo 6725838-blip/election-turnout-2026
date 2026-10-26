@@ -23,6 +23,13 @@ class MergeTests(unittest.TestCase):
         result=merge_snapshot(self.old,feed('13:00',[dict(city='אלעד',eligible=100,voted=20,partial=True)]))
         self.assertEqual(result['records'][0]['voted'],40)
 
+    def test_partial_does_not_replace_preserved_full(self):
+        mid=merge_snapshot(self.old,feed('13:00',[]))
+        self.assertTrue(mid['records'][0]['preserved_previous'])
+        result=merge_snapshot(mid,feed('14:00',[dict(city='אלעד',eligible=100,voted=10,partial=True)]))
+        self.assertEqual(result['records'][0]['voted'],40)
+        self.assertTrue(result['records'][0]['preserved_previous'])
+
     def test_older_row_in_newer_snapshot(self):
         result=merge_snapshot(self.old,feed('13:00',[dict(city='אלעד',turnout_pct=20,as_of='2026-10-27T11:00:00+02:00')]))
         self.assertEqual(result['records'][0]['voted'],40)

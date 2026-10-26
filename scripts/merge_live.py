@@ -1,11 +1,17 @@
 """Retain missing/older reports, with their original timestamps and an explicit stale flag."""
 from copy import deepcopy
-import re
-import unicodedata
+from city_norm import city_key
 from validate_live import timestamp, validate
 
-def city_key(name):
-    return re.sub(r'''[\s״׳'"־–-]''', '', unicodedata.normalize('NFKC', name)).lower()
+def station_partial(row):
+    if row.get('reported_stations') is None and row.get('total_stations') is None:
+        return False
+    return (row.get('reported_stations') or 0) < (row.get('total_stations') or 0)
+
+
+def report_full(row):
+    return not row.get('partial') and not station_partial(row)
+
 
 def merge_snapshot(previous, incoming):
     validate(incoming)
@@ -21,9 +27,8 @@ def merge_snapshot(previous, incoming):
             key=city_key(old['city'])
             candidate=new.get(key)
             old_time=old.get('as_of') or previous['updated_at']
-            old_full=not old.get('partial') and old.get('reported_stations',0)>=old.get('total_stations',0)
-            partial=candidate and (candidate.get('partial') or candidate.get('reported_stations',0)<candidate.get('total_stations',0))
-            if candidate is None or timestamp(candidate.get('as_of') or incoming['updated_at']) < timestamp(old_time) or (old_full and partial):
+            next_partial=candidate is not None and (candidate.get('partial') or station_partial(candidate))
+            if candidate is None or timestamp(candidate.get('as_of') or incoming['updated_at']) < timestamp(old_time) or (report_full(old) and next_partial):
                 kept=deepcopy(old)
                 kept.update(as_of=old_time, preserved_previous=True)
                 new[key]=kept

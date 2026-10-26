@@ -31,11 +31,16 @@ jobs:
           ref: main
       - id: gate
         run: python3 scripts/schedule_gate.py
+      - name: Watch GovMap Knesset-26 municipal feed
+        id: govmap
+        continue-on-error: true
+        run: python3 scripts/watch_govmap.py --knesset 26
       - name: Refresh only verified data in the election window
         if: vars.OFFICIAL_FEED_VERIFIED == 'true' && (inputs.refresh_verified_feed || (github.event_name == 'schedule' && steps.gate.outputs.active == 'true'))
         env:
           OFFICIAL_FEED_VERIFIED: ${{ vars.OFFICIAL_FEED_VERIFIED }}
           OFFICIAL_FEED_URL: ${{ vars.OFFICIAL_FEED_URL }}
+          OFFICIAL_FEED_FORMAT: ${{ vars.OFFICIAL_FEED_FORMAT }}
           ELECTION_DATE: ${{ vars.ELECTION_DATE }}
         run: python3 scripts/update_live.py
       - name: Validate

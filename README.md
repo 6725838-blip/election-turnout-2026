@@ -19,15 +19,25 @@
 
 ## חיבור עתידי לנתוני אמת — כבוי
 
-אין כתובת API מוגדרת. תזמון Actions מוגדר ל־27.10.2026, כל 20 דקות בשעות 07:07–23:47 לפי שעון ישראל (בדקות 07, 27, 47). התזמון אינו מבטיח זמני הרצה מדויקים. בדיקת תאריך בקוד מונעת משיכה בשנה אחרת. בלי `OFFICIAL_FEED_VERIFIED=true` לא נשלחת בקשה למקור נתונים ואין פרסום של נתונים מומצאים. לפני חיבור יש לאמת מקור רשמי, רישיון שימוש, מיפוי יישובים, משמעות הדיווח המלא ושעות דיווח תואמות לנתון הארצי. יש להתאים את המקור לסכמת JSON זו; הסקריפט אינו מנחש מבנה API.
+תזמון Actions מוגדר ל־27.10.2026, כל 20 דקות בשעות 07:07–23:47 לפי שעון ישראל (בדקות 07, 27, 47). בלי `OFFICIAL_FEED_VERIFIED=true` לא נשלחת בקשה למקור ואין פרסום של נתונים מומצאים.
 
-רק לאחר האימות מגדירים Repository Variables:
+הנתיב המוכן לפיד יישובים הוא **GovMap** (`municipal_data.json`), דרך מתאם ב־`scripts/adapt_govmap.py`. כל הרצה מתוזמנת גם מדווחת אם פיד כנסת 26 זמין (`scripts/watch_govmap.py`) — בלי להדליק אימות אוטומטית. מפות ynet / מקורות צד־שלישי אינם בשימוש.
 
-- `OFFICIAL_FEED_VERIFIED`: הערך `true` רק לאחר אימות.
-- `OFFICIAL_FEED_URL`: כתובת HTTPS הרשמית המאומתת, ללא סיסמאות בכתובת.
-- `ELECTION_DATE`: תאריך הבחירות שאומת, בפורמט YYYY-MM-DD.
+### Runbook בוקר בחירות
 
-להרצה ידנית בוחרים Actions → Update and deploy election turnout dashboard → Run workflow ומסמנים `refresh_verified_feed`. שגיאת מקור, ערכים לא תקינים או snapshot ישן מפסיקים את הפרסום ושומרים את הגרסה הקודמת. דיווח יישוב חסר, ישן או חלקי במקום דיווח מלא נשמר עם שעתו המקורית וסימון דיווח קודם; הוא אינו נכלל במדד העדכני המלא. נתון ארצי קודם נשמר בקובץ אך אינו משמש להשוואה עדכנית אם חסר נתון חדש. העדכון רץ בענן ואין צורך במחשב מקומי דולק.
+1. `python scripts/watch_govmap.py` עד ש־`ready` הוא true.
+2. הורדה ידנית של `municipal_data.json` ובדיקת 2–3 יישובים מול הבסיס.
+3. הגדרת Repository Variables ואז Actions → Run workflow עם `refresh_verified_feed`.
+4. אם יש רק אחוז ארצי מהוועדה — הזנה ב־«אחוז ארצי ידני» או JSON עם `national_turnout_pct` ו־`records: []`.
+
+Repository Variables לאחר אימות:
+
+- `OFFICIAL_FEED_VERIFIED`: `true` רק לאחר אימות.
+- `OFFICIAL_FEED_URL`: למשל `https://elections.govmap.gov.il/data/votes/26/municipal_data.json` (HTTPS, בלי סיסמאות).
+- `OFFICIAL_FEED_FORMAT`: `govmap_municipal` לפיד GovMap, או `live` אם ה־URL כבר בסכמת `live-turnout.json`.
+- `ELECTION_DATE`: `2026-10-27`.
+
+שגיאת מקור, ערכים לא תקינים או snapshot ישן מפסיקים את הפרסום ושומרים את הגרסה הקודמת. דיווח יישוב חסר, ישן או חלקי במקום דיווח מלא נשמר עם שעתו המקורית וסימון דיווח קודם.
 
 ## בדיקה ציבורית מקצה לקצה
 
@@ -45,9 +55,14 @@ Actions → Public end-to-end demo cycle → Run workflow מפעיל בדיקה 
 python -m unittest discover -s tests
 node tests/dashboard.test.cjs
 python scripts/validate_live.py live-turnout.json
+python scripts/watch_govmap.py
+python scripts/adapt_govmap.py --fixture-from-25 --updated-at 2026-10-27T12:00:00+02:00 --out /tmp/live-from-25.json
+python scripts/validate_live.py /tmp/live-from-25.json
 python scripts/prepare_site.py
 python -m http.server 8766 --bind 127.0.0.1
 ```
+
+סנכרון קודי יישוב / בסיס 2022 מול GovMap 25: `python scripts/sync_baseline_codes.py --update-stats`.
 
 פותחים `http://127.0.0.1:8766/index.html`. קובצי הבדיקה משתמשים בנתונים סינתטיים בזיכרון בלבד, ולא משנים את קובץ ההצבעה הציבורי.
 
