@@ -144,10 +144,11 @@ button.primary:hover{background:#0a5748}
 .pm-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:10px}
 .pm-meta{font-size:.8125rem;color:var(--muted);margin:0 0 12px;line-height:1.55}
 .pm-list{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:var(--radius);background:var(--elev);overflow:hidden}
-.pm-row{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(120px,1.5fr) auto;gap:12px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line);cursor:pointer;text-align:start;width:100%;background:transparent;font:inherit;color:inherit;border-inline:0;border-top:0;border-radius:0;transition:background .15s ease}
+.pm-row{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(120px,1.5fr) auto;gap:12px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line);cursor:pointer;text-align:start;width:100%;background:transparent;font:inherit;color:inherit;border-inline:0;border-top:0;border-radius:0;transition:background .15s ease,opacity .15s ease}
 .pm-row:last-child{border-bottom:0}
 .pm-row:hover,.pm-row:focus-visible{background:#f0f4f2;outline:none}
 .pm-row.active{background:#eef3f0;box-shadow:inset 3px 0 0 var(--pm,var(--live))}
+.pm-row.dim{opacity:.45}
 .pm-name{font-weight:700;font-size:.95rem;display:flex;gap:10px;align-items:center;min-width:0}
 .pm-name img{width:36px;height:36px;border-radius:2px;object-fit:cover;background:#dce4df;flex-shrink:0}
 .pm-name .who{min-width:0}.pm-name .who b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:800}
@@ -157,19 +158,39 @@ button.primary:hover{background:#0a5748}
 .pm-pct{font-variant-numeric:tabular-nums;font-weight:800;font-size:1.15rem;direction:ltr;unicode-bidi:isolate;text-align:end;min-width:4rem;color:var(--navy)}
 .pm-empty{padding:20px;color:var(--muted);font-size:.875rem}
 .pm-note{margin-top:10px;font-size:.8125rem;color:var(--muted);line-height:1.6}
-.pm-chart-wrap{margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:var(--radius);background:#0b1218;color:#eef2f0}
-.pm-chart-wrap.hidden{display:none!important}
+.pm-chart-wrap{margin:0 0 14px;padding:14px;border:1px solid var(--line);border-radius:var(--radius);background:#0b1218;color:#eef2f0}
 .pm-chart-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:10px}
 .pm-chart-top h3{margin:0;font-size:1rem;font-weight:800;color:#fff}
 .pm-chart-top .pm-chart-sub{margin:4px 0 0;font-size:.8125rem;color:#a8b8b1}
+.pm-legend{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 10px}
+.pm-legend span{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;color:#c5d0cb;font-weight:600}
+.pm-legend i{width:10px;height:10px;border-radius:2px;background:var(--c);display:inline-block}
 .pm-res{display:flex;gap:4px;flex-wrap:wrap}
 .pm-res button{border:1px solid #2a3a44;background:#151f28;color:#c5d0cb;border-radius:var(--radius);padding:6px 10px;font-size:.75rem;font-weight:700;cursor:pointer}
 .pm-res button.on{background:#b86a0a;border-color:#b86a0a;color:#fff}
 .pm-res button:focus-visible{outline:2px solid #b86a0a;outline-offset:2px}
-#pmChart{width:100%;height:240px;display:block}
+.pm-chart-stage{position:relative;width:100%}
+#pmChart{width:100%;height:280px;display:block;touch-action:none;cursor:crosshair}
+.pm-tip{
+ position:absolute;z-index:3;pointer-events:none;transform:translate(-50%,calc(-100% - 14px));
+ background:#101820ee;color:#eef2f0;border:1px solid #3a4c56;border-radius:8px;
+ padding:10px 12px;min-width:11rem;box-shadow:0 10px 28px #00000066;backdrop-filter:blur(6px);
+ opacity:0;visibility:hidden;transition:opacity .12s ease;
+}
+.pm-tip.on{opacity:1;visibility:visible}
+.pm-tip .pm-tip-time{display:block;margin-bottom:8px;font-size:.72rem;color:#a8b8b1;font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate;text-align:start}
+.pm-tip-rows{display:flex;flex-direction:column;gap:6px}
+.pm-tip-row{display:flex;justify-content:space-between;gap:14px;align-items:center;font-size:.82rem}
+.pm-tip-row .nm{display:inline-flex;align-items:center;gap:6px;font-weight:600;color:#d5ddd8}
+.pm-tip-row .nm i{width:8px;height:8px;border-radius:50%;background:var(--c);flex-shrink:0}
+.pm-tip-row .pv{font-weight:800;font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate;color:#fff}
+.pm-tip::after{
+ content:"";position:absolute;top:100%;inset-inline-start:50%;transform:translateX(-50%);
+ border:6px solid transparent;border-top-color:#101820ee;
+}
 .pm-chart-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:8px;font-size:.75rem;color:#8fa39b;font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
 .pm-chart-status{margin-top:8px;font-size:.8125rem;color:#a8b8b1}
-@media(max-width:600px){.pm-row{grid-template-columns:1fr auto;gap:8px}.pm-bar{grid-column:1/-1}#pmChart{height:200px}}
+@media(max-width:600px){.pm-row{grid-template-columns:1fr auto;gap:8px}.pm-bar{grid-column:1/-1}#pmChart{height:220px}}
 @keyframes mast{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
 @media(prefers-reduced-motion:reduce){.head,.dot.ok{animation:none}html{scroll-behavior:auto}}
@@ -260,24 +281,32 @@ button.primary:hover{background:#0a5748}
   </div>
  </div>
  <p class="pm-meta" id="pmMeta">טוען נתוני שוק…</p>
- <div class="pm-list" id="pmList" role="list"></div>
- <div class="pm-chart-wrap hidden" id="pmChartWrap">
+ <div class="pm-chart-wrap" id="pmChartWrap">
   <div class="pm-chart-top">
    <div>
-    <h3 id="pmChartTitle">מגמת שבוע</h3>
-    <p class="pm-chart-sub" id="pmChartSub">שבעת הימים האחרונים</p>
+    <h3 id="pmChartTitle">מגמת שבוע · שלושת המועמדים</h3>
+    <p class="pm-chart-sub" id="pmChartSub">סיכוי Yes בשוק · ריחוף מציג את שלושת האחוזים באותו רגע</p>
    </div>
    <div class="pm-res" id="pmRes" role="group" aria-label="רזולוציית גרף">
     <button type="button" data-fid="15">15 דק׳</button>
     <button type="button" data-fid="60" class="on">שעה</button>
     <button type="button" data-fid="240">4 שעות</button>
     <button type="button" data-fid="360">6 שעות</button>
+    <button type="button" data-fid="1440">שבוע</button>
    </div>
   </div>
-  <svg id="pmChart" viewBox="0 0 800 240" role="img" aria-label="גרף סיכויים לשבוע האחרון"></svg>
+  <div class="pm-legend" id="pmLegend"></div>
+  <div class="pm-chart-stage" id="pmChartStage">
+   <svg id="pmChart" viewBox="0 0 800 280" role="img" aria-label="גרף סיכויים לשלושת המועמדים בשבוע האחרון"></svg>
+   <div class="pm-tip" id="pmTip" aria-hidden="true">
+    <span class="pm-tip-time" id="pmTipTime">—</span>
+    <div class="pm-tip-rows" id="pmTipRows"></div>
+   </div>
+  </div>
   <div class="pm-chart-foot"><span id="pmChartMin">—</span><span id="pmChartMax">—</span></div>
   <div class="pm-chart-status" id="pmChartStatus" aria-live="polite"></div>
  </div>
+ <div class="pm-list" id="pmList" role="list"></div>
  <p class="pm-note" id="pmNote"></p>
 </section>
 
@@ -325,7 +354,7 @@ const state={
  selected:new Set(rows.filter(x=>x.active).map(x=>x.key)),
  live:new Map(),feed:null,source:'לא מחובר',updatedAt:null,rawCount:0,nationalPct:null,
  nationalPreserved:false,history:[],hourlyHistory:null,showForecasts:false,openGroup:null,chartHidden:new Set(),
- pm:null,pmSelected:null,pmFidelity:60,pmHistoryCache:new Map(),pmHistoryLoading:false
+ pm:null,pmSelected:null,pmFidelity:60,pmHistoryCache:new Map(),pmHistoryLoading:false,pmChartGeom:null
 };
 const PM_TRACKED=['Gadi Eizenkot','Benjamin Netanyahu','Naftali Bennett'];
 const PM_META={
@@ -718,32 +747,98 @@ function eventToPmSnapshot(ev){
   disclaimer_he:'סיכויי שוק הימורים (Polymarket), לא סקר ולא תחזית רשמית. מתעדכן בדפדפן כל דקה.'
  };
 }
-function renderPmChart(points,color){
+function pmFidelityLabel(fid){
+ if(fid===15)return '15 דק׳';
+ if(fid===60)return 'שעה';
+ if(fid===240)return '4 שעות';
+ if(fid===360)return '6 שעות';
+ if(fid===1440)return 'שבוע (יומי)';
+ return fid+' דק׳';
+}
+function nearestPmPoint(points,t){
+ if(!points?.length)return null;
+ let best=points[0],bestD=Math.abs(points[0].t-t);
+ for(let i=1;i<points.length;i++){const d=Math.abs(points[i].t-t);if(d<bestD){bestD=d;best=points[i]}}
+ return best;
+}
+function hidePmTip(){
+ const tip=$('pmTip');if(!tip)return;
+ tip.classList.remove('on');tip.setAttribute('aria-hidden','true');
+ const guide=$('pmGuide');if(guide)guide.setAttribute('visibility','hidden');
+ const dots=document.querySelectorAll('[data-pm-dot]');dots.forEach(d=>d.setAttribute('visibility','hidden'));
+}
+function renderPmMultiChart(series){
  const svg=$('pmChart');if(!svg)return;
- if(!points||points.length<2){
-  svg.innerHTML='<text x="400" y="120" text-anchor="middle" fill="#8fa39b" font-size="14" font-family="Heebo,sans-serif">אין מספיק נקודות להצגת מגמה</text>';
+ hidePmTip();
+ const usable=(series||[]).filter(s=>s.points&&s.points.length>=2);
+ if(!usable.length){
+  svg.innerHTML='<text x="400" y="140" text-anchor="middle" fill="#8fa39b" font-size="14" font-family="Heebo,sans-serif">אין מספיק נקודות להצגת מגמה</text>';
+  state.pmChartGeom=null;
   if($('pmChartMin'))$('pmChartMin').textContent='—';
   if($('pmChartMax'))$('pmChartMax').textContent='—';
   return;
  }
- const W=800,H=240,pad={t:18,r:18,b:28,l:48};
- const xs=points.map(p=>p.t),ys=points.map(p=>p.p*100);
- const x0=Math.min(...xs),x1=Math.max(...xs),yMin=Math.min(...ys),yMax=Math.max(...ys);
- const yPad=Math.max(0.5,(yMax-yMin)*0.12||1);
- const y0=Math.max(0,yMin-yPad),y1=Math.min(100,yMax+yPad);
+ const W=800,H=280,pad={t:18,r:18,b:28,l:48};
+ const allT=usable.flatMap(s=>s.points.map(p=>p.t));
+ const allY=usable.flatMap(s=>s.points.map(p=>p.p*100));
+ const x0=Math.min(...allT),x1=Math.max(...allT);
+ const yMin=Math.min(...allY),yMax=Math.max(...allY);
+ const yPad=Math.max(1,(yMax-yMin)*0.12||2);
+ const yLo=Math.max(0,yMin-yPad),yHi=Math.min(100,yMax+yPad);
  const xScale=t=>pad.l+(W-pad.l-pad.r)*((t-x0)/Math.max(1,x1-x0));
- const yScale=v=>pad.t+(H-pad.t-pad.b)*(1-((v-y0)/Math.max(0.01,y1-y0)));
- const line=points.map((p,i)=>`${i?'L':'M'}${xScale(p.t).toFixed(1)},${yScale(p.p*100).toFixed(1)}`).join(' ');
- const area=`M${xScale(points[0].t).toFixed(1)},${(H-pad.b).toFixed(1)} `+points.map(p=>`L${xScale(p.t).toFixed(1)},${yScale(p.p*100).toFixed(1)}`).join(' ')+` L${xScale(points.at(-1).t).toFixed(1)},${(H-pad.b).toFixed(1)} Z`;
- const grid=[0.25,0.5,0.75].map(f=>{
-  const v=y0+(y1-y0)*f;const y=yScale(v);
-  return `<line x1="${pad.l}" x2="${W-pad.r}" y1="${y}" y2="${y}" stroke="#2a3a44" stroke-width="1"/><text x="${pad.l-8}" y="${y+4}" text-anchor="end" fill="#8fa39b" font-size="11" font-variant-numeric="tabular-nums">${v.toFixed(1)}%</text>`;
+ const yScale=v=>pad.t+(H-pad.t-pad.b)*(1-((v-yLo)/Math.max(0.01,yHi-yLo)));
+ const focus=state.pmSelected;
+ const grid=[0,0.25,0.5,0.75,1].map(f=>{
+  const v=yLo+(yHi-yLo)*f;const y=yScale(v);
+  return `<line x1="${pad.l}" x2="${W-pad.r}" y1="${y}" y2="${y}" stroke="#24323c" stroke-width="1"/><text x="${pad.l-8}" y="${y+4}" text-anchor="end" fill="#8fa39b" font-size="11" font-variant-numeric="tabular-nums">${v.toFixed(0)}%</text>`;
  }).join('');
- const last=points.at(-1);
- svg.innerHTML=`<rect width="${W}" height="${H}" fill="transparent"/>${grid}<path d="${area}" fill="${color}" opacity=".18"/><path d="${line}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="${xScale(last.t)}" cy="${yScale(last.p*100)}" r="4.5" fill="${color}" stroke="#0b1218" stroke-width="2"/>`;
- const fmtT=ts=>new Date(ts*1000).toLocaleString('he-IL',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
- if($('pmChartMin'))$('pmChartMin').textContent=fmtT(points[0].t)+' · '+(points[0].p*100).toFixed(1)+'%';
- if($('pmChartMax'))$('pmChartMax').textContent=fmtT(points.at(-1).t)+' · '+(points.at(-1).p*100).toFixed(1)+'%';
+ const paths=usable.map(s=>{
+  const dim=focus&&focus!==s.name;
+  const op=dim?'.28':'1';
+  const sw=dim?'1.6':'2.6';
+  const d=s.points.map((p,i)=>`${i?'L':'M'}${xScale(p.t).toFixed(1)},${yScale(p.p*100).toFixed(1)}`).join(' ');
+  const last=s.points.at(-1);
+  return `<path data-pm-line="${esc(s.name)}" d="${d}" fill="none" stroke="${s.color}" stroke-width="${sw}" stroke-linejoin="round" stroke-linecap="round" opacity="${op}"/><circle data-pm-end="${esc(s.name)}" cx="${xScale(last.t)}" cy="${yScale(last.p*100)}" r="4" fill="${s.color}" stroke="#0b1218" stroke-width="2" opacity="${op}"/>`;
+ }).join('');
+ const hoverDots=usable.map(s=>`<circle data-pm-dot="${esc(s.name)}" cx="0" cy="0" r="4.5" fill="${s.color}" stroke="#fffcf8" stroke-width="2" visibility="hidden"/>`).join('');
+ svg.innerHTML=`<rect width="${W}" height="${H}" fill="transparent"/>${grid}${paths}<line id="pmGuide" x1="0" x2="0" y1="${pad.t}" y2="${H-pad.b}" stroke="#9eb0aa" stroke-width="1" stroke-dasharray="4 4" opacity=".7" visibility="hidden"/>${hoverDots}<rect id="pmHit" x="${pad.l}" y="${pad.t}" width="${W-pad.l-pad.r}" height="${H-pad.t-pad.b}" fill="transparent" style="cursor:crosshair"/>`;
+ const fmtT=ts=>new Date(ts*1000).toLocaleString('he-IL',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+ if($('pmChartMin'))$('pmChartMin').textContent=fmtT(x0);
+ if($('pmChartMax'))$('pmChartMax').textContent=fmtT(x1);
+ state.pmChartGeom={series:usable,pad,W,H,x0,x1,xScale,yScale,fmtT};
+ const hit=$('pmHit'),tip=$('pmTip'),stage=$('pmChartStage'),rows=$('pmTipRows');
+ if(!hit||!tip||!stage||!rows)return;
+ const onMove=ev=>{
+  const geom=state.pmChartGeom;if(!geom)return;
+  const pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;
+  const ctm=svg.getScreenCTM();if(!ctm)return;
+  const loc=pt.matrixTransform(ctm.inverse());
+  if(loc.x<pad.l||loc.x>W-pad.r||loc.y<pad.t||loc.y>H-pad.b){hidePmTip();return}
+  const t=x0+((loc.x-pad.l)/Math.max(1,W-pad.l-pad.r))*(x1-x0);
+  const samples=usable.map(s=>({...s,point:nearestPmPoint(s.points,t)})).filter(s=>s.point);
+  if(!samples.length){hidePmTip();return}
+  const cx=xScale(samples.reduce((a,s)=>a+s.point.t,0)/samples.length);
+  const guide=$('pmGuide');
+  if(guide){guide.setAttribute('x1',cx);guide.setAttribute('x2',cx);guide.setAttribute('visibility','visible')}
+  samples.forEach(s=>{
+   const dot=svg.querySelector(`[data-pm-dot="${CSS.escape(s.name)}"]`);
+   if(!dot)return;
+   dot.setAttribute('cx',xScale(s.point.t));
+   dot.setAttribute('cy',yScale(s.point.p*100));
+   dot.setAttribute('visibility','visible');
+  });
+  const ordered=[...samples].sort((a,b)=>b.point.p-a.point.p);
+  if($('pmTipTime'))$('pmTipTime').textContent=fmtT(ordered[0].point.t);
+  rows.innerHTML=ordered.map(s=>`<div class="pm-tip-row"><span class="nm"><i style="--c:${s.color}"></i>${esc(s.name_he)}</span><span class="pv">${(s.point.p*100).toFixed(1)}%</span></div>`).join('');
+  const topY=Math.min(...samples.map(s=>yScale(s.point.p*100)));
+  const rect=stage.getBoundingClientRect();
+  tip.style.left=Math.min(rect.width-12,Math.max(12,(cx/W)*rect.width))+'px';
+  tip.style.top=Math.max(10,(topY/H)*rect.height)+'px';
+  tip.classList.add('on');tip.setAttribute('aria-hidden','false');
+ };
+ hit.onpointermove=onMove;
+ hit.onpointerleave=hidePmTip;
+ hit.onpointerdown=onMove;
 }
 async function loadPmHistory(token,fidelity){
  const key=token+'|'+fidelity;
@@ -759,32 +854,45 @@ async function loadPmHistory(token,fidelity){
  state.pmHistoryCache.set(key,history);
  return history;
 }
-async function showPmChart(name){
+async function loadPmMultiChart(){
  const wrap=$('pmChartWrap');if(!wrap)return;
- const c=(state.pm?.candidates||[]).find(x=>x.name===name);
- if(!c||!c.yes_token){
-  wrap.classList.add('hidden');
-  if($('pmChartStatus'))$('pmChartStatus').textContent='אין מזהה שוק למועמד זה.';
+ const candidates=(state.pm?.candidates||[]).filter(c=>c.yes_token);
+ $('pmRes')?.querySelectorAll('button').forEach(b=>b.classList.toggle('on',Number(b.dataset.fid)===state.pmFidelity));
+ const legend=$('pmLegend');
+ if(legend){
+  legend.innerHTML=candidates.map(c=>`<span><i style="--c:${c.color}"></i>${esc(c.name_he)}</span>`).join('');
+ }
+ if(!candidates.length){
+  renderPmMultiChart([]);
+  if($('pmChartStatus'))$('pmChartStatus').textContent='אין מזהי שוק למועמדים.';
   return;
  }
- state.pmSelected=name;
- wrap.classList.remove('hidden');
- if($('pmChartTitle'))$('pmChartTitle').textContent=`${c.name_he} · מגמת שבוע`;
- if($('pmChartSub'))$('pmChartSub').textContent='לחיצה על מועמד מציגה תנועות מחיר Yes בשבעת הימים האחרונים';
- $('pmRes')?.querySelectorAll('button').forEach(b=>b.classList.toggle('on',Number(b.dataset.fid)===state.pmFidelity));
- document.querySelectorAll('.pm-row').forEach(el=>el.classList.toggle('active',el.dataset.name===name));
- const cacheKey=c.yes_token+'|'+state.pmFidelity;
- const hadCache=state.pmHistoryCache.has(cacheKey);
- if(!hadCache&&$('pmChartStatus'))$('pmChartStatus').textContent='טוען היסטוריית מחירים…';
+ const missing=candidates.some(c=>!state.pmHistoryCache.has(c.yes_token+'|'+state.pmFidelity));
+ if(missing&&$('pmChartStatus'))$('pmChartStatus').textContent='טוען היסטוריית מחירים…';
  state.pmHistoryLoading=true;
  try{
-  const pts=await loadPmHistory(c.yes_token,state.pmFidelity);
-  renderPmChart(pts,c.color||'#b86a0a');
-  if($('pmChartStatus'))$('pmChartStatus').textContent=pts.length?`${pts.length} נקודות · רזולוציה ${state.pmFidelity} דק׳`:'אין נתוני היסטוריה לחלון זה';
+  const series=await Promise.all(candidates.map(async c=>{
+   const points=await loadPmHistory(c.yes_token,state.pmFidelity);
+   return {name:c.name,name_he:c.name_he,color:c.color,points};
+  }));
+  renderPmMultiChart(series);
+  const n=series.reduce((s,x)=>s+x.points.length,0);
+  if($('pmChartStatus'))$('pmChartStatus').textContent=n?`שלושה קווים · ${pmFidelityLabel(state.pmFidelity)} · ${n} נקודות`:'אין נתוני היסטוריה לחלון זה';
  }catch(e){
-  renderPmChart([],c.color);
+  renderPmMultiChart([]);
   if($('pmChartStatus'))$('pmChartStatus').textContent='טעינת הגרף נכשלה: '+(e.message||e);
  }finally{state.pmHistoryLoading=false}
+}
+function setPmFocus(name){
+ state.pmSelected=state.pmSelected===name?null:name;
+ document.querySelectorAll('.pm-row').forEach(el=>{
+  const on=state.pmSelected&&el.dataset.name===state.pmSelected;
+  const dim=state.pmSelected&&el.dataset.name!==state.pmSelected;
+  el.classList.toggle('active',!!on);
+  el.classList.toggle('dim',!!dim);
+  el.setAttribute('aria-pressed',on?'true':'false');
+ });
+ if(state.pmChartGeom?.series)renderPmMultiChart(state.pmChartGeom.series);
 }
 function renderPolymarket(data){
  const list=$('pmList'),meta=$('pmMeta'),note=$('pmNote');
@@ -795,30 +903,28 @@ function renderPolymarket(data){
   list.innerHTML='<div class="pm-empty">אין כרגע נתוני שוק להצגה.</div>';
   if(meta)meta.textContent='';
   if(note)note.textContent='';
-  $('pmChartWrap')?.classList.add('hidden');
+  renderPmMultiChart([]);
   return;
  }
  const vol=data.volume!=null?nf.format(Math.round(data.volume)):'—';
  const when=data.updated_at?new Date(data.updated_at).toLocaleString('he-IL',{dateStyle:'short',timeStyle:'short'}):'—';
  const liveTag=data.live?' · רענון חי כל דקה':' · מטמון מקומי';
  if(meta)meta.textContent=`נפח אירוע ≈ $${vol} · עודכן ${when}${liveTag}`;
- if(note)note.textContent=data.disclaimer_he||'סיכויי שוק Polymarket בלבד. לחצו על מועמד לגרף שבועי.';
+ if(note)note.textContent=data.disclaimer_he||'סיכויי שוק Polymarket בלבד. ריחוף על הגרף מציג את שלושת האחוזים.';
  const maxPct=Math.max(...candidates.map(c=>c.pct||0),1);
  list.innerHTML=candidates.map(c=>{
   const img=c.image?`<img src="${esc(c.image)}" alt="" width="36" height="36" loading="lazy" referrerpolicy="no-referrer">`:'';
   const w=Math.max(3,Math.round(100*(c.pct||0)/maxPct));
-  const active=state.pmSelected===c.name?' active':'';
-  return `<button type="button" class="pm-row${active}" role="listitem" data-name="${esc(c.name)}" style="--pm:${c.color}" aria-pressed="${state.pmSelected===c.name?'true':'false'}">
+  const active=state.pmSelected===c.name;
+  const dim=state.pmSelected&&state.pmSelected!==c.name;
+  return `<button type="button" class="pm-row${active?' active':''}${dim?' dim':''}" role="listitem" data-name="${esc(c.name)}" style="--pm:${c.color}" aria-pressed="${active?'true':'false'}">
    <div class="pm-name">${img}<span class="who"><b>${esc(c.name_he)}</b><small>${esc(c.name)}</small></span></div>
    <div class="pm-bar" aria-hidden="true"><i style="width:${w}%"></i></div>
    <div class="pm-pct">${(c.pct??0).toFixed(1)}%</div>
   </button>`;
  }).join('');
- list.querySelectorAll('.pm-row').forEach(btn=>{
-  btn.onclick=()=>{const n=btn.dataset.name;if(state.pmSelected===n){state.pmSelected=null;$('pmChartWrap')?.classList.add('hidden');btn.classList.remove('active');btn.setAttribute('aria-pressed','false');return;}showPmChart(n);};
- });
- if(state.pmSelected&&candidates.some(c=>c.name===state.pmSelected))showPmChart(state.pmSelected);
- else if(state.pmSelected){state.pmSelected=null;$('pmChartWrap')?.classList.add('hidden')}
+ list.querySelectorAll('.pm-row').forEach(btn=>{btn.onclick=()=>setPmFocus(btn.dataset.name)});
+ loadPmMultiChart();
 }
 async function loadPolymarket(){
  try{
@@ -1008,8 +1114,7 @@ globalThis.api={state,rows,ingest,fetchFeed,newPulseStats,nationalLive,groupStat
    btn.onclick=()=>{
     state.pmFidelity=Number(btn.dataset.fid)||60;
     state.pmHistoryCache.clear();
-    if(state.pmSelected)showPmChart(state.pmSelected);
-    else $('pmRes')?.querySelectorAll('button').forEach(b=>b.classList.toggle('on',Number(b.dataset.fid)===state.pmFidelity));
+    loadPmMultiChart();
    };
   });
 }
