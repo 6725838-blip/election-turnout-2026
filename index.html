@@ -49,9 +49,11 @@ button,input,select{font:inherit}a{color:#2a5f8f}
 .chip.full{background:#e5f5ef;color:var(--ok)}.chip.partial{background:#fff3df;color:var(--warn)}.chip.none{background:#eef1f5;color:#7a8b9c}
 .group-cities{display:none;margin-top:10px;border-top:1px solid var(--border);padding-top:8px}
 .group-row.open .group-cities{display:block}
-.group-cities table{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
-.group-cities th,.group-cities td{padding:6px 4px;border-bottom:1px solid #e8eef3;text-align:right}
-.group-cities .num{text-align:left;direction:ltr;font-weight:700}
+.group-cities .tablewrap{overflow-x:auto}
+.group-cities table.city-mini{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums;min-width:640px}
+.group-cities th,.group-cities td{padding:7px 6px;border-bottom:1px solid #e8eef3;text-align:right;vertical-align:middle}
+.group-cities th{background:#edf2f7;color:#425871;font-size:11px;white-space:nowrap}
+.group-cities .num{text-align:left;direction:ltr;unicode-bidi:isolate;font-weight:700;white-space:nowrap}
 .national-card .big{font-size:40px;font-weight:800;font-variant-numeric:tabular-nums;direction:ltr;text-align:right;line-height:1.1;margin:6px 0}
 .national-card .meta{font-size:12px;color:var(--muted);line-height:1.7}
 .national-card .forecast-box{margin-top:12px;padding:10px 11px;border-radius:10px;background:#f3f7fb;border:1px solid #dbe5ef}
@@ -151,9 +153,9 @@ button.primary{background:var(--navy);color:#fff;border-color:var(--navy)}
  <div class="controls noprint">
   <input id="filterCity" type="text" placeholder="חיפוש יישוב…" style="flex:1;min-width:160px">
   <select id="filterGroup"><option value="">כל הקבוצות</option></select>
-  <select id="sort"><option value="group">לפי קבוצה</option><option value="live">שיעור 2026</option><option value="p2022">סופי 2022</option><option value="progress">התקדמות מול 2022</option><option value="name">שם</option></select>
+  <select id="sort"><option value="group">לפי קבוצה</option><option value="live">שיעור 2026</option><option value="p2022">סופי 2022</option><option value="p2021">סופי 2021</option><option value="p2020">סופי 2020</option><option value="progress">התקדמות מול 2022</option><option value="name">שם</option></select>
  </div>
- <div class="tablewrap"><table class="data"><thead><tr><th>יישוב</th><th>קבוצה</th><th>2026</th><th>סופי 2022</th><th>התקדמות מול 2022</th><th>סטטוס</th></tr></thead><tbody id="cityTable"></tbody></table></div>
+ <div class="tablewrap"><table class="data"><thead><tr><th>יישוב</th><th>קבוצה</th><th>2026 עכשיו</th><th>סופי 2022</th><th>סופי 2021</th><th>סופי 2020</th><th>התקדמות מול 2022</th><th>סטטוס</th></tr></thead><tbody id="cityTable"></tbody></table></div>
 </section>
 
 <details class="tools noprint">
@@ -221,6 +223,12 @@ function nationalLive(){
  return {value:null,manual:false};
 }
 function selectedInGroup(id){return rows.filter(r=>r.group===id&&state.selected.has(r.key))}
+function weightedFinal(pick, yearField){
+ if(!pick.length||!pick.every(r=>val(r[yearField])!=null&&val(r.eligible2022)>0))return null;
+ const e=pick.reduce((s,r)=>s+r.eligible2022,0);
+ if(!(e>0))return null;
+ return pick.reduce((s,r)=>s+r[yearField]*r.eligible2022,0)/e;
+}
 function groupStats(id){
  const selected=selectedInGroup(id);
  const full=selected.filter(r=>{const l=getLive(r.name);return complete(l)&&val(l.eligible)>0&&val(l.voted)!=null});
@@ -230,16 +238,24 @@ function groupStats(id){
   votedSum=full.reduce((s,r)=>s+val(getLive(r.name).voted),0);
   current=eligSum>0?100*votedSum/eligSum:null;
  }
- let baseline=null;
+ // 2022 reference for progress uses the same reported cities; display baseline uses full group when none reported.
+ let baselineReported=null;
  if(full.length&&full.every(r=>val(r.eligible2022)>0&&val(r.voters2022)!=null)){
   const be=full.reduce((s,r)=>s+r.eligible2022,0),bv=full.reduce((s,r)=>s+r.voters2022,0);
-  baseline=be>0?100*bv/be:null;
+  baselineReported=be>0?100*bv/be:null;
  }
+ let baselineAll=null;
+ if(selected.length&&selected.every(r=>val(r.eligible2022)>0&&val(r.voters2022)!=null)){
+  const be=selected.reduce((s,r)=>s+r.eligible2022,0),bv=selected.reduce((s,r)=>s+r.voters2022,0);
+  baselineAll=be>0?100*bv/be:null;
+ }
+ const baseline=baselineReported??baselineAll;
+ const baselineIsPartial=!!(baselineReported!=null&&full.length>0&&full.length<selected.length);
  const baseEligAll=selected.every(r=>val(r.eligible2022)>0)?selected.reduce((s,r)=>s+r.eligible2022,0):null;
- const baseEligFull=full.every(r=>val(r.eligible2022)>0)?full.reduce((s,r)=>s+r.eligible2022,0):null;
+ const baseEligFull=full.length&&full.every(r=>val(r.eligible2022)>0)?full.reduce((s,r)=>s+r.eligible2022,0):null;
  const eligibleCoverage=baseEligAll>0&&baseEligFull!=null?baseEligFull/baseEligAll:null;
- const progress=current!=null&&baseline>0?100*current/baseline:null;
- return {id,n:selected.length,fullCount:full.length,current,baseline,progress,eligibleCoverage,votedSum,eligSum,cityKeys:full.map(r=>r.key),partial:full.length>0&&full.length<selected.length,empty:full.length===0};
+ const progress=current!=null&&baselineReported>0?100*current/baselineReported:null;
+ return {id,n:selected.length,fullCount:full.length,current,baseline,baselineReported,baselineAll,baselineIsPartial,progress,eligibleCoverage,votedSum,eligSum,cityKeys:full.map(r=>r.key),partial:full.length>0&&full.length<selected.length,empty:full.length===0};
 }
 /** Alias used by older tests expecting all-or-nothing completeCount semantics for demos. */
 function newPulseStats(pick){
@@ -341,9 +357,9 @@ function renderBoard(){
   const open=state.openGroup===g.id?' open':'';
   const chip=s.empty?'<span class="chip none">אין דיווח</span>':(s.partial||s.fullCount<s.n?`<span class="chip partial">חלקי ${s.fullCount}/${s.n}</span>`:`<span class="chip full">מלא ${s.fullCount}/${s.n}</span>`);
   const pctCls=s.current==null?'group-pct missing':'group-pct';
-  const baseMax=Math.max(s.baseline||0,s.current||0,1);
-  const fill=s.current==null?0:Math.max(0,Math.min(100,100*s.current/Math.max(baseMax,100)));
-  const markPos=s.baseline==null?null:Math.max(0,Math.min(100,100*s.baseline/Math.max(baseMax,100)));
+  const baseMax=Math.max(s.baseline||0,s.current||0,100);
+  const fill=s.current==null?0:Math.max(0,Math.min(100,100*s.current/baseMax));
+  const markPos=s.baseline==null?null:Math.max(0,Math.min(100,100*s.baseline/baseMax));
   let deltaHtml='';
   if(d?.kind==='same'&&d.delta!=null){
    const cls=d.delta>0.05?'up':d.delta<-0.05?'down':'flat';
@@ -355,17 +371,30 @@ function renderBoard(){
   const fc=groupForecastRange(s);
   const forecast=fc?`<div class="forecast-line">תרחיש סיום משוער: ${fc.lo.toFixed(0)}%–${fc.hi.toFixed(0)}%</div>`:(state.showForecasts?`<div class="forecast-line">תרחישי סיום — אין בסיס מאומת להצגה</div>`:'');
   const cities=selectedInGroup(g.id).map(r=>{
-   const l=getLive(r.name),p=livePct(l),prog=p!=null&&r.p2022>0?100*p/r.p2022:null;
-   const st=!l?'אין':l.preserved_previous?'נשמר':!complete(l)?'חלקי':'מלא';
-   return `<tr><td>${esc(r.name)}</td><td class="num">${fmt(p)}</td><td class="num">${fmt(r.p2022)}</td><td class="num">${prog==null?'—':prog.toFixed(0)+'%'}</td><td>${st}</td></tr>`;
+   const l=getLive(r.name),p=complete(l)?livePct(l):(l&&!l.preserved_previous?livePct(l):null);
+   const liveShow=l?livePct(l):null;
+   const prog=complete(l)&&liveShow!=null&&r.p2022>0?100*liveShow/r.p2022:null;
+   const st=!l?'אין דיווח':l.preserved_previous?'נשמר':!complete(l)?'חלקי':'מלא';
+   return `<tr>
+    <td>${esc(r.name)}</td>
+    <td class="num" data-col="y2026">${liveShow==null?'—':fmt(liveShow)}</td>
+    <td class="num" data-col="y2022">${fmt(r.p2022)}</td>
+    <td class="num" data-col="y2021">${fmt(r.p2021)}</td>
+    <td class="num" data-col="y2020">${fmt(r.p2020)}</td>
+    <td class="num" data-col="prog">${prog==null?'—':prog.toFixed(0)+'%'}</td>
+    <td data-col="status">${esc(st)}</td>
+   </tr>`;
   }).join('');
+  const refNote=s.empty?'סופי ב־2022 (כל הקבוצה)':(s.baselineIsPartial?'סופי ב־2022 (יישובים מדווחים)':'סופי ב־2022');
   return `<div class="group-row${open}" data-gid="${g.id}"><div class="group-row-main">
    <div class="group-name">${esc(g.title)}${chip}<small>${s.fullCount?`מדווחים ${s.fullCount}/${s.n}${covElig}`:'ממתין לדיווח'}</small></div>
    <div class="${pctCls}">${s.current==null?'—':s.current.toFixed(1)+'%'}</div>
    <div class="track-wrap"><div class="track"><div class="fill" style="width:${fill}%"></div>${markPos!=null?`<div class="mark2022" style="right:${markPos}%"></div>`:''}</div>
-   <div class="ref2022">סופי ב־2022: ${s.baseline==null?'—':s.baseline.toFixed(1)+'%'}${s.fullCount&&s.fullCount<s.n?' · על היישובים המדווחים':''}</div>${forecast}</div>
+   <div class="ref2022">${refNote}: ${s.baseline==null?'—':s.baseline.toFixed(1)+'%'}</div>${forecast}</div>
    <div class="meta-col">${deltaHtml}<div>${s.progress==null?'':('התקדמות מול 2022: '+s.progress.toFixed(0)+'%')}</div></div>
-  </div><div class="group-cities"><table><thead><tr><th>יישוב</th><th>2026</th><th>2022</th><th>התקדמות</th><th>סטטוס</th></tr></thead><tbody>${cities}</tbody></table></div></div>`;
+  </div><div class="group-cities"><div class="tablewrap"><table class="city-mini">
+   <thead><tr><th>יישוב</th><th>2026 עכשיו</th><th>סופי 2022</th><th>סופי 2021</th><th>סופי 2020</th><th>התקדמות מול 2022</th><th>סטטוס</th></tr></thead>
+   <tbody>${cities}</tbody></table></div></div></div>`;
  }).join('');
  root.querySelectorAll('.group-row').forEach(el=>{
   el.addEventListener('click',ev=>{if(ev.target.closest('a,button,input'))return;const id=el.getAttribute('data-gid');state.openGroup=state.openGroup===id?null:id;renderBoard();});
@@ -485,13 +514,24 @@ function renderTable(){
  const prog=r=>{const p=complete(getLive(r.name))?livePct(getLive(r.name)):null;return p!=null&&r.p2022>0?100*p/r.p2022:null};
  if(order==='name')list.sort((a,b)=>a.name.localeCompare(b.name,'he'));
  if(order==='live')list.sort((a,b)=>(livePct(getLive(b.name))??-1)-(livePct(getLive(a.name))??-1));
- if(order==='p2022')list.sort((a,b)=>b.p2022-a.p2022);
+ if(order==='p2022')list.sort((a,b)=>(b.p2022??-1)-(a.p2022??-1));
+ if(order==='p2021')list.sort((a,b)=>(b.p2021??-1)-(a.p2021??-1));
+ if(order==='p2020')list.sort((a,b)=>(b.p2020??-1)-(a.p2020??-1));
  if(order==='progress')list.sort((a,b)=>(prog(b)??-1)-(prog(a)??-1));
  if(order==='group')list.sort((a,b)=>primaryGroups.indexOf(a.group)-primaryGroups.indexOf(b.group)||a.name.localeCompare(b.name,'he'));
  $('cityTable').innerHTML=list.map(r=>{
-  const l=getLive(r.name),p=livePct(l),pr=prog(r);
-  const st=!l?'אין':l.preserved_previous?'נשמר':!complete(l)?'חלקי':'מלא';
-  return `<tr><td>${esc(r.name)}</td><td>${esc(groupById[r.group]?.title||r.group)}</td><td class="num">${fmt(p)}</td><td class="num">${fmt(r.p2022)}</td><td class="num">${pr==null?'—':pr.toFixed(0)+'%'}</td><td>${st}</td></tr>`;
+  const l=getLive(r.name),p=l?livePct(l):null,pr=prog(r);
+  const st=!l?'אין דיווח':l.preserved_previous?'נשמר':!complete(l)?'חלקי':'מלא';
+  return `<tr>
+   <td>${esc(r.name)}</td>
+   <td>${esc(groupById[r.group]?.title||r.group)}</td>
+   <td class="num">${p==null?'—':fmt(p)}</td>
+   <td class="num">${fmt(r.p2022)}</td>
+   <td class="num">${fmt(r.p2021)}</td>
+   <td class="num">${fmt(r.p2020)}</td>
+   <td class="num">${pr==null?'—':pr.toFixed(0)+'%'}</td>
+   <td>${esc(st)}</td>
+  </tr>`;
  }).join('');
 }
 function renderStatus(){
