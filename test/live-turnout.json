@@ -1,9 +1,362 @@
 {
   "format_version": 1,
   "demo": true,
-  "test_revision": "cleared",
-  "source": "סביבת בדיקה בלבד — אין נתוני הדגמה פעילים",
-  "updated_at": null,
-  "national_turnout_pct": null,
-  "records": []
+  "test_revision": "one",
+  "source": "הדגמה בלבד — בדיקה אוטומטית one",
+  "updated_at": "2026-10-26T00:01:14.836124+00:00",
+  "national_turnout_pct": 35.315,
+  "records": [
+    {
+      "city": "מעלה אדומים",
+      "eligible": 1000000,
+      "voted": 350200.0,
+      "turnout_pct": 35.02,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "דימונה",
+      "eligible": 1000000,
+      "voted": 317850.0,
+      "turnout_pct": 31.785,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "שדרות",
+      "eligible": 1000000,
+      "voted": 327800.0,
+      "turnout_pct": 32.78,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "קריית שמונה",
+      "eligible": 1000000,
+      "voted": 305550.0,
+      "turnout_pct": 30.555,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "טירת כרמל",
+      "eligible": 1000000,
+      "voted": 342584.6209615298,
+      "turnout_pct": 34.258462096152975,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "באר שבע",
+      "eligible": 1000000,
+      "voted": 306550.0,
+      "turnout_pct": 30.655,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "קריית אתא",
+      "eligible": 1000000,
+      "voted": 324853.81321034423,
+      "turnout_pct": 32.485381321034424,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "עפולה",
+      "eligible": 1000000,
+      "voted": 316350.5559189013,
+      "turnout_pct": 31.635055591890126,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "אילת",
+      "eligible": 1000000,
+      "voted": 215117.1739716012,
+      "turnout_pct": 21.51171739716012,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "אשקלון",
+      "eligible": 1000000,
+      "voted": 309500.0,
+      "turnout_pct": 30.95,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "קריית אונו",
+      "eligible": 1000000,
+      "voted": 366350.0,
+      "turnout_pct": 36.635,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "כפר סבא",
+      "eligible": 1000000,
+      "voted": 349450.0,
+      "turnout_pct": 34.945,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "הרצליה",
+      "eligible": 1000000,
+      "voted": 328200.0,
+      "turnout_pct": 32.82,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "רמת גן",
+      "eligible": 1000000,
+      "voted": 326150.00000000006,
+      "turnout_pct": 32.615,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "גבעתיים",
+      "eligible": 1000000,
+      "voted": 344850.0,
+      "turnout_pct": 34.485,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "הוד השרון",
+      "eligible": 1000000,
+      "voted": 371800.0,
+      "turnout_pct": 37.18,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "רמת השרון",
+      "eligible": 1000000,
+      "voted": 357100.0,
+      "turnout_pct": 35.71,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "נס ציונה",
+      "eligible": 1000000,
+      "voted": 373500.0,
+      "turnout_pct": 37.35,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "שוהם",
+      "eligible": 1000000,
+      "voted": 380200.0,
+      "turnout_pct": 38.02,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "זכרון יעקב",
+      "eligible": 1000000,
+      "voted": 356100.0,
+      "turnout_pct": 35.61,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "בני ברק",
+      "eligible": 1000000,
+      "voted": 382650.0,
+      "turnout_pct": 38.265,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "אלעד",
+      "eligible": 1000000,
+      "voted": 421800.0,
+      "turnout_pct": 42.18,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "ביתר עילית",
+      "eligible": 1000000,
+      "voted": 406700.0,
+      "turnout_pct": 40.67,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "מודיעין עילית",
+      "eligible": 1000000,
+      "voted": 410150.0,
+      "turnout_pct": 41.015,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "רכסים",
+      "eligible": 1000000,
+      "voted": 421050.0,
+      "turnout_pct": 42.105,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "נצרת",
+      "eligible": 1000000,
+      "voted": 241450.0,
+      "turnout_pct": 24.145,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "רהט",
+      "eligible": 1000000,
+      "voted": 303050.0,
+      "turnout_pct": 30.305,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "טייבה",
+      "eligible": 1000000,
+      "voted": 288550.0,
+      "turnout_pct": 28.855,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "סחנין",
+      "eligible": 1000000,
+      "voted": 342050.0,
+      "turnout_pct": 34.205,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "שפרעם",
+      "eligible": 1000000,
+      "voted": 257350.0,
+      "turnout_pct": 25.735,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "טמרה",
+      "eligible": 1000000,
+      "voted": 317550.0,
+      "turnout_pct": 31.755,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "אום אל־פחם",
+      "eligible": 1000000,
+      "voted": 191450.0,
+      "turnout_pct": 19.145,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "טירה",
+      "eligible": 1000000,
+      "voted": 311350.0,
+      "turnout_pct": 31.135,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "כפר קאסם",
+      "eligible": 1000000,
+      "voted": 334399.99999999994,
+      "turnout_pct": 33.44,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "עראבה",
+      "eligible": 1000000,
+      "voted": 284350.0,
+      "turnout_pct": 28.435,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "טלמון",
+      "eligible": 1000000,
+      "voted": 402800.0,
+      "turnout_pct": 40.28,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "בית אל",
+      "eligible": 1000000,
+      "voted": 385950.0,
+      "turnout_pct": 38.595,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "קדומים",
+      "eligible": 1000000,
+      "voted": 380100.0,
+      "turnout_pct": 38.01,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "קריית ארבע",
+      "eligible": 1000000,
+      "voted": 331400.0,
+      "turnout_pct": 33.14,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "יד בנימין",
+      "eligible": 1000000,
+      "voted": 388850.0,
+      "turnout_pct": 38.885,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "כפר חב״ד",
+      "eligible": 1000000,
+      "voted": 336550.0,
+      "turnout_pct": 33.655,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "קרני שומרון",
+      "eligible": 1000000,
+      "voted": 367750.0,
+      "turnout_pct": 36.775,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "אלקנה",
+      "eligible": 1000000,
+      "voted": 403100.0,
+      "turnout_pct": 40.31,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    },
+    {
+      "city": "אפרת",
+      "eligible": 1000000,
+      "voted": 364900.0,
+      "turnout_pct": 36.49,
+      "partial": false,
+      "as_of": "2026-10-26T00:01:14.836124+00:00"
+    }
+  ]
 }
