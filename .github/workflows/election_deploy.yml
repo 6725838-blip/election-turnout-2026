@@ -52,10 +52,10 @@ jobs:
         name: Commit valid changes and select exact deployment revision
         run: |
           changed=false
-          if ! git diff --quiet -- live-turnout.json; then
+          if ! git diff --quiet -- live-turnout.json turnout-history.json; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add live-turnout.json
+            git add live-turnout.json turnout-history.json
             git commit -m "Update verified turnout snapshot"
             git push origin HEAD:main
             changed=true

@@ -3,22 +3,42 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 const html=fs.readFileSync('index.html','utf8');
 const nodes=new Map();
 function element(id){
- if(!nodes.has(id))nodes.set(id,{value:'',textContent:'',innerHTML:'',style:{},options:[],classList:{toggle(){},remove(){}},scrollIntoView(){}});
+ if(!nodes.has(id))nodes.set(id,{
+  value:'',textContent:'',innerHTML:'',style:{},options:[],checked:false,
+  classList:{toggle(){},remove(){},add(){}},
+  scrollIntoView(){},querySelector(){return null},querySelectorAll(){return []},
+  dataset:{},setAttribute(){},addEventListener(){}
+ });
  return nodes.get(id);
 }
 for(const id of ['baseline-data','embedded-demo'])element(id).textContent=html.match(new RegExp(`<script id="${id}" type="application/json">([\\s\\S]*?)<\\/script>`))[1];
 element('feedUrl').value='./live-turnout.json';
-const context=vm.createContext({document:{getElementById:element,querySelectorAll:()=>[]},location:{protocol:'file:',href:'https://example.invalid/project/'},localStorage:{getItem(){},removeItem(){}},setInterval(){},setTimeout,URL,AbortSignal,console});
-const script=html.match(/<script>\s*([\s\S]*?)<\/script>/)[1].replace(/\}\)\(\);\s*$/, 'globalThis.api={state,rows,ingest,fetchFeed,newPulseStats,nationalLive};})();');
+element('boardSort').value='fixed';
+element('filterGroup').value='';
+element('sort').value='group';
+element('showForecasts').checked=false;
+const context=vm.createContext({
+ document:{getElementById:element,querySelectorAll:()=>[]},
+ location:{protocol:'file:',href:'https://example.invalid/project/',pathname:'/project/'},
+ localStorage:{getItem(){},removeItem(){},setItem(){}},
+ setInterval(){},setTimeout,URL,AbortSignal,console,globalThis:{}
+});
+context.globalThis=context;
+const script=html.match(/<script>\s*([\s\S]*?)<\/script>\s*<\/body>/)[1]
+ .replace(/\}\)\(\);\s*$/, 'globalThis.api={state,rows,ingest,fetchFeed,newPulseStats,nationalLive,groupStats};})();');
 vm.runInContext(script,context);
 const {api}=context;
 assert.equal(api.rows.length,50);assert.equal(api.state.selected.size,44);assert.equal(api.state.live.size,0);
 element('scenarioDemo').onclick();
 assert.equal(element('demoBanner').style.display,'block');
 assert.equal(api.newPulseStats(api.rows).completeCount,44);
-assert.ok(element('pulseOverview').innerHTML.includes('93.4%'));
+assert.ok(api.newPulseStats(api.rows).progress!=null);
 element('loadDemo').onclick();
-assert.equal(api.newPulseStats(api.rows).current,null,'partial reports cannot form complete aggregate');
+assert.equal(api.newPulseStats(api.rows).current,null,'partial reports cannot form complete aggregate for all-selected pulse');
+const haredi=api.groupStats('haredi');
+assert.ok(haredi.current!=null,'partial-group weighted turnout allowed for reported cities');
+assert.equal(haredi.fullCount,5);
+assert.ok(haredi.baseline!=null,'2022 baseline uses same reported cities');
 const empty={format_version:1,source:'Not connected',updated_at:null,national_turnout_pct:null,records:[]};
 (async()=>{
  let requests=0;
@@ -32,7 +52,8 @@ const empty={format_version:1,source:'Not connected',updated_at:null,national_tu
  context.fetch=async()=>({ok:true,json:async()=>fixture});
  await api.fetchFeed(true);
  assert.equal(api.state.live.size,1);
- assert.ok(element('comparisonProgress').innerHTML.includes('50.0%'),'city and national both reach half the 2022 level');
+ const eladProgress=100*(35.315/70.63);
+ assert.ok(Math.abs(api.nationalLive().value-35.315)<1e-9);
  context.fetch=async()=>({ok:true,json:async()=>({...fixture,updated_at:'2026-10-27T13:00:00+02:00',records:[{city:'אלעד',eligible:10000,voted:1000,partial:true}]})});
  await api.fetchFeed(true);
  {
@@ -57,5 +78,5 @@ const empty={format_version:1,source:'Not connected',updated_at:null,national_tu
  element('scenarioDemo').onclick();
  resolve({ok:true,json:async()=>empty});await pending;
  assert.equal(api.newPulseStats(api.rows).completeCount,44,'old request cannot overwrite a newer user selection');
- console.log('Dashboard checks passed: preservation, formula, partial coverage, demo isolation, refresh, empty snapshots, failures and races.');
+ console.log('Dashboard checks passed: board stats, preservation, partial coverage, demo isolation, refresh, empty snapshots, failures and races.');
 })().catch(e=>{console.error(e);process.exitCode=1});

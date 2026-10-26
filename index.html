@@ -4,126 +4,92 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>מדד השתתפות ביישובים 2026 | דשבורד בחירות</title>
 <style>
-:root{--bg:#f5f7fb;--ink:#182940;--muted:#687b8e;--border:#dde5ee;--navy:#142c4b;--blue:#3265b0;--right:#7164b1;--opp:#217caa;--haredi:#168778;--arab:#c07b31;--zionism:#5377a2;--near:#9a9a9a;--green:#187e63;--red:#ae4655}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,'Noto Sans Hebrew',sans-serif;line-height:1.55}button,input,select{font:inherit}a{color:var(--blue)}
-.wrap{max-width:1320px;margin:0 auto;padding:20px 24px 70px}.head{background:linear-gradient(125deg,#0d2647,#224b72);color:white;padding:27px 30px;border-radius:17px;box-shadow:0 12px 28px #193b611b}.head h1{font-size:31px;margin:6px 0 3px}.head .sub{color:#c8d9eb;font-size:14px;max-width:850px}.eyebrow{font-size:12px;letter-spacing:.7px;color:#a7d8ef;font-weight:700}
-.statbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:17px}.pill{display:flex;gap:7px;align-items:center;border:1px solid #ffffff3b;border-radius:99px;padding:6px 11px;background:#ffffff12;font-size:12px}.dot{width:8px;height:8px;border-radius:50%;background:#ebc368}.dot.ok{background:#59cf9e}.dot.warn{background:#f4a15c}
-.cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:16px 0}.card,.panel{border:1px solid var(--border);background:white;border-radius:15px;box-shadow:0 3px 14px #102f4d08}.card{padding:17px 18px}.card .label{font-size:12px;color:var(--muted);min-height:35px}.card .value{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}.card .desc{font-size:11px;color:var(--muted)}
-.panel{padding:21px 22px;margin:16px 0}.panel h2{font-size:19px;margin:0 0 8px}.panel .help{font-size:12px;color:var(--muted);margin:6px 0 14px}.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.controls label{font-size:12px;font-weight:bold}.controls input[type=text],.controls input[type=url],.controls select{border:1px solid #cbd7e2;background:white;border-radius:9px;padding:10px;min-height:39px;min-width:185px;max-width:100%}button,.btn{cursor:pointer;color:#224361;border:1px solid #d1dfeb;background:white;border-radius:9px;padding:8px 12px;font-weight:700;font-size:12px}button:hover{background:#edf5fd}.primary{background:#183b63;color:white;border-color:#183b63}.primary:hover{background:#28527f}.control-break{width:100%;height:0}.tiny{font-size:11px;color:var(--muted)}.alert{padding:10px 13px;border-radius:10px;background:#fff6e7;color:#775126;font-size:12px;border:1px solid #f0ddc2;margin:10px 0}.success{background:#eff9f5;border-color:#d4ece0;color:#246b56}.error{background:#fff0f1;border-color:#f2d2d8;color:#9b334a}.hidden{display:none!important}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.group{--tone:#5a7597}.group[data-group=right]{--tone:var(--right)}.group[data-group=opp]{--tone:var(--opp)}.group[data-group=haredi]{--tone:var(--haredi)}.group[data-group=arab]{--tone:var(--arab)}.group[data-group=zionism]{--tone:var(--zionism)}.group[data-group=near]{--tone:var(--near)}.group h3{font-size:17px;margin:0}.group-title{border-bottom:2px solid var(--tone);padding-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px}.count{background:var(--tone);color:white;border-radius:99px;padding:3px 9px;font-size:11px;white-space:nowrap}.group-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.mini{background:#f4f7fa;padding:10px;border-radius:10px}.mini .title{font-size:10px;color:#6e7d8d}.mini .num{font-size:21px;font-weight:800;font-variant-numeric:tabular-nums}.mini small{font-size:10px;color:#718296}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;min-width:650px}th{background:#edf2f7;color:#425871;font-size:11px;position:sticky;top:0;z-index:2;white-space:nowrap}td{font-size:12px;white-space:nowrap}td,th{text-align:right;padding:9px;border-bottom:1px solid #e8eef3}tbody tr:nth-child(even){background:#fafcff}tbody tr:hover{background:#f0f6fd}.num{text-align:left;direction:ltr;font-weight:700}.muted{color:#85919d}.flag{color:var(--red);font-weight:bold}.positive{color:var(--green)}.negative{color:var(--red)}.choiceline{display:flex;align-items:center;gap:7px;white-space:nowrap}.choiceline input{accent-color:#336b9d}
-.legend{display:flex;gap:13px;flex-wrap:wrap;font-size:11px;color:var(--muted)}.legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:5px;background:#6c9dc5}.foot{font-size:11px;color:var(--muted);line-height:1.9;margin-top:20px;padding-bottom:30px}.nowrap{white-space:nowrap}#dataStatus{flex-grow:1}#filterCity{flex-grow:1;max-width:300px}
-@media(max-width:1000px){.cards{grid-template-columns:repeat(3,1fr)}.grid2{grid-template-columns:1fr}}
-@media(max-width:600px){.wrap{padding:12px 10px 40px}.head{padding:23px 18px}.head h1{font-size:24px}.cards{grid-template-columns:repeat(2,1fr)}.card{padding:14px}.card .value{font-size:22px}.panel{padding:16px 12px}.group-metrics{gap:5px}.mini .num{font-size:18px}}
-@media print{body{background:white}.wrap{max-width:none;padding:0}.head{color:black;background:white;box-shadow:none;padding:4px;border:0}.head .eyebrow,.head .sub{color:#444}.panel,.card{box-shadow:none}.noprint{display:none!important}.grid2{grid-template-columns:1fr}.group{break-inside:avoid}table{font-size:10px}.panel{padding:10px}th{position:static}}
-
-/* Historical/current dashboard comparisons */
-.compare-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:14px 0 20px}
-.comparison-card{border:1px solid #dce5ef;border-radius:13px;background:#fcfdff;padding:16px;min-width:0}
-.comparison-card h3{margin:0 0 2px;font-size:17px}.comparison-card .meta{color:#667a90;font-size:11px;min-height:36px;margin-bottom:10px}
-.chart-row{margin:13px 0}.chart-row-header{display:flex;justify-content:space-between;gap:10px;font-size:12px;align-items:center}.chart-row-header strong{font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}.chart-label{color:#4a627b}.chart-track{height:12px;border-radius:99px;background:#e8eff5;overflow:hidden;margin-top:5px;position:relative}.chart-fill{height:100%;background:#8594a8;border-radius:99px;min-width:0}.chart-fill[data-year="2021"]{background:#9baac3}.chart-fill[data-year="2022"]{background:#617fba}.chart-fill[data-year="2026"]{background:#198e78}.chart-row.partial .chart-fill{background:#d7a04d}.chart-year-note{font-size:10px;color:#788a9a;margin-top:3px}
-.progress-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.progress-card{background:#f7f9fc;border:1px solid #e5ebf2;border-radius:12px;padding:13px}.progress-card h4{margin:0;font-size:13px}.progress-number{font-size:25px;font-weight:800;font-variant-numeric:tabular-nums;direction:ltr;text-align:right}.progress-number small{font-size:12px;font-weight:400}.progress-track{height:10px;background:#e3e9f1;border-radius:99px;overflow:hidden}.progress-fill{height:100%;border-radius:99px;background:#198e78}.progress-foot{color:#64778b;font-size:11px;margin-top:6px}
-#comparisonPanel .controls select{min-width:190px}.compare-note{background:#f0f5fa;border:1px solid #dce6f0;padding:10px 12px;border-radius:9px;font-size:12px;color:#41566c;margin:12px 0}.compare-note.warning{background:#fff7e8;color:#895b20;border-color:#f0ddb5}.comparison-heading{font-size:16px;margin:18px 0 8px}.comparison-legend{display:flex;gap:14px;flex-wrap:wrap;color:#687b8e;font-size:11px}.comparison-legend b{display:inline-block;width:9px;height:9px;border-radius:100%;margin-left:5px}
-.national-input{max-width:110px!important;min-width:100px!important}.disabled-series{opacity:.6}
-@media(max-width:1050px){.compare-grid{grid-template-columns:1fr}.comparison-card .meta{min-height:0}.progress-grid{grid-template-columns:1fr}}
-@media print{.compare-grid{grid-template-columns:repeat(3,1fr)}.progress-grid{grid-template-columns:repeat(3,1fr)}.comparison-card{break-inside:avoid}}
-
-.aggregate-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:12px;margin:14px 0}
-.aggregate-metric{background:#f4f8fc;border:1px solid #dce7f1;border-radius:12px;padding:15px}
-.aggregate-metric strong{font-size:24px;display:block;color:#14334c;margin:6px 0;font-variant-numeric:tabular-nums}
-.aggregate-metric small{color:#61758a}
-.aggregate-line{display:grid;grid-template-columns:82px 1fr 72px;gap:10px;align-items:center;margin:12px 0;font-size:13px}
-.aggregate-line .track{background:#e3ecf4;height:16px;border-radius:20px;overflow:hidden}
-.aggregate-line .fill{height:100%;background:#728fb4;border-radius:20px}
-.aggregate-line.current .fill{background:#169783}
-.aggregate-line .percent{font-weight:700;text-align:left;font-variant-numeric:tabular-nums}
-.aggregate-report{border-radius:10px;background:#edf6f4;border:1px solid #b6dad1;padding:12px 15px;margin-top:14px;line-height:1.7}
-.aggregate-warning{background:#fff6e5;border-color:#f2d8a1}
-@media print{.aggregate-grid{grid-template-columns:repeat(4,1fr)}}
-
-/* Primary comparative progress monitor */
-.pulse-panel{border:1px solid #b5d5e6;background:linear-gradient(180deg,#f6fbfd,#fff 24%);margin-top:16px;box-shadow:0 8px 24px #14324b0b}
-.pulse-intro{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}
-.pulse-intro h2{font-size:24px;margin:3px 0 6px;color:#163a57}
-.pulse-kicker{font-size:11px;font-weight:800;letter-spacing:.1px;color:#326685}
-.pulse-manual{padding:13px;background:#f2f8fa;border:1px solid #d9eaf0;border-radius:12px;min-width:210px;max-width:245px}
-.pulse-manual label,.pulse-manual small{display:block;font-size:11px;line-height:1.7;color:#385d70}
-.pulse-manual input{width:130px!important;margin:4px 0;font-weight:800;font-size:17px;text-align:center}
-.pulse-overview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:15px}
-.pulse-tile{border-radius:12px;background:#f3f8fc;border:1px solid #dce7ee;padding:14px;min-width:0}
-.pulse-tile .pulse-title{font-size:12px;color:#536b7e;font-weight:700}
-.pulse-tile strong{display:block;font-size:31px;color:#153c58;line-height:1.5;font-variant-numeric:tabular-nums;direction:ltr;text-align:right}
-.pulse-tile small{display:block;font-size:11px;color:#5e7488}
-.pulse-tile.flag-missing strong{color:#8395a5}
-.pulse-context{font-size:12px;border-radius:9px;background:#eaf3f7;padding:10px 13px;margin:12px 0;color:#36586e}
-.pulse-context.warn{background:#fff5e3;color:#7c571f}
-.pulse-chart-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-top:20px}
-.pulse-chart-head h3{margin:0;font-size:17px}
-.pulse-groups{display:grid;gap:9px;margin:11px 0}
-.pulse-row{display:grid;grid-template-columns:minmax(130px,220px) minmax(130px,1fr) minmax(100px,180px);gap:12px;align-items:center;background:#fff;border:1px solid #e5edf3;border-radius:10px;padding:9px 11px;--bar:#678fb5}
-.pulse-row.national{--bar:#263c57;background:#eff5f9;border-color:#cbdce9}
-.pulse-row.total{--bar:#188576;background:#edf7f3;border-color:#cee4db}
-.pulse-label b{display:block;font-size:13px;font-weight:700}
-.pulse-label small{display:block;color:#698093;font-size:10px}
-.pulse-bar{background:#e8eef4;border-radius:99px;height:19px;position:relative;overflow:hidden}
-.pulse-bar .pulse-fill{height:100%;background:var(--bar);border-radius:99px}
-.pulse-bar .pulse-marker{position:absolute;inset-block:0;border-right:2px dashed #aa5d24;opacity:.85;pointer-events:none}
-.pulse-reading{text-align:left;direction:ltr;unicode-bidi:isolate;white-space:nowrap;font-variant-numeric:tabular-nums}
-.pulse-reading strong{display:block;font-size:18px}
-.pulse-reading small{font-size:11px;color:#5c7286;direction:rtl;display:block}
-.pulse-gap{font-weight:800}.pulse-gap.positive{color:#146b59}.pulse-gap.negative{color:#b45138}.pulse-gap.neutral{color:#718495}
-.pulse-details{border-top:1px solid #e1e9ef;margin-top:16px;padding-top:11px}
-.pulse-details summary{font-weight:700;cursor:pointer;padding:7px 0;color:#2a5f87}
-.pulse-table{width:100%}.pulse-table th,.pulse-table td{font-size:12px;white-space:nowrap}.pulse-table td.num{direction:ltr;unicode-bidi:isolate;text-align:left}
-.pulse-caveat{background:#f5f8fb;padding:12px;border-radius:10px;font-size:11px;color:#51697d;line-height:1.8;margin:14px 0 0}
-@media(max-width:830px){.pulse-intro{flex-direction:column}.pulse-overview{grid-template-columns:1fr 1fr}.pulse-manual{max-width:none;width:100%}.pulse-row{grid-template-columns:minmax(100px,170px) 1fr 120px;gap:6px}}
-@media(max-width:540px){.pulse-overview{grid-template-columns:1fr}.pulse-tile strong{font-size:25px}.pulse-row{grid-template-columns:1fr 1.2fr;gap:6px}.pulse-bar{grid-column:1 / -1;grid-row:2}.pulse-reading{grid-column:2;grid-row:1}.pulse-label{grid-column:1;grid-row:1}}
-@media print{.pulse-overview{grid-template-columns:repeat(3,1fr)}.pulse-row{break-inside:avoid}.pulse-details{display:none}}
-
-/* Keep wide historical tables scrollable inside their cards; never expand the whole page. */
-.grid2{min-width:0}.grid2 > .group{min-width:0;width:100%}
-.group .tablewrap,.pulse-details .tablewrap{width:100%;max-width:100%;min-width:0;overflow-x:auto}
-.pulse-details{min-width:0}.pulse-table{min-width:760px}
-
-/* User-requested 20:00 electoral-turnout simulation */
-.simulation-launch{display:flex;justify-content:space-between;align-items:center;gap:18px;background:#edf5fc;border:1px solid #bbd5ec;border-radius:12px;padding:14px 17px;margin-top:15px}
-.simulation-launch b{display:block;font-size:14px;color:#174469}
-.simulation-launch small{display:block;color:#56768e;font-size:12px;margin-top:3px}
-.scenario-button{background:#1b567f;color:#fff;border:1px solid #1b567f;font-size:13px;padding:11px 16px;white-space:nowrap}
-.scenario-button:hover{background:#246997}
-.scenario-details{border:1px solid #e5c785;border-radius:12px;background:#fff9ed;margin-top:13px;padding:16px}
-.scenario-details h3{font-size:17px;margin:0 0 6px;color:#694917}
-.scenario-intro{color:#6d542d;font-size:12px;line-height:1.8;margin:0 0 12px}
-.scenario-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-bottom:12px}
-.scenario-kpi{border:1px solid #edd8b0;border-radius:9px;background:#fff;padding:11px}
-.scenario-kpi small{display:block;color:#866836;font-size:11px}
-.scenario-kpi strong{display:block;font-size:24px;color:#3d4d62;font-variant-numeric:tabular-nums;direction:ltr;text-align:right}
-.scenario-details table{min-width:590px}.scenario-details th{background:#fbefd6}
-.scenario-details .scenario-foot{font-size:11px;color:#846d47;margin:10px 0 0;line-height:1.75}
-@media(max-width:650px){.simulation-launch{flex-direction:column;align-items:stretch}.scenario-button{white-space:normal}.scenario-kpis{grid-template-columns:1fr}}
-@media print{.simulation-launch{display:none}.scenario-details{break-inside:avoid}}
-
-/* Election-day countdown in header */
-.election-timer{margin-top:16px;padding:14px 16px;border-radius:14px;border:1px solid #ffffff35;background:linear-gradient(120deg,#ffffff14,#ffffff08)}
-.election-timer-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
-.election-timer-label{font-size:13px;font-weight:800;color:#e8f3fc;margin:0 0 4px}
-.election-timer-sub{font-size:12px;color:#b7d0e4;margin:0;max-width:52ch;line-height:1.65}
-.election-timer-digits{display:flex;gap:8px;flex-wrap:wrap;direction:ltr;unicode-bidi:isolate;font-variant-numeric:tabular-nums}
-.timer-unit{min-width:58px;padding:8px 10px;border-radius:10px;background:#0c223ab8;border:1px solid #ffffff22;text-align:center}
-.timer-unit b{display:block;font-size:22px;line-height:1.15;color:#fff;font-weight:800}
-.timer-unit span{display:block;font-size:10px;color:#9eb8ce;margin-top:3px;direction:rtl;unicode-bidi:embed}
-.election-timer-note{margin:10px 0 0;font-size:11px;color:#9eb9cf;line-height:1.6}
-.election-timer[data-phase=voting]{border-color:#59cf9e66;background:linear-gradient(120deg,#1a4d3f33,#ffffff08)}
-.election-timer[data-phase=closed]{border-color:#ffffff28;opacity:.96}
+:root{--bg:#f4f7fb;--ink:#15293f;--muted:#5f7388;--border:#d7e0ea;--card:#fff;--navy:#143355;--teal:#1a8f7a;--warn:#b86a1c;--bad:#ae4655;--ok:#187e63;--line:#c9d6e3}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:'Segoe UI',Arial,'Noto Sans Hebrew',sans-serif;line-height:1.55}
+button,input,select{font:inherit}a{color:#2a5f8f}
+.wrap{max-width:1280px;margin:0 auto;padding:18px 20px 64px}
+.head{background:linear-gradient(125deg,#0d2647,#1f4a70);color:#fff;padding:22px 24px;border-radius:16px;box-shadow:0 10px 26px #193b611a}
+.head h1{font-size:28px;margin:4px 0 2px}.head .sub{color:#c5d8ea;font-size:13px;max-width:820px}
+.eyebrow{font-size:12px;color:#9fd0ea;font-weight:700}
+.statbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.pill{display:flex;gap:6px;align-items:center;border:1px solid #ffffff3a;border-radius:99px;padding:5px 10px;background:#ffffff12;font-size:12px}
+.dot{width:8px;height:8px;border-radius:50%;background:#ebc368}.dot.ok{background:#59cf9e}
+.election-timer{margin-top:14px;padding:12px 14px;border-radius:12px;border:1px solid #ffffff30;background:#ffffff10}
+.election-timer-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.election-timer-label{margin:0 0 3px;font-size:13px;font-weight:800}.election-timer-sub{margin:0;font-size:12px;color:#b9d0e3;max-width:48ch}
+.election-timer-digits{display:flex;gap:7px;direction:ltr;unicode-bidi:isolate;font-variant-numeric:tabular-nums}
+.timer-unit{min-width:52px;padding:7px 8px;border-radius:9px;background:#0c223ab0;border:1px solid #ffffff22;text-align:center}
+.timer-unit b{display:block;font-size:20px}.timer-unit span{display:block;font-size:10px;color:#9eb8ce;margin-top:2px;direction:rtl}
+.election-timer-note{margin:8px 0 0;font-size:11px;color:#9eb9cf}
+.election-timer[data-phase=voting]{border-color:#59cf9e55}
 .election-timer[data-phase=closed] .election-timer-digits{display:none}
-@media(max-width:600px){.timer-unit{min-width:48px;padding:7px 8px}.timer-unit b{font-size:18px}.election-timer-sub{max-width:none}}
-@media print{.election-timer{border-color:#ccc;background:#f7f7f7;color:#222}.election-timer-label,.timer-unit b{color:#111}.election-timer-sub,.election-timer-note,.timer-unit span{color:#444}.timer-unit{background:#eee;border-color:#ddd}}
+.main-grid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(260px,.75fr);gap:14px;margin-top:14px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 17px;box-shadow:0 3px 12px #102f4d08}
+.card h2{margin:0 0 10px;font-size:18px}
+.board-head{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.board-head .tiny{color:var(--muted);font-size:12px}
+.toggle{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--navy);cursor:pointer;user-select:none}
+.toggle input{accent-color:var(--teal)}
+.board-sort{border:1px solid var(--border);border-radius:8px;padding:6px 8px;background:#fff;font-size:12px}
+.group-row{border:1px solid var(--border);border-radius:12px;padding:12px 13px;margin:8px 0;background:#fbfcfe;cursor:pointer}
+.group-row:hover{border-color:#b9cfe3}.group-row.open{background:#f3f8fc}
+.group-row-main{display:grid;grid-template-columns:minmax(110px,1.1fr) auto minmax(140px,1.4fr) auto;gap:10px;align-items:center}
+.group-name{font-weight:800;font-size:14px}.group-name small{display:block;font-weight:600;color:var(--muted);font-size:11px;margin-top:2px}
+.group-pct{font-size:28px;font-weight:800;font-variant-numeric:tabular-nums;direction:ltr;text-align:right;line-height:1}
+.group-pct.missing{color:#8a9aab;font-size:22px}
+.track-wrap{min-width:0}.track{height:10px;background:#e5edf4;border-radius:99px;position:relative;overflow:hidden}
+.track .fill{height:100%;background:var(--teal);border-radius:99px}
+.track .mark2022{position:absolute;top:-3px;bottom:-3px;width:2px;background:#243b53;opacity:.85}
+.ref2022{font-size:11px;color:var(--muted);margin-top:4px}
+.forecast-line{font-size:11px;color:#4d657a;margin-top:3px}
+.meta-col{text-align:left;direction:ltr;unicode-bidi:isolate;font-size:11px;color:var(--muted);white-space:nowrap}
+.meta-col .delta{display:inline-block;padding:2px 6px;border-radius:6px;font-weight:800;margin-bottom:4px;direction:rtl}
+.meta-col .delta.up{background:#e7f6f0;color:var(--ok)}.meta-col .delta.down{background:#fdecee;color:var(--bad)}.meta-col .delta.flat{background:#eef2f6;color:#627487}
+.chip{display:inline-block;padding:2px 7px;border-radius:99px;font-size:10px;font-weight:700}
+.chip.full{background:#e5f5ef;color:var(--ok)}.chip.partial{background:#fff3df;color:var(--warn)}.chip.none{background:#eef1f5;color:#7a8b9c}
+.group-cities{display:none;margin-top:10px;border-top:1px solid var(--border);padding-top:8px}
+.group-row.open .group-cities{display:block}
+.group-cities table{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
+.group-cities th,.group-cities td{padding:6px 4px;border-bottom:1px solid #e8eef3;text-align:right}
+.group-cities .num{text-align:left;direction:ltr;font-weight:700}
+.national-card .big{font-size:40px;font-weight:800;font-variant-numeric:tabular-nums;direction:ltr;text-align:right;line-height:1.1;margin:6px 0}
+.national-card .meta{font-size:12px;color:var(--muted);line-height:1.7}
+.national-card .forecast-box{margin-top:12px;padding:10px 11px;border-radius:10px;background:#f3f7fb;border:1px solid #dbe5ef}
+.national-card .forecast-box strong{display:block;font-size:20px;font-variant-numeric:tabular-nums;direction:ltr;text-align:right}
+.national-card .forecast-box small{color:var(--muted);font-size:11px}
+.insights{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.insight{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px 14px}
+.insight b{display:block;font-size:13px;margin-bottom:4px}.insight p{margin:0;font-size:13px;color:#345068;line-height:1.65}
+.chart-card{margin-top:14px}.chart-card .legend{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 4px}
+.legend button{border:1px solid var(--border);background:#fff;border-radius:99px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer}
+.legend button.on{background:#e8f4f1;border-color:#9ecfc3;color:#146857}
+.legend button.off{opacity:.45}
+#dayChart{width:100%;height:260px;display:block;background:#fbfdff;border:1px solid #e4ebf2;border-radius:10px}
+.chart-empty{padding:40px 16px;text-align:center;color:var(--muted);font-size:13px}
+.table-card{margin-top:14px}.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.controls input,.controls select{border:1px solid var(--border);border-radius:8px;padding:8px 10px;min-height:36px;background:#fff}
+.tablewrap{overflow:auto}table.data{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;min-width:720px}
+table.data th{background:#edf2f7;font-size:11px;position:sticky;top:0;padding:8px;text-align:right}
+table.data td{font-size:12px;padding:8px;border-bottom:1px solid #e8eef3;text-align:right}
+table.data .num{text-align:left;direction:ltr;font-weight:700}
+details.tools{margin-top:14px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
+details.tools summary{cursor:pointer;font-weight:800;font-size:14px}
+.tools-body{margin-top:10px}.tools-body .help{font-size:12px;color:var(--muted)}
+button,.btn{cursor:pointer;color:#224361;border:1px solid #d1dfeb;background:#fff;border-radius:8px;padding:8px 11px;font-weight:700;font-size:12px}
+button.primary{background:var(--navy);color:#fff;border-color:var(--navy)}
+.alert{padding:9px 12px;border-radius:9px;background:#fff6e7;color:#775126;font-size:12px;border:1px solid #f0ddc2;margin:8px 0}
+.alert.success{background:#eff9f5;border-color:#d4ece0;color:#246b56}.alert.error{background:#fff0f1;border-color:#f2d2d8;color:#9b334a}
+.hidden{display:none!important}.tiny{font-size:11px;color:var(--muted)}.foot{font-size:11px;color:var(--muted);margin-top:18px;line-height:1.8}
+@media(max-width:900px){.main-grid,.insights{grid-template-columns:1fr}.group-row-main{grid-template-columns:1fr 1fr;gap:8px}.group-pct{grid-column:2;grid-row:1}.meta-col{grid-column:2}.track-wrap{grid-column:1/-1}}
+@media(max-width:600px){.wrap{padding:12px 10px 40px}.head{padding:18px}.head h1{font-size:22px}.group-pct{font-size:24px}.national-card .big{font-size:32px}}
+@media print{.tools,.noprint{display:none!important}body{background:#fff}.card{box-shadow:none}}
 </style>
 </head>
 <body><main class="wrap">
 <header class="head">
  <div class="eyebrow">דשבורד ניסיוני · בחירות לכנסת ה־26 · 27.10.2026</div>
  <h1>מדד השתתפות ביישובים</h1>
- <div class="sub">מעקב לפי יישובים וקבוצות מחקר, עם השוואה לשיעורי ההצבעה ב־2020–2022. הנתונים העכשוויים יופיעו רק כשהתקבלו ממקור נתונים; אין כאן תחזית מנדטים.</div>
+ <div class="sub">מעקב משוקלל אחר 44 יישובים בחמש קבוצות מחקר. שיעור נוכחי ≠ תוצאה סופית; אין כאן תחזית מנדטים או מסקנה למי הצביעו.</div>
  <div class="election-timer" id="electionTimer" data-phase="before" aria-label="ספירה לאחור ליום הבחירות">
   <div class="election-timer-top">
    <div>
@@ -137,377 +103,441 @@
     <div class="timer-unit" data-unit="secs"><b id="tSecs">—</b><span>שניות</span></div>
    </div>
   </div>
-  <p class="election-timer-note">ברוב הקלפיות 07:00–22:00 · ביישובים קטנים, בתי חולים, בתי סוהר ובתי אבות — 08:00–20:00</p>
+  <p class="election-timer-note">ברוב הקלפיות 07:00–22:00 · ביישובים קטנים / בתי חולים / בתי סוהר / בתי אבות — 08:00–20:00</p>
  </div>
  <div class="statbar"><span class="pill"><span class="dot" id="connDot"></span><span id="connStatus">ממתין לנתונים חיים</span></span><span class="pill" id="lastUpdate">עודכן לאחרונה: —</span><span class="pill" id="sourceName">מקור: לא מחובר</span></div>
 </header>
-<div id="demoBanner" style="display:none;background:#fff1cb;border:2px solid #e7ae37;border-radius:12px;padding:13px 18px;margin:14px 0;font-weight:bold;color:#704400;text-align:center" role="status">⚠ נתוני הדגמה בלבד — אלה אינם נתוני בחירות אמיתיים. נועדו רק לבדיקת פעולת האתר.</div>
+<div id="demoBanner" class="hidden" style="background:#fff1cb;border:2px solid #e7ae37;border-radius:12px;padding:12px 16px;margin:12px 0;font-weight:bold;color:#704400;text-align:center" role="status"></div>
 
-<section class="panel pulse-panel" id="pulsePanel" aria-labelledby="pulseTitle">
- <div class="pulse-intro">
-   <div><span class="pulse-kicker">המדד המרכזי • מבט אחד על כל היישובים</span>
-     <h2 id="pulseTitle">מי מתקדם מהר יותר ביחס ל־2022?</h2>
-     <p class="help">לכל יישוב או קבוצה: <b>אחוז ההצבעה המדווח כעת ÷ שיעור ההצבעה הסופי ב־2022</b>. ההפרש מהנתון הארצי באותה שעה הוא המדד המרכזי שלנו. הנתונים כאן אינם תחזית לתוצאות הבחירות.</p>
+<div class="main-grid">
+ <section class="card" id="groupBoardCard">
+  <div class="board-head">
+   <div><h2 style="margin:0">לוח קבוצות</h2><div class="tiny">שיעור משוקלל לפי בעלי זכות בחירה · כיסוי חלקי מסומן</div></div>
+   <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <label class="toggle"><input type="checkbox" id="showForecasts"> תרחישי סיום משוערים</label>
+    <select class="board-sort" id="boardSort" aria-label="מיון קבוצות"><option value="fixed">סדר קבוצות קבוע</option><option value="live">לפי שיעור נוכחי</option></select>
    </div>
-   <div class="pulse-manual noprint"><label for="nationalManual">אחוז הצבעה ארצי עכשיו</label><input id="nationalManual" class="national-input" type="number" min="0" max="100" step="0.01" placeholder="למשל 64.5" inputmode="decimal"><small>למילוי ידני רק אם לא הגיע נתון ארצי בקובץ. ודא שהוא מאותה שעה.</small></div>
- </div>
- <div class="simulation-launch noprint" id="simulationLaunch">
-   <div><b>סימולציית ערב הבחירות · 20:00</b><small>נתוני הדגמה בלבד: 66.0% ארצי; חרדים ומרכז–שמאל לפי רמת 2020, ימין לפי רמת 2022</small></div>
-   <button id="scenarioDemo" class="scenario-button" type="button">▶ הפעל את התרחיש שביקשת</button>
- </div>
- <div id="scenarioDetails" class="scenario-details hidden" aria-live="polite"></div>
- <div id="pulseOverview" class="pulse-overview" aria-live="polite"></div>
- <div id="pulseContext" class="pulse-context" role="status"></div>
- <div class="pulse-chart-head"><h3>התקדמות לפי קבוצה</h3><span class="tiny">הקו המקווקו = התקדמות ארצית באותו דיווח</span></div>
- <div id="pulseGroups" class="pulse-groups" aria-live="polite"></div>
- <details class="pulse-details"><summary>פירוט כל היישובים — ממוינים לפי הפער מהארצי</summary>
-   <p class="tiny">המיון מציג קודם את היישובים עם דיווח מלא. אם אין מספר זכאים ומצביעים או שהדיווח חלקי, לא מחושב פער יחסי. אפשר גם לבחור יישובים ולהחריגם בהמשך הדף.</p>
-   <div class="tablewrap"><table class="pulse-table"><thead><tr><th>יישוב</th><th>קבוצה</th><th>2022 סופי</th><th>2026 עכשיו</th><th>התקדמות מרמת 2022</th><th>פער מהארצי</th><th>סטטוס דיווח</th></tr></thead><tbody id="pulseCities"></tbody></table></div>
- </details>
- <p class="pulse-caveat">נקודת ייחוס לשעה 20:00: בבחירות 2019 א׳–2022 הושגו בארץ כ־89.5%–93.9% מרמת ההשתתפות הסופית (ממוצע כ־91.3%). <b>זהו קצב ארצי היסטורי, לא קצב מוכח לכל יישוב.</b> גם פער מדוד כעת לא מבטיח פער דומה בסגירת הקלפיות.</p>
+  </div>
+  <div id="groupBoard"></div>
+ </section>
+ <aside class="card national-card" id="nationalCard">
+  <h2>הצבעה ארצית</h2>
+  <div class="big" id="nationalPct">—</div>
+  <div class="meta" id="nationalMeta">ממתין לדיווח רשמי</div>
+  <div class="forecast-box" id="nationalForecastBox">
+   <div class="tiny">תחזית סיום (תרחישים היסטוריים)</div>
+   <strong id="nationalForecastValue">—</strong>
+   <small id="nationalForecastNote">אין עדיין נתוני שעה מאומתים לחמש המערכות — לא מוצגת תחזית מספרית.</small>
+  </div>
+  <div class="noprint" style="margin-top:12px">
+   <label class="tiny" for="nationalManual">הזנה ידנית (רק אם חסר בפיד)</label>
+   <input id="nationalManual" type="number" min="0" max="100" step="0.01" placeholder="למשל 52.4" style="width:100%;margin-top:4px;padding:8px;border:1px solid var(--border);border-radius:8px">
+  </div>
+ </aside>
+</div>
+
+<section class="insights" id="insights" aria-live="polite"></section>
+
+<section class="card chart-card">
+ <h2>התקדמות במהלך היום</h2>
+ <p class="tiny">נתונים שהתקבלו בפועל בלבד · אין קווים לשעות עתידיות</p>
+ <div class="legend" id="chartLegend"></div>
+ <div id="chartEmpty" class="chart-empty">ממתינים לשתי נקודות דיווח אמינות לפחות כדי להציג מגמה.</div>
+ <svg id="dayChart" class="hidden" viewBox="0 0 800 260" role="img" aria-label="גרף התקדמות הקבוצות"></svg>
 </section>
 
-<section class="cards" id="cards"></section>
-<section class="panel noprint">
- <h2>עדכון נתונים</h2>
- <p class="help">אפשר להפעיל את <b>סימולציית 20:00</b> בראש הדף, או את ההדגמה הכללית כאן. שתי האפשרויות עובדות ללא קובץ נוסף. הזנת JSON יכולה לכלול גם <b>national_turnout_pct</b> לצורך השוואה לאחוז הארצי. כאשר האתר מאוחסן ברשת, הוא ינסה לקרוא <b>live-turnout.json</b> כל שתי דקות. יש להזין לקובץ הזה נתונים ממקור מורשה. בלי חיבור למקור לא יוצגו מספרים מדומים.</p>
- <div class="controls">
-  <label for="feedUrl">כתובת הזנת הנתונים</label><input type="text" id="feedUrl" value="./live-turnout.json" placeholder="./live-turnout.json" spellcheck="false">
-  <button class="primary" id="refresh">בדוק עכשיו</button><button type="button" id="loadFullDemo" style="background:#e3f5ed;border-color:#a4cdbb;color:#195e44">▶ הדגמה מלאה — 44 יישובים</button><button type="button" id="loadDemo" style="background:#fff2d1;border-color:#dbba66;color:#6f4900">הדגמת נתונים חלקיים</button><label class="btn" for="upload">ייבוא JSON / CSV</label><input id="upload" type="file" accept=".json,.csv,application/json,text/csv" hidden>
-  <button id="returnLive" type="button">יציאה מהדגמה / חזרה לעדכונים</button><button id="export" title="יצירת CSV מנתונים המוצגים">יצוא CSV</button><button id="print">הדפסה / PDF</button>
- </div>
- <div id="dataStatus" class="alert">לא התקבלו עדיין נתוני הצבעה ל־2026. בטבלאות מוצגים נתונים היסטוריים בלבד.</div>
- <p class="tiny">אם פותחים את קובץ ה־HTML ישירות מהמחשב, טעינה אוטומטית של קובץ מקומי נחסמת לעיתים על ידי הדפדפן. במקרה כזה אפשר לייבא JSON/CSV או לפתוח את האתר משרת אינטרנט. ממשק של GovMap לא אושר עדיין כמקור אוטומטי. נתוני הדגמה אינם נתוני בחירות אמיתיים.</p>
-</section>
-<section class="panel noprint">
- <h2>תצוגה וסינון</h2><div class="controls"><label for="filterCity">חיפוש יישוב</label><input id="filterCity" type="text" placeholder="למשל: אלקנה, שדרות, נצרת…"><label for="sort">מיון ערים בתוך קבוצה</label>
- <select id="sort"><option value="group">לפי סדר הקבוצה</option><option value="name">לפי שם</option><option value="p2022">שיעור הצבעה 2022 — גבוה לנמוך</option><option value="change">שינוי בהשתתפות 2021–2022</option><option value="share">שיעור תמיכה מפלגתי/גושי 2022</option><option value="live">שיעור השתתפות 2026 — גבוה לנמוך</option><option value="gap">פער התקדמות מהארצי — מהנמוך לגבוה</option></select></div>
- <p class="tiny">אפשר להסיר או להוסיף ערים באמצעות תיבות הסימון. כשתגיע הזנה מלאה, הממוצע הקבוצתי יחושב לפי <b>סך המצביעים ÷ סך הזכאים</b>, ולא כממוצע אחוזים.</p>
-</section>
-
-<section class="panel" id="comparisonPanel">
- <h2>📊 השוואת השתתפות: היישוב, הקבוצה וכל הארץ</h2>
- <p class="help">העמודה הירוקה מציגה את <b>שיעור ההצבעה המדווח כעת ב־2026</b>, והעמודות האחרות את שיעורי ההצבעה <b>בסיום</b> בחירות 2020, 2021 ו־2022 (או ממוצע קבוצתי מחושב). אלה אינם נתונים מאותה שעה בבחירות הקודמות.</p>
+<section class="card table-card">
+ <h2>טבלת יישובים</h2>
  <div class="controls noprint">
-  <label for="comparisonGroup">קבוצת יישובים</label><select id="comparisonGroup"></select>
-  <label for="comparisonCity">יישוב להשוואה</label><select id="comparisonCity"></select>
+  <input id="filterCity" type="text" placeholder="חיפוש יישוב…" style="flex:1;min-width:160px">
+  <select id="filterGroup"><option value="">כל הקבוצות</option></select>
+  <select id="sort"><option value="group">לפי קבוצה</option><option value="live">שיעור 2026</option><option value="p2022">סופי 2022</option><option value="progress">התקדמות מול 2022</option><option value="name">שם</option></select>
  </div>
- <div id="comparisonAsOf" class="compare-note">טרם התקבל דיווח ל־2026. אפשר להפעיל נתוני הדגמה לבדיקת הגרפים.</div>
- <div class="comparison-legend"><span><b style="background:#8594a8"></b>2020–2022 — תוצאה סופית</span><span><b style="background:#198e78"></b>2026 — דיווח נוכחי</span><span><b style="background:#d7a04d"></b>דיווח חלקי</span></div>
- <div id="comparisonCharts" class="compare-grid" aria-live="polite"></div>
- <h3 class="comparison-heading">איזה חלק מרמת ההשתתפות של 2022 כבר הושג?</h3>
- <p class="help">100% פירושו שההצבעה המדווחת כבר הגיעה לשיעור הסופי של 2022. הנתון אינו מציין איזה חלק מהמצביעים של 2026 כבר הצביע, ואינו תחזית לסיום היום.</p>
- <div id="comparisonProgress" class="progress-grid"></div>
- <div id="comparisonRelative" class="compare-note"></div>
- <p class="tiny">חישוב קבוצתי: שיעורי 2020–2021 משוקללים לפי מספר בעלי זכות הבחירה <b>ב־2022</b> כדי לאפשר השוואת יישובים באותו הרכב; זהו אומדן מתוקנן, לא שיעור מצרפי רשמי לשנים אלו. ב־2022 משתמשים בסך המצביעים והזכאים בפועל כשקיימים. בקבוצות ללא נתוני זכאים (למשל יישובי הציונות הדתית) מוצג ממוצע פשוט. נתון 2026 קבוצתי מופיע רק אם לכל היישובים שנבחרו יש דיווח מלא ומספר מצביעים וזכאים.</p>
+ <div class="tablewrap"><table class="data"><thead><tr><th>יישוב</th><th>קבוצה</th><th>2026</th><th>סופי 2022</th><th>התקדמות מול 2022</th><th>סטטוס</th></tr></thead><tbody id="cityTable"></tbody></table></div>
 </section>
 
-<section class="panel" id="all44Panel">
- <h2>📈 כל היישובים יחד — מדד השתתפות מול 20:00</h2>
- <p class="help">זהו <b>שיעור הצבעה מצרפי אחד לכל היישובים שנבחרו</b>: סך המצביעים חלקי סך בעלי זכות הבחירה, ולא ממוצע של הקבוצות. שינוי בחירת היישובים בטבלאות מעדכן גם מדד זה.</p>
- <div id="all44Metrics" class="aggregate-grid" aria-live="polite"></div>
- <div id="all44Bars" aria-live="polite"></div>
- <div id="all44Report" class="aggregate-report"></div>
- <p class="tiny">לשנים 2020 ו־2021 השקלול מתוקנן לפי מספר הזכאים ב־2022; לשנת 2022 שיעור ההצבעה המצרפי מחושב מהמספרים המדויקים. נתוני 2026 יוצגו רק אם קיים דיווח מלא לכל היישובים שנבחרו. סרגל 20:00 הוא השוואה ניסיונית לקצב הארצי בשנים 2019–2022, לא אומדן סטטיסטי מכויל לקבוצה זו. קלפיות ביישובים קטנים עשויות להיסגר ב־20:00, ולכן דפוסן עשוי להיות שונה. הנתונים הארציים הסופיים כוללים גם מעטפות חיצוניות, שאינן משויכות ליישובים.</p>
-</section>
-<section id="groupContainer" class="grid2"></section>
-<section class="panel">
- <h2>איך לקרוא את הנתונים ביום הבחירות?</h2>
- <p class="help"><b>2021 ו־2022</b> הם שיעורי השתתפות סופיים. <b>2026</b> הוא שיעור מדווח בנקודת הזמן האחרונה. לפני סגירת הקלפיות אין להשוות ביניהם כאילו שניהם תוצאות סופיות. אפשר לבדוק כמה נקודות אחוז חסרות כדי להגיע לרמת 2022, אבל זה לא תחזית.</p>
- <p class="help">אם לא כל הקלפיות ביישוב דווחו, שיעור ההצבעה מסומן כחלקי ואינו נכלל בחישוב הקבוצתי המלא. בכל קבוצה מוצג כיסוי מדווח של היישובים שנבחרו. פירוט אפשרי לפי קלפיות מחייב שיוך מדויק לקוד היישוב ושקלול המצביעים והזכאים שלהן.</p>
- <p class="help">הקבוצות נבחרו למחקר גיאוגרפי: עשר ערי ימין לפי גוש נתניהו והעדפת הליכוד והציונות הדתית; עשר ערי מרכז–שמאל שעברו 60%; חמש ערים חרדיות; עשר ערביות; ותשעה יישובים שבהם הציונות הדתית קיבלה מעל 45%. אלה אינן קבוצות מדגמיות מייצגות ואינן מלמדות לבדן על הצבעה למפלגה מסוימת.</p>
-</section>
-<div class="foot">בסיס הנתונים ההיסטורי מבוסס על קובצי השוואה שהוכנו במחקר הקודם ועל הנתונים שנאספו בשיחה. עד לחיבור הזרם הרשמי יש להתייחס אליו כטיוטת מחקר לבדיקה, ולא כמאגר מאומת באופן עצמאי. אין באתר נתוני מצביעים אישיים ואין בו ניבוי תוצאות הבחירות.</div>
+<details class="tools noprint">
+ <summary>כלים, ייבוא ומתודולוגיה</summary>
+ <div class="tools-body">
+  <p class="help">ייבוא ידני, הדגמות לבדיקה, וסימולציה — לא מוצגים כנתוני אמת בנתיב הייצור. הפיד החי נטען מ־<code>live-turnout.json</code>; היסטוריה מ־<code>turnout-history.json</code>.</p>
+  <div class="controls">
+   <label for="feedUrl">כתובת פיד</label><input id="feedUrl" type="text" value="./live-turnout.json" style="min-width:220px">
+   <button class="primary" id="refresh" type="button">בדוק עכשיו</button>
+   <button id="loadFullDemo" type="button">הדגמה מלאה</button>
+   <button id="loadDemo" type="button">הדגמה חלקית</button>
+   <button id="scenarioDemo" type="button">סימולציית 20:00</button>
+   <button id="returnLive" type="button">חזרה לפיד חי</button>
+   <label class="btn" for="upload">ייבוא JSON/CSV</label><input id="upload" type="file" accept=".json,.csv,application/json,text/csv" hidden>
+   <button id="export" type="button">יצוא CSV</button>
+   <button id="print" type="button">הדפסה</button>
+  </div>
+  <div id="dataStatus" class="alert">לא התקבלו עדיין נתוני הצבעה ל־2026. מוצגים נתונים היסטוריים בלבד.</div>
+  <div id="scenarioDetails" class="hidden"></div>
+  <p class="tiny">התקדמות מול 2022 = שיעור נוכחי ÷ שיעור סופי 2022 (על אותם יישובים מדווחים). זה אינו ירידה בהשתתפות ואין תחזית מנדטים. תחזיות סיום מוצגות רק עם נתוני שעה מאומתים וכיסוי מספק.</p>
+ </div>
+</details>
+<div class="foot">בסיס היסטורי 2020–2022 הוא טיוטת מחקר. ההשתתפות לפי יישוב אינה מלמדת למי הצביעו. אין נתוני מצביעים אישיים.</div>
 </main>
+
 <script id="baseline-data" type="application/json">[{"key":"right:מעלה אדומים","name":"מעלה אדומים","group":"right","p2020":71.24,"p2021":67.37,"p2022":70.04,"eligible2022":28142,"voters2022":19710,"share2022":78.54,"active":true,"subshare2022":68.71,"code":3616},{"key":"right:דימונה","name":"דימונה","group":"right","p2020":62.22,"p2021":56.35,"p2022":63.57,"eligible2022":29297,"voters2022":18625,"share2022":81.18,"active":true,"subshare2022":66.69,"code":2200},{"key":"right:שדרות","name":"שדרות","group":"right","p2020":65.4,"p2021":59.8,"p2022":65.56,"eligible2022":23403,"voters2022":15342,"share2022":79.11,"active":true,"subshare2022":66.07,"code":1031},{"key":"right:בית שאן","name":"בית שאן","group":"right","p2020":70.71,"p2021":65.16,"p2022":70.66,"eligible2022":14782,"voters2022":10445,"share2022":89.78,"active":false,"subshare2022":63.99,"code":9200},{"key":"right:קריית מלאכי","name":"קריית מלאכי","group":"right","p2020":69.37,"p2021":62.46,"p2022":70.51,"eligible2022":17963,"voters2022":12665,"share2022":88.24,"active":false,"subshare2022":63.3,"code":1034},{"key":"right:קריית שמונה","name":"קריית שמונה","group":"right","p2020":61.36,"p2021":57.16,"p2022":61.11,"eligible2022":18582,"voters2022":11355,"share2022":74.77,"active":true,"subshare2022":63.14,"code":2800},{"key":"right:טירת כרמל","name":"טירת כרמל","group":"right","p2020":66.37976835617894,"p2021":62.82978506672099,"p2022":68.51692419230595,"eligible2022":22069,"voters2022":15121,"share2022":70.05,"active":true,"subshare2022":59.66,"code":2100},{"key":"right:אור יהודה","name":"אור יהודה","group":"right","p2020":70.07979216923363,"p2021":66.77359194330474,"p2022":72.43849493487699,"eligible2022":27640,"voters2022":20022,"share2022":76.37,"active":false,"subshare2022":56.7,"code":2400},{"key":"right:באר שבע","name":"באר שבע","group":"right","p2020":61.77,"p2021":56.56,"p2022":61.31,"eligible2022":164728,"voters2022":101002,"share2022":66.39,"active":true,"subshare2022":55.97,"code":9000},{"key":"right:קריית אתא","name":"קריית אתא","group":"right","p2020":66.13165508648181,"p2021":61.779532851621575,"p2022":64.97076264206885,"eligible2022":48568,"voters2022":31555,"share2022":66.88,"active":true,"subshare2022":54.92,"code":6800},{"key":"right:עפולה","name":"עפולה","group":"right","p2020":63.2336390412107,"p2021":59.304039427018566,"p2022":63.27011118378025,"eligible2022":45870,"voters2022":29022,"share2022":69.28,"active":true,"subshare2022":54.8,"code":7700},{"key":"right:אילת","name":"אילת","group":"right","p2020":44.87,"p2021":41.32,"p2022":43.02343479432024,"eligible2022":51974,"voters2022":22361,"share2022":62.12,"active":true,"subshare2022":54.77,"code":2600},{"key":"right:אשקלון","name":"אשקלון","group":"right","p2020":63.38,"p2021":58.57,"p2022":61.9,"eligible2022":119846,"voters2022":74187,"share2022":65.77,"active":true,"subshare2022":52.95,"code":7100},{"key":"right:קריית גת","name":"קריית גת","group":"right","p2020":68.11,"p2021":62.58,"p2022":68.51,"eligible2022":45388,"voters2022":31097,"share2022":73.92,"active":false,"subshare2022":49.84,"code":2630},{"key":"opp:קריית אונו","name":"קריית אונו","group":"opp","p2020":74.1,"p2021":73.06,"p2022":73.27,"eligible2022":31113,"voters2022":22796,"share2022":67.05,"active":true,"subshare2022":null,"code":2620},{"key":"opp:כפר סבא","name":"כפר סבא","group":"opp","p2020":72.21,"p2021":69.91,"p2022":69.89,"eligible2022":81737,"voters2022":57122,"share2022":64.29,"active":true,"subshare2022":null,"code":6900},{"key":"opp:הרצליה","name":"הרצליה","group":"opp","p2020":66.35,"p2021":65.32,"p2022":65.64,"eligible2022":88932,"voters2022":58374,"share2022":66.22,"active":true,"subshare2022":null,"code":6400},{"key":"opp:רמת גן","name":"רמת גן","group":"opp","p2020":66.01,"p2021":64.76,"p2022":65.23,"eligible2022":139055,"voters2022":90709,"share2022":61.99,"active":true,"subshare2022":null,"code":8600},{"key":"opp:גבעתיים","name":"גבעתיים","group":"opp","p2020":70.02,"p2021":69.29,"p2022":68.97,"eligible2022":49341,"voters2022":34032,"share2022":74.84,"active":true,"subshare2022":null,"code":6300},{"key":"opp:הוד השרון","name":"הוד השרון","group":"opp","p2020":75.59,"p2021":74.43,"p2022":74.36,"eligible2022":48723,"voters2022":36229,"share2022":70.89,"active":true,"subshare2022":null,"code":9700},{"key":"opp:רמת השרון","name":"רמת השרון","group":"opp","p2020":72.61,"p2021":71.78,"p2022":71.42,"eligible2022":38282,"voters2022":27342,"share2022":73.84,"active":true,"subshare2022":null,"code":2650},{"key":"opp:נס ציונה","name":"נס ציונה","group":"opp","p2020":75.63,"p2021":74.16,"p2022":74.7,"eligible2022":34763,"voters2022":25969,"share2022":62.25,"active":true,"subshare2022":null,"code":7200},{"key":"opp:שוהם","name":"שוהם","group":"opp","p2020":75.86,"p2021":75.36,"p2022":76.04,"eligible2022":17006,"voters2022":12931,"share2022":62.51,"active":true,"subshare2022":null,"code":1304},{"key":"opp:זכרון יעקב","name":"זכרון יעקב","group":"opp","p2020":72.04,"p2021":71.86,"p2022":71.22,"eligible2022":17889,"voters2022":12740,"share2022":62.28,"active":true,"subshare2022":null,"code":9300},{"key":"haredi:בני ברק","name":"בני ברק","group":"haredi","p2020":77.04,"p2021":73.91,"p2022":76.53,"eligible2022":115586,"voters2022":88454,"share2022":null,"active":true,"subshare2022":null,"code":6100},{"key":"haredi:אלעד","name":"אלעד","group":"haredi","p2020":85.64,"p2021":81.04,"p2022":84.36,"eligible2022":23395,"voters2022":19737,"share2022":null,"active":true,"subshare2022":null,"code":1309},{"key":"haredi:ביתר עילית","name":"ביתר עילית","group":"haredi","p2020":82.03,"p2021":77.32,"p2022":81.34,"eligible2022":29318,"voters2022":23847,"share2022":null,"active":true,"subshare2022":null,"code":3780},{"key":"haredi:מודיעין עילית","name":"מודיעין עילית","group":"haredi","p2020":83.44,"p2021":81.02,"p2022":82.03,"eligible2022":32933,"voters2022":27016,"share2022":null,"active":true,"subshare2022":null,"code":3797},{"key":"haredi:רכסים","name":"רכסים","group":"haredi","p2020":84.58,"p2021":81.67,"p2022":84.21,"eligible2022":6974,"voters2022":5873,"share2022":null,"active":true,"subshare2022":null,"code":922},{"key":"arab:נצרת","name":"נצרת","group":"arab","p2020":60.34,"p2021":39.03,"p2022":48.29,"eligible2022":59519,"voters2022":28739,"share2022":null,"active":true,"subshare2022":null,"code":7300},{"key":"arab:רהט","name":"רהט","group":"arab","p2020":66.33,"p2021":47.78,"p2022":60.61,"eligible2022":38346,"voters2022":23241,"share2022":null,"active":true,"subshare2022":null,"code":1161},{"key":"arab:טייבה","name":"טייבה","group":"arab","p2020":70.94,"p2021":43.4,"p2022":57.71,"eligible2022":30461,"voters2022":17580,"share2022":null,"active":true,"subshare2022":null,"code":2730},{"key":"arab:סחנין","name":"סחנין","group":"arab","p2020":79.25,"p2021":70.25,"p2022":68.41,"eligible2022":23207,"voters2022":15877,"share2022":null,"active":true,"subshare2022":null,"code":7500},{"key":"arab:שפרעם","name":"שפרעם","group":"arab","p2020":65.93,"p2021":44.83,"p2022":51.47,"eligible2022":30875,"voters2022":15890,"share2022":null,"active":true,"subshare2022":null,"code":8800},{"key":"arab:טמרה","name":"טמרה","group":"arab","p2020":80.23,"p2021":52.37,"p2022":63.51,"eligible2022":24503,"voters2022":15563,"share2022":null,"active":true,"subshare2022":null,"code":8900},{"key":"arab:אום אל־פחם","name":"אום אל־פחם","group":"arab","p2020":63.1,"p2021":33.15,"p2022":38.29,"eligible2022":38286,"voters2022":14658,"share2022":null,"active":true,"subshare2022":null,"code":2710},{"key":"arab:טירה","name":"טירה","group":"arab","p2020":72.48,"p2021":47.1,"p2022":62.27,"eligible2022":19319,"voters2022":12030,"share2022":null,"active":true,"subshare2022":null,"code":2720},{"key":"arab:כפר קאסם","name":"כפר קאסם","group":"arab","p2020":73.88,"p2021":56.25,"p2022":66.88,"eligible2022":16449,"voters2022":11001,"share2022":null,"active":true,"subshare2022":null,"code":634},{"key":"arab:עראבה","name":"עראבה","group":"arab","p2020":72.14,"p2021":55.15,"p2022":56.87,"eligible2022":18203,"voters2022":10352,"share2022":null,"active":true,"subshare2022":null,"code":531},{"key":"near:מודיעין־מכבים־רעות","name":"מודיעין־מכבים־רעות","group":"near","p2020":null,"p2021":74.92,"p2022":74.69,"eligible2022":69212,"voters2022":51695,"share2022":59.75,"active":false,"subshare2022":null,"code":1200},{"key":"near:רעננה","name":"רעננה","group":"near","p2020":null,"p2021":66.68,"p2022":66.61,"eligible2022":69652,"voters2022":46392,"share2022":58.92,"active":false,"subshare2022":null,"code":8700},{"key":"zionism:טלמון","name":"טלמון","group":"zionism","p2020":82.97,"p2021":80.28,"p2022":80.56,"eligible2022":2624,"voters2022":2114,"share2022":84.9,"active":true,"subshare2022":null,"code":3788},{"key":"zionism:בית אל","name":"בית אל","group":"zionism","p2020":80.12,"p2021":76.6,"p2022":77.19,"eligible2022":3503,"voters2022":2704,"share2022":83.25,"active":true,"subshare2022":null,"code":3574},{"key":"zionism:קדומים","name":"קדומים","group":"zionism","p2020":79.92,"p2021":77.44,"p2022":76.02,"eligible2022":2715,"voters2022":2064,"share2022":72.7,"active":true,"subshare2022":null,"code":3557},{"key":"zionism:קריית ארבע","name":"קריית ארבע","group":"zionism","p2020":69.49,"p2021":63.72,"p2022":66.28,"eligible2022":4914,"voters2022":3257,"share2022":67.44,"active":true,"subshare2022":null,"code":3611},{"key":"zionism:יד בנימין","name":"יד בנימין","group":"zionism","p2020":80.86,"p2021":78.06,"p2022":77.77,"eligible2022":2411,"voters2022":1875,"share2022":58.4,"active":true,"subshare2022":null,"code":577},{"key":"zionism:כפר חב״ד","name":"כפר חב״ד","group":"zionism","p2020":68.27,"p2021":65.66,"p2022":67.31,"eligible2022":4371,"voters2022":2942,"share2022":56.28,"active":true,"subshare2022":null,"code":696},{"key":"zionism:קרני שומרון","name":"קרני שומרון","group":"zionism","p2020":75.53,"p2021":72.56,"p2022":73.55,"eligible2022":6464,"voters2022":4754,"share2022":54.44,"active":true,"subshare2022":null,"code":3640},{"key":"zionism:אלקנה","name":"אלקנה","group":"zionism","p2020":82.81,"p2021":81.16,"p2022":80.62,"eligible2022":2797,"voters2022":2255,"share2022":52.3,"active":true,"subshare2022":null,"code":3560},{"key":"zionism:אפרת","name":"אפרת","group":"zionism","p2020":75.38,"p2021":74.37,"p2022":72.98,"eligible2022":7945,"voters2022":5798,"share2022":48.05,"active":true,"subshare2022":null,"code":3650}]</script>
 <script id="embedded-demo" type="application/json">{"format_version":1,"source":"נתוני הדגמה בלבד — אינם נתוני בחירות אמיתיים","updated_at":"2026-10-27T20:00:00+02:00","national_turnout_pct":64.2,"records":[{"city":"בני ברק","eligible":115586,"voted":80910,"turnout_pct":70.0,"reported_stations":10,"total_stations":10,"as_of":"2026-10-27T20:00:00+02:00","partial":false},{"city":"אלעד","eligible":23395,"voted":16376,"turnout_pct":70.0,"reported_stations":10,"total_stations":10,"as_of":"2026-10-27T20:00:00+02:00","partial":false},{"city":"ביתר עילית","eligible":29318,"voted":20523,"turnout_pct":70.0,"reported_stations":10,"total_stations":10,"as_of":"2026-10-27T20:00:00+02:00","partial":false},{"city":"מודיעין עילית","eligible":32933,"voted":23053,"turnout_pct":70.0,"reported_stations":10,"total_stations":10,"as_of":"2026-10-27T20:00:00+02:00","partial":false},{"city":"רכסים","eligible":6974,"voted":4882,"turnout_pct":70.0,"reported_stations":10,"total_stations":10,"as_of":"2026-10-27T20:00:00+02:00","partial":false},{"city":"טירת כרמל","eligible":22069,"voted":9710,"turnout_pct":44.0,"reported_stations":8,"total_stations":10,"as_of":"2026-10-27T20:00:00+02:00","partial":true},{"city":"טלמון","eligible":2600,"voted":1456,"turnout_pct":56.0,"reported_stations":10,"total_stations":10,"as_of":"2026-10-27T20:00:00+02:00","partial":false}]}</script>
 <script>
 (()=>{'use strict';
 const rows=JSON.parse(document.getElementById('baseline-data').textContent);
+const primaryGroups=['right','opp','haredi','arab','zionism'];
 const groups=[
- {id:'right',title:'ערי גוש נתניהו',sub:'10 ערים נבחרות + 4 חלופות · ממוין לפי ימין ללא המפלגות החרדיות'},
- {id:'opp',title:'ערי מרכז–שמאל (60% ומעלה)',sub:'עשר ערים שעברו רף 60% תמיכה בגוש ב־2022'},
- {id:'haredi',title:'ערים חרדיות',sub:'בני ברק, אלעד, ביתר עילית, מודיעין עילית ורכסים'},
- {id:'arab',title:'ערים ערביות',sub:'עשרה יישובים נבחרים לצורך השוואת השתתפות'},
- {id:'zionism',title:'יישובים שבהם הציונות הדתית מעל 45%',sub:'תשעה יישובים · תמיכה ברשימה ב־2022, ולא בכלל גוש הימין'},
- {id:'near',title:'יישובים הקרובים לרף 60% מרכז–שמאל',sub:'רעננה ומודיעין־מכבים־רעות · מחוץ לקבוצה הראשית'}
+ {id:'right',title:'ערי גוש נתניהו',color:'#5b6fb0'},
+ {id:'opp',title:'ערי מרכז–שמאל (60% ומעלה)',color:'#2a7ea8'},
+ {id:'haredi',title:'ערים חרדיות',color:'#1a8f7a'},
+ {id:'arab',title:'ערים ערביות',color:'#c07b31'},
+ {id:'zionism',title:'יישובים שבהם הציונות הדתית מעל 45%',color:'#5377a2'},
+ {id:'near',title:'יישובים הקרובים לרף 60% מרכז–שמאל',color:'#9a9a9a'}
 ];
+const groupById=Object.fromEntries(groups.map(g=>[g.id,g]));
 const testEnvironment=location.pathname?.includes('/test/')===true;
 let feedMode='live', requestVersion=0;
-const state={selected:new Set(rows.filter(x=>x.active).map(x=>x.key)),live:new Map(),feed:null,source:'לא מחובר',updatedAt:null,rawCount:0,nationalPct:null,comparisonGroup:'haredi',comparisonCity:'אלעד'};
-const $=id=>document.getElementById(id),nf=new Intl.NumberFormat('he-IL'),fmt=x=>x==null||!Number.isFinite(x)?'—':x.toFixed(2)+'%',dif=x=>x==null||!Number.isFinite(x)?'—':(x>0?'+':x<0?'−':'')+Math.abs(x).toFixed(2),val=x=>Number.isFinite(Number(x))&&x!==null&&x!==''?Number(x):null;
+const state={
+ selected:new Set(rows.filter(x=>x.active).map(x=>x.key)),
+ live:new Map(),feed:null,source:'לא מחובר',updatedAt:null,rawCount:0,nationalPct:null,
+ nationalPreserved:false,history:[],hourlyHistory:null,showForecasts:false,openGroup:null,chartHidden:new Set()
+};
+const $=id=>document.getElementById(id),nf=new Intl.NumberFormat('he-IL');
+const fmt=x=>x==null||!Number.isFinite(x)?'—':x.toFixed(1)+'%';
+const dif=x=>x==null||!Number.isFinite(x)?'—':(x>0?'+':x<0?'−':'')+Math.abs(x).toFixed(1);
+const val=x=>Number.isFinite(Number(x))&&x!==null&&x!==''?Number(x):null;
 function esc(s){return String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;')}
 function norm(s){return String(s||'').normalize('NFKC').replace(/קריית/g,'קרית').replace(/[״׳'"־–-]/g,'').replace(/\s+/g,'').toLowerCase()}
-function renderTime(s){if(!s)return '—';let d=new Date(s);return Number.isFinite(+d)?d.toLocaleString('he-IL',{dateStyle:'short',timeStyle:'short'}):String(s)}
+function renderTime(s){if(!s)return '—';const d=new Date(s);return Number.isFinite(+d)?d.toLocaleString('he-IL',{dateStyle:'short',timeStyle:'short'}):String(s)}
 function getLive(name){return state.live.get(norm(name))||null}
-function livePct(l){if(!l)return null;let e=val(l.eligible),v=val(l.voted);if(e!==null||v!==null)return e>0&&v!==null&&v>=0&&v<=e?100*v/e:null;return val(l.turnout_pct)}
+function livePct(l){if(!l)return null;const e=val(l.eligible),v=val(l.voted);if(e!==null||v!==null)return e>0&&v!==null&&v>=0&&v<=e?100*v/e:null;return val(l.turnout_pct)}
 function stationPartial(l){if(!l)return false;const r=val(l.reported_stations),t=val(l.total_stations);if(r===null&&t===null)return false;return (r??0)<(t??0)}
 function reportFull(l){return !!l&&l.partial!==true&&!stationPartial(l)}
 function complete(l){return reportFull(l)&&!l.preserved_previous}
-function makeSummary(groupRows){let selected=groupRows.filter(x=>state.selected.has(x.key));let allElig=selected.every(x=>val(x.eligible2022)>0&&val(x.voters2022)!=null),eligible2022=allElig?selected.reduce((s,x)=>s+x.eligible2022,0):null,voters2022=allElig?selected.reduce((s,x)=>s+x.voters2022,0):null,hist=allElig&&eligible2022>0?100*voters2022/eligible2022:null;
- let reported=selected.filter(x=>getLive(x.name)),full=selected.filter(x=>complete(getLive(x.name)) && val(getLive(x.name).eligible)>0 && val(getLive(x.name).voted)!=null);let coverage=selected.length?reported.length+'/'+selected.length:'0/0';let fullOk=selected.length>0&&full.length===selected.length;let e=full.reduce((s,x)=>s+val(getLive(x.name).eligible),0),v=full.reduce((s,x)=>s+val(getLive(x.name).voted),0);let pct=fullOk&&e>0?100*v/e:null;
- let simpleDelta=selected.length?selected.reduce((s,x)=>s+(x.p2022-x.p2021),0)/selected.length:null;
- return {n:selected.length,coverage,fullCount:full.length,live:pct,hist,delta:simpleDelta,reported:reported.length}; }
-
-const nationalHistory={2020:71.52,2021:67.44,2022:70.63};
-function selectedGroupRows(id){return rows.filter(r=>r.group===id&&state.selected.has(r.key))}
-function groupHistory(id){
- const picked=selectedGroupRows(id);let values={};
- const weightsOk=picked.length>0&&picked.every(r=>val(r.eligible2022)>0);
- for(const yr of [2020,2021,2022]){
-  if(picked.length===0||picked.some(r=>val(r['p'+yr])===null))values[yr]=null;
-  else if(yr===2022&&picked.every(r=>val(r.voters2022)!==null&&val(r.eligible2022)>0)){
-   const eligible=picked.reduce((a,r)=>a+r.eligible2022,0);
-   values[yr]=eligible>0?100*picked.reduce((a,r)=>a+r.voters2022,0)/eligible:null;
-  }else if(weightsOk){
-   const wt=picked.reduce((a,r)=>a+r.eligible2022,0);
-   values[yr]=wt>0?picked.reduce((a,r)=>a+r['p'+yr]*r.eligible2022,0)/wt:null;
-  }else values[yr]=picked.reduce((a,r)=>a+r['p'+yr],0)/picked.length;
- }
- const s=makeSummary(rows.filter(r=>r.group===id));
- return {values,live:s.live,coverage:s.coverage,full:s.fullCount===s.n&&s.n>0,approx:!weightsOk,groupSize:s.n};
-}
 function nationalLive(){
- const manual=val($('nationalManual').value);
+ const manual=val($('nationalManual')?.value);
  if(manual!==null&&manual>=0&&manual<=100)return {value:manual,manual:true};
  if(state.nationalPreserved)return {value:null,manual:false};
  if(state.nationalPct!==null)return {value:state.nationalPct,manual:false};
  return {value:null,manual:false};
 }
-function comparisonOptions(){
- const a=$('comparisonGroup'),b=$('comparisonCity');
- if(!a.options.length)a.innerHTML=groups.map(g=>`<option value="${g.id}">${esc(g.title)}</option>`).join('');
- a.value=state.comparisonGroup;
- const cities=rows.filter(x=>x.group===state.comparisonGroup);
- b.innerHTML=cities.map(r=>`<option value="${esc(r.name)}">${esc(r.name)}${state.selected.has(r.key)?'':' (לא נבחר בקבוצה)'}</option>`).join('');
- if(!cities.some(r=>r.name===state.comparisonCity))state.comparisonCity=(cities.find(r=>state.selected.has(r.key))||cities[0]||{}).name||'';
- b.value=state.comparisonCity;
-}
-function comparisonChart(title,detail,values,current,{partial=false,groupHistoryMode=null}={}){
- const arr=[[2020,values[2020]],[2021,values[2021]],[2022,values[2022]],[2026,current]];
- return `<article class="comparison-card"><h3>${esc(title)}</h3><div class="meta">${esc(detail)}</div>${arr.map(([y,p])=>{
- const available=p!=null&&Number.isFinite(p)&&p>=0&&p<=100;
- const pct=available?p:null;
- let note=y===2026?(partial?'נתון חלקי — אינו שיעור סופי':'שיעור הצבעה מדווח בנקודת הזמן האחרונה'):'שיעור הצבעה סופי';
- if(y!==2026&&groupHistoryMode){note=groupHistoryMode==='simple'?'ממוצע פשוט של יישובים; מבוסס על נתוני בחירות סופיים':y===2022?'שיעור מצרפי רשמי-בסיס, מחושב מנתוני היישובים':'ממוצע משוקלל מתוקנן לפי זכאי 2022'}
- return `<div class="chart-row ${partial&&y===2026?'partial':''}"><div class="chart-row-header"><span class="chart-label">${y}${y===2026?' · עכשיו':''}</span><strong>${pct===null?'טרם התקבל':fmt(pct)}</strong></div><div class="chart-track"><div class="chart-fill" data-year="${y}" style="width:${pct===null?0:Math.min(100,Math.max(0,pct))}%"></div></div><div class="chart-year-note">${pct===null?'אין נתון להשוואה':esc(note)}</div></div>`
- }).join('')}</article>`;
-}
-function progressCard(title,current,p2022,{partial=false}={}){
- const progress=current!=null&&p2022!=null&&p2022>0?current/p2022*100:null;
- const gap=current!=null&&p2022!=null?current-p2022:null;
- return `<article class="progress-card"><h4>${esc(title)}</h4><div class="progress-number">${progress===null?'—':progress.toFixed(1)+'%'}${partial?'<small> · חלקי</small>':''}</div><div class="progress-track"><div class="progress-fill" style="width:${progress===null?0:Math.min(100,Math.max(0,progress))}%"></div></div><div class="progress-foot">${gap===null?'ממתין לנתוני 2026':(gap>=0?'+':'−')+Math.abs(gap).toFixed(2)+' נקודות אחוז לעומת סוף 2022'}${progress!==null&&progress>100?' · רמת 2022 כבר נחצתה':''}</div></article>`;
-}
-function renderComparisons(){
- comparisonOptions();
- const selected=rows.find(r=>r.group===state.comparisonGroup&&r.name===state.comparisonCity);
- const g=groups.find(x=>x.id===state.comparisonGroup),l=selected?getLive(selected.name):null;
- const city=selected?{2020:val(selected.p2020),2021:val(selected.p2021),2022:val(selected.p2022)}:{2020:null,2021:null,2022:null};
- const cPct=livePct(l),cityPartial=l&&!complete(l);
- const group=groupHistory(state.comparisonGroup),national=nationalLive();
- const cityNote=selected?selected.name:'יישוב לא נבחר';
- const gDesc=`${group.groupSize} יישובים נבחרים; כיסוי ${group.coverage}. ${group.approx?'נתוני עבר: ממוצע פשוט':'נתוני עבר: חישוב מצרפי/מתוקנן'}`;
- $('comparisonCharts').innerHTML=comparisonChart('היישוב: '+cityNote,'שיעורי ההשתתפות של היישוב',city,cPct,{partial:cityPartial})+
- comparisonChart('הקבוצה: '+g.title,gDesc,group.values,group.live,{groupHistoryMode:group.approx?'simple':'weighted'})+
- comparisonChart('כל הארץ','נתוני 2020–2022: שיעורים ארציים סופיים',nationalHistory,national.value);
- $('comparisonProgress').innerHTML=progressCard('היישוב: '+cityNote,cPct,city[2022],{partial:cityPartial})+progressCard('הקבוצה: '+g.title,group.live,group.values[2022])+progressCard('הארצי',national.value,nationalHistory[2022]);
- const asof=l?.as_of||state.updatedAt;
- let status=`נתוני 2026: ${state.feed?esc(state.source):'טרם התקבלה הזנה'}; שעת דיווח ליישוב: ${esc(renderTime(asof))}. `;
- if(cityPartial)status+='הנתון ביישוב חלקי. ';
- if(!group.full)status+=`בקבוצה יש דיווח מלא רק עבור ${group.coverage.split('/')[0]==='0'?0:group.full?group.groupSize:rows.filter(r=>r.group===state.comparisonGroup&&state.selected.has(r.key)&&complete(getLive(r.name))&&val(getLive(r.name).eligible)>0&&val(getLive(r.name).voted)!==null).length} מתוך ${group.groupSize} יישובים נבחרים, ולכן עדיין לא מוצג שיעור קבוצתי מלא. `;
- if(national.manual)status+='שיעור ההצבעה הארצי הוזן ידנית ולא נמשך ממקור אוטומטי. ';
- else if(national.value===null)status+='שיעור ההצבעה הארצי עדיין לא התקבל; ניתן להזינו בשדה למעלה. ';
- $('comparisonAsOf').textContent=status;
- $('comparisonAsOf').className='compare-note'+(cityPartial||!group.full?' warning':'');
- const cp=cPct!=null&&city[2022]>0?100*cPct/city[2022]:null,gp=group.live!=null&&group.values[2022]>0?100*group.live/group.values[2022]:null,np=national.value!=null?100*national.value/nationalHistory[2022]:null;
- let relative='השוואה לקצב הארצי: ';
- if(np===null)relative+='יש להזין או לייבא שיעור הצבעה ארצי כדי להציג השוואה.';
- else{
-  relative+=`הארצי השיג ${np.toFixed(1)}% מרמת 2022.`;
-  if(cp!==null)relative+=` היישוב השיג ${cp.toFixed(1)}% (${(cp-np)>=0?'+':''}${(cp-np).toFixed(1)} נקודות מדד ביחס לארצי).`;
-  if(gp!==null)relative+=` הקבוצה השיגה ${gp.toFixed(1)}% (${(gp-np)>=0?'+':''}${(gp-np).toFixed(1)} נקודות מדד ביחס לארצי).`;
-  relative+=' זהו מדד תיאורי ביחס לשיעור הסופי של 2022, לא השוואה היסטורית של אותה שעה.';
+function selectedInGroup(id){return rows.filter(r=>r.group===id&&state.selected.has(r.key))}
+function groupStats(id){
+ const selected=selectedInGroup(id);
+ const full=selected.filter(r=>{const l=getLive(r.name);return complete(l)&&val(l.eligible)>0&&val(l.voted)!=null});
+ let current=null,votedSum=null,eligSum=null;
+ if(full.length){
+  eligSum=full.reduce((s,r)=>s+val(getLive(r.name).eligible),0);
+  votedSum=full.reduce((s,r)=>s+val(getLive(r.name).voted),0);
+  current=eligSum>0?100*votedSum/eligSum:null;
  }
- $('comparisonRelative').textContent=relative;
+ let baseline=null;
+ if(full.length&&full.every(r=>val(r.eligible2022)>0&&val(r.voters2022)!=null)){
+  const be=full.reduce((s,r)=>s+r.eligible2022,0),bv=full.reduce((s,r)=>s+r.voters2022,0);
+  baseline=be>0?100*bv/be:null;
+ }
+ const baseEligAll=selected.every(r=>val(r.eligible2022)>0)?selected.reduce((s,r)=>s+r.eligible2022,0):null;
+ const baseEligFull=full.every(r=>val(r.eligible2022)>0)?full.reduce((s,r)=>s+r.eligible2022,0):null;
+ const eligibleCoverage=baseEligAll>0&&baseEligFull!=null?baseEligFull/baseEligAll:null;
+ const progress=current!=null&&baseline>0?100*current/baseline:null;
+ return {id,n:selected.length,fullCount:full.length,current,baseline,progress,eligibleCoverage,votedSum,eligSum,cityKeys:full.map(r=>r.key),partial:full.length>0&&full.length<selected.length,empty:full.length===0};
 }
-
-
+/** Alias used by older tests expecting all-or-nothing completeCount semantics for demos. */
 function newPulseStats(pick){
  const s=pick.filter(r=>state.selected.has(r.key));
+ const full=s.filter(r=>{const x=getLive(r.name);const e=val(x?.eligible),v=val(x?.voted);return complete(x)&&e>0&&v!==null&&v>=0&&v<=e});
+ const fullCoverage=s.length>0&&full.length===s.length;
  const validBase=s.length>0&&s.every(r=>val(r.eligible2022)>0&&val(r.voters2022)!==null);
  const baseE=validBase?s.reduce((a,r)=>a+val(r.eligible2022),0):null;
  const baseV=validBase?s.reduce((a,r)=>a+val(r.voters2022),0):null;
  const baseline=baseE>0?100*baseV/baseE:null;
- const full=s.filter(r=>{let x=getLive(r.name),e=val(x?.eligible),v=val(x?.voted);return complete(x)&&e>0&&v!==null&&v>=0&&v<=e;});
- const fullCoverage=s.length>0&&full.length===s.length;
  const e=fullCoverage?full.reduce((a,r)=>a+val(getLive(r.name).eligible),0):null;
  const v=fullCoverage?full.reduce((a,r)=>a+val(getLive(r.name).voted),0):null;
  const current=e>0?100*v/e:null;
  const progress=current!==null&&baseline>0?100*current/baseline:null;
- const stamps=full.map(r=>Date.parse(getLive(r.name).as_of||state.updatedAt||'')).filter(Number.isFinite);
- const ageSpread=stamps.length===full.length&&stamps.length?Math.round((Math.max(...stamps)-Math.min(...stamps))/60000):null;
- const oldest=stamps.length?new Date(Math.min(...stamps)).toISOString():null;
- const newest=stamps.length?new Date(Math.max(...stamps)).toISOString():null;
- return {n:s.length,completeCount:full.length,baseline,current,progress,ageSpread,oldest,newest};
+ return {n:s.length,completeCount:full.length,baseline,current,progress};
 }
-function pulseBadgeGap(n){if(n===null||!Number.isFinite(n))return '<span class="pulse-gap neutral">—</span>';
- return `<span class="pulse-gap ${n>0.05?'positive':n<-.05?'negative':'neutral'}">${n>0?'+':''}${n.toFixed(1)} נק׳</span>`;
-}
-function renderPulse(){
- const nat=nationalLive();const natProgress=nat.value!==null?100*nat.value/nationalHistory[2022]:null;
- const active=rows.filter(r=>state.selected.has(r.key));const total=newPulseStats(active);
- const stats=groups.filter(g=>active.some(r=>r.group===g.id)).map(g=>({...newPulseStats(rows.filter(r=>r.group===g.id)),id:g.id,title:g.title}));
- const pct=x=>x==null?'—':x.toFixed(1)+'%';
- const tile=(label,number,note,missing=false)=>`<div class="pulse-tile${missing?' flag-missing':''}"><div class="pulse-title">${esc(label)}</div><strong>${esc(number)}</strong><small>${esc(note)}</small></div>`;
- $('pulseOverview').innerHTML=tile('הארץ · כמה הושג מ־2022',pct(natProgress),nat.value===null?'חסר נתון ארצי עדכני':`שיעור הצבעה נוכחי: ${pct(nat.value)}; בסיס 2022: 70.63%`,natProgress===null)+
-   tile(`כל ${active.length} היישובים · התקדמות`,pct(total.progress),`${total.completeCount}/${total.n} יישובים דיווחו באופן מלא; בסיס 2022: ${pct(total.baseline)}`,total.progress===null)+
-   tile('פער ההתקדמות מול הארץ',total.progress!==null&&natProgress!==null?`${total.progress-natProgress>0?'+':''}${(total.progress-natProgress).toFixed(1)} נק׳`:'—',total.progress!==null&&natProgress!==null?'חיובי: מעל הקצב הארצי; שלילי: מתחתיו':'יופיע רק כשיש נתונים מלאים והשתתפות ארצית',total.progress===null||natProgress===null);
- const warning=[];
- if((/הדגמה|סימולציה|demo|simulation/i).test(String(state.source)))warning.push('נתוני סימולציה/הדגמה מומצאים — לא נתוני אמת.');
- if(state.nationalPreserved)warning.push('הנתון הארצי הקודם נשמר, אך אינו משמש להשוואה לעדכון חדש.');
- if([...state.live.values()].some(r=>r.preserved_previous))warning.push('דיווחים קודמים נשמרו עם שעתם המקורית ואינם נכללים במדד העדכני המלא.');
- if(total.completeCount<total.n)warning.push(`רק ${total.completeCount} מתוך ${total.n} יישובים נבחרים דיווחו באופן מלא. המדד המשותף אינו מחושב מדיווחים חלקיים.`);
- if(natProgress===null)warning.push('טרם התקבל אחוז הצבעה ארצי. ניתן להזין אותו ידנית למעלה.');
- if(nat.manual)warning.push('הנתון הארצי הוזן ידנית; יש לוודא שהוא מאותה שעה כמו נתוני היישובים.');
- if(total.ageSpread>60)warning.push(`זמני הדיווח בין היישובים שונים עד ${total.ageSpread} דקות, ולכן השוואת הקצב עשויה להטעות.`);
- if(total.ageSpread===null&&total.current!==null)warning.push('לנתוני היישובים אין חותמות זמן מלאות; יש לוודא שהם מעודכנים לאותה שעה.');
- $('pulseContext').textContent=warning.length?warning.join(' '):`דיווחים מלאים לכל ${total.n} היישובים. עדכון: ${renderTime(state.updatedAt)}. זהו פער במדד ההתקדמות, לא תחזית סופית.`;
- $('pulseContext').className='pulse-context'+(warning.length?' warn':'');
- const all=[{title:'כל הארץ',progress:natProgress,completeCount:0,n:0,kind:'national',current:nat.value,ageSpread:null},{title:`כל ${total.n} היישובים יחד`,...total,kind:'total'},...stats.map(s=>({...s,kind:'group'}))];
- const maxObserved=Math.max(105,...all.map(x=>x.progress??0)); const axis=Math.max(110,Math.ceil((maxObserved+3)/10)*10);
- $('pulseGroups').innerHTML=all.map(d=>{
-  const p=d.progress;const gap=p!==null&&natProgress!==null?p-natProgress:null;
-  const coverage=d.kind==='national'?'כל הארץ':`${d.completeCount}/${d.n} דיווחים מלאים`;
-  const outdated=d.ageSpread!==null&&d.ageSpread>60?' · שעות דיווח שונות':'';
-  return `<div class="pulse-row ${d.kind}"><div class="pulse-label"><b>${esc(d.title)}</b><small>${esc(coverage+outdated)}</small></div><div class="pulse-bar" title="התקדמות עדכנית יחסית לשיעור ההשתתפות הסופי ב־2022"><div class="pulse-fill" style="width:${p===null?0:Math.max(0,Math.min(100,100*p/axis))}%"></div>${natProgress!==null&&d.kind!=='national'?`<div class="pulse-marker" style="right:${Math.max(0,Math.min(100,100*natProgress/axis))}%"></div>`:''}</div><div class="pulse-reading"><strong>${pct(p)}</strong><small>${d.kind==='national'?'קו הייחוס':gap!==null?pulseBadgeGap(gap):'ממתין לדיווח מלא'}</small></div></div>`;
- }).join('');
- const items=active.map(r=>{
-  const x=getLive(r.name),p=complete(x)?livePct(x):null;const progress=p!==null&&r.p2022>0?100*p/r.p2022:null;
-  const gap=progress!==null&&natProgress!==null?progress-natProgress:null;
-  return {r,x,p,progress,gap};
- }).sort((a,b)=>(a.gap===null?1:0)-(b.gap===null?1:0)||(a.gap===null?0:a.gap-b.gap)||a.r.name.localeCompare(b.r.name,'he'));
- $('pulseCities').innerHTML=items.map(o=>{const status=!o.x?'לא התקבל':o.x.preserved_previous?'דיווח קודם':!complete(o.x)?'חלקי':o.progress===null?'חסר נתון תקין':'מלא';
- return `<tr><td>${esc(o.r.name)}</td><td>${esc(groups.find(g=>g.id===o.r.group)?.title||'')}</td><td class="num">${pct(o.r.p2022)}</td><td class="num">${pct(o.p)}</td><td class="num"><strong>${pct(o.progress)}</strong></td><td class="num">${pulseBadgeGap(o.gap)}</td><td>${status}${o.x?.as_of?' · '+esc(renderTime(o.x.as_of)):''}</td></tr>`}).join('');
-}
-
-function renderAll44(){
- const pick=rows.filter(r=>state.selected.has(r.key));
- const weighted=pick.length>0&&pick.every(r=>val(r.eligible2022)>0&&val(r.voters2022)!==null);
- const eligible=weighted?pick.reduce((s,r)=>s+r.eligible2022,0):null;
- const voted=weighted?pick.reduce((s,r)=>s+r.voters2022,0):null;
- const baseline=weighted&&eligible>0?100*voted/eligible:null;
- const previous={};
- for(const year of [2020,2021]){
-  previous[year]=pick.length&&pick.every(r=>val(r['p'+year])!==null)?
-    weighted?pick.reduce((s,r)=>s+r.eligible2022*r['p'+year],0)/eligible:
-      pick.reduce((s,r)=>s+r['p'+year],0)/pick.length:null;
+function historyCityMap(point){
+ const out=new Map();
+ const cities=point?.cities||{};
+ for(const [k,row] of Object.entries(cities)){
+  if(!row||row.partial||row.preserved_previous)continue;
+  const e=val(row.eligible),v=val(row.voted);
+  if(!(e>0)||v==null)continue;
+  out.set(k,{eligible:e,voted:v,turnout:100*v/e,name:row.city});
  }
- const full=pick.filter(r=>{let l=getLive(r.name);return complete(l)&&val(l?.eligible)>0&&val(l?.voted)!==null});
- const eligibleLive=full.length===pick.length&&pick.length>0?full.reduce((s,r)=>s+val(getLive(r.name).eligible),0):null;
- const votedLive=eligibleLive!==null?full.reduce((s,r)=>s+val(getLive(r.name).voted),0):null;
- const live=eligibleLive>0?100*votedLive/eligibleLive:null;
- const pctDone=live!==null&&baseline>0?100*live/baseline:null;
- const national=nationalLive();
- const natDone=national.value!==null?100*national.value/nationalHistory[2022]:null;
- const fmtv=n=>n===null?'—':n.toFixed(2)+'%';
- const metric=(heading,value,foot)=>`<div class="aggregate-metric"><small>${esc(heading)}</small><strong>${esc(value)}</strong><small>${esc(foot)}</small></div>`;
- $('all44Metrics').innerHTML=metric('ההצבעה בקבוצה בסוף 2022',fmtv(baseline),weighted?`${nf.format(voted)} מצביעים מתוך ${nf.format(eligible)} זכאים`:'ממתין לנתוני זכאים לכל היישובים')+
- metric('ההצבעה המדווחת ב־2026',fmtv(live),`${full.length} מתוך ${pick.length} יישובים עם דיווח מלא`)+
- metric('כמה מרמת 2022 כבר הושג?',pctDone===null?'—':pctDone.toFixed(1)+'%',`בארץ: ${natDone===null?'—':natDone.toFixed(1)+'%'} מרמת 2022`)+
- metric('סרגל ייחוס לשעה 20:00',baseline===null?'—':`${(baseline*.8954).toFixed(1)}%–${(baseline*.9387).toFixed(1)}%`,'ממוצע מרכזי: '+(baseline===null?'—':(baseline*.9132).toFixed(1)+'%'));
- const bars=[[2020,previous[2020]],[2021,previous[2021]],[2022,baseline],['2026',live]];
- $('all44Bars').innerHTML=bars.map(([yr,x])=>`<div class="aggregate-line ${yr==='2026'?'current':''}"><b>${yr==='2026'?'עכשיו':yr}</b><div class="track"><div class="fill" style="width:${x===null?0:Math.min(100,Math.max(0,x))}%"></div></div><span class="percent">${fmtv(x)}</span></div>`).join('');
- let message='';
- if(live===null){message=`עדיין אין מדד חי מלא לכל ${pick.length} היישובים. לא מחשבים ממוצע של רשומות חלקיות: יש דיווח מלא עבור ${full.length} בלבד. נתוני 2022 זמינים להשוואה.`}
- else {message=`היישובים שנבחרו השיגו ${pctDone.toFixed(1)}% מרמת ההשתתפות של 2022. `;
-  if(natDone!==null)message+=`באותו עדכון, הארץ השיגה ${natDone.toFixed(1)}% מרמת 2022; הפער במדד הוא ${(pctDone-natDone>=0?'+':'')+(pctDone-natDone).toFixed(1)} נקודות. `;
-  else message+='טרם התקבל שיעור הצבעה ארצי לאותו מועד. ';
-  message+='בבדיקה סביב 20:00, סרגל הייחוס הארצי ההיסטורי הוא 89.5%–93.9% מרמת 2022; אין להסיק ממנו ודאות לגבי קצב ההצבעה ביישובים.';
+ return out;
+}
+function groupTurnoutFromCityMap(id, cityMap){
+ const selected=selectedInGroup(id);
+ const full=[];
+ for(const r of selected){
+  const hit=cityMap.get(norm(r.name))||cityMap.get(r.key)||[...cityMap.values()].find(x=>norm(x.name)===norm(r.name));
+  // keys in history are city_key normalized without group prefix
+  let row=cityMap.get(norm(r.name));
+  if(!row){
+   for(const [ck,valRow] of cityMap){if(norm(valRow.name)===norm(r.name)||ck===norm(r.name)){row=valRow;break}}
+  }
+  if(row)full.push(row);
  }
- $('all44Report').textContent=message;
- $('all44Report').className='aggregate-report'+(live===null?' aggregate-warning':'');
+ if(!full.length)return null;
+ const e=full.reduce((s,x)=>s+x.eligible,0),v=full.reduce((s,x)=>s+x.voted,0);
+ return e>0?{pct:100*v/e,keys:full.map(x=>norm(x.name))}:null;
 }
-
-
-// Scenario rates reflect only *assumptions* for an invented 20:00 report.
-// 2020: 65.6/71.52 of the final turnout had been reached by 20:00.
-// 2022: 66.3/70.63 of the final turnout had been reached by 20:00.
-const scenarioConfigs={
- right:{year:2022,factor:66.3/70.63,rule:'יעד סיום ברמת 2022, עם קצב 20:00 של 2022'},
- opp:{year:2020,factor:65.6/71.52,rule:'יעד סיום ברמת 2020, עם קצב 20:00 של 2020'},
- haredi:{year:2020,factor:65.6/71.52,rule:'יעד סיום ברמת 2020, עם קצב 20:00 של 2020'},
- arab:{year:2022,factor:.90,rule:'יעד סיום ברמת 2022, ו־90% ממנו עד 20:00 (הנחה)'},
- zionism:{year:2020,factor:65.6/71.52,rule:'יעד סיום ברמת 2020, עם קצב 20:00 של 2020'},
- near:{year:2020,factor:65.6/71.52,rule:'חלופות: יעד סיום ברמת 2020 עם קצב 2020'}
-};
-function simulateAtEight(){
- try{
-  // Clear any manually entered national turnout so the simulated national rate is visible.
-  $('nationalManual').value='';
-  const records=rows.map(r=>{
-   const scenario=scenarioConfigs[r.group],eligible=val(r.eligible2022);
-   if(!(eligible>0))return null;
-   const historicalEnd=val(r['p'+scenario.year]);
-   if(historicalEnd===null)return null;
-   const rate=Math.min(100,Math.max(0,historicalEnd*scenario.factor));
-   const voted=Math.round(eligible*rate/100);
-   return {city:r.name,eligible,voted,turnout_pct:100*voted/eligible,
-     partial:false,reported_stations:10,total_stations:10,as_of:'2026-10-27T20:00:00+02:00'};
-  }).filter(Boolean);
-  ingest({source:'סימולציה — תרחיש 20:00 — נתונים מומצאים בלבד',
-    updated_at:'2026-10-27T20:00:00+02:00',
-    national_turnout_pct:66.0,records},'סימולציה 20:00');
-  $('pulsePanel').scrollIntoView({behavior:'smooth',block:'start'});
- }catch(e){setStatus('טעינת הסימולציה נכשלה: '+e.message,'err')}
+function deltaSame(id){
+ if(state.history.length<2)return null;
+ const a=state.history[state.history.length-2],b=state.history[state.history.length-1];
+ const mapA=historyCityMap(a),mapB=historyCityMap(b);
+ const selected=selectedInGroup(id);
+ const shared=[];
+ for(const r of selected){
+  let ra=null,rb=null;
+  for(const [ck,row] of mapA){if(norm(row.name)===norm(r.name)||ck===norm(r.name)){ra=row;break}}
+  for(const [ck,row] of mapB){if(norm(row.name)===norm(r.name)||ck===norm(r.name)){rb=row;break}}
+  if(ra&&rb)shared.push({a:ra,b:rb});
+ }
+ if(!shared.length)return {kind:'none'};
+ // composition: cities in B full but not in shared
+ const fullB=[];
+ for(const r of selected){
+  for(const [ck,row] of mapB){if(norm(row.name)===norm(r.name)||ck===norm(r.name)){fullB.push(row);break}}
+ }
+ if(fullB.length!==shared.length){
+  return {kind:'composition',note:'שינוי בהרכב הדיווח'};
+ }
+ const eA=shared.reduce((s,x)=>s+x.a.eligible,0),vA=shared.reduce((s,x)=>s+x.a.voted,0);
+ const eB=shared.reduce((s,x)=>s+x.b.eligible,0),vB=shared.reduce((s,x)=>s+x.b.voted,0);
+ if(!(eA>0&&eB>0))return {kind:'none'};
+ return {kind:'same',delta:100*vB/eB-100*vA/eA};
 }
-function renderScenarioDetails(){
- const isScenario=String(state.source).includes('סימולציה');
- const panel=$('scenarioDetails');panel.classList.toggle('hidden',!isScenario);
- if(!isScenario)return;
- const pct=n=>n===null?'—':n.toFixed(2)+'%';
- const rowsHtml=groups.filter(g=>selectedGroupRows(g.id).length).map(g=>{
-  const s=scenarioConfigs[g.id],history=groupHistory(g.id),end=history.values[s.year],now=history.live;
-  const progress=history.values[2022]>0&&now!==null?100*now/history.values[2022]:null;
-  const nationalProgress=100*66/70.63;
-  const gap=progress===null?null:progress-nationalProgress;
-  return `<tr><td><b>${esc(g.title)}</b></td><td>${esc(s.year)}</td><td class="num">${pct(end)}</td><td class="num">${(100*s.factor).toFixed(1)}%</td><td class="num">${pct(now)}</td><td class="num">${gap===null?'—':(gap>=0?'+':'')+gap.toFixed(1)+' נק׳'}</td></tr>`;
+function verifiedHourlyCount(){
+ const elections=state.hourlyHistory?.elections||{};
+ let n=0;
+ for(const e of Object.values(elections)){
+  if(Array.isArray(e.points)&&e.points.length>=2&&val(e.final_turnout_pct)!=null)n++;
+ }
+ return n;
+}
+function nationalForecast(nowPct, asOf){
+ if(nowPct==null||verifiedHourlyCount()<3||!asOf)return null;
+ // No numeric forecast until curated hourly points exist (currently empty by design).
+ return null;
+}
+function groupForecastRange(stats){
+ if(!state.showForecasts)return null;
+ if(!stats||stats.current==null||stats.partial||stats.fullCount<Math.ceil(stats.n*0.85))return null;
+ if(verifiedHourlyCount()<3)return null;
+ return null; // gated until national_hourly_history has verified points
+}
+function setStatus(message,type='warn'){
+ const el=$('dataStatus');if(!el)return;
+ el.textContent=message;el.className='alert'+(type==='ok'?' success':type==='err'?' error':'');
+}
+function renderBoard(){
+ const root=$('groupBoard');if(!root)return;
+ const sort=$('boardSort')?.value||'fixed';
+ let list=primaryGroups.map(id=>({g:groupById[id],s:groupStats(id),d:deltaSame(id)}));
+ if(sort==='live')list.sort((a,b)=>(b.s.current??-1)-(a.s.current??-1));
+ root.innerHTML=list.map(({g,s,d})=>{
+  const open=state.openGroup===g.id?' open':'';
+  const chip=s.empty?'<span class="chip none">אין דיווח</span>':(s.partial||s.fullCount<s.n?`<span class="chip partial">חלקי ${s.fullCount}/${s.n}</span>`:`<span class="chip full">מלא ${s.fullCount}/${s.n}</span>`);
+  const pctCls=s.current==null?'group-pct missing':'group-pct';
+  const baseMax=Math.max(s.baseline||0,s.current||0,1);
+  const fill=s.current==null?0:Math.max(0,Math.min(100,100*s.current/Math.max(baseMax,100)));
+  const markPos=s.baseline==null?null:Math.max(0,Math.min(100,100*s.baseline/Math.max(baseMax,100)));
+  let deltaHtml='';
+  if(d?.kind==='same'&&d.delta!=null){
+   const cls=d.delta>0.05?'up':d.delta<-0.05?'down':'flat';
+   deltaHtml=`<div class="delta ${cls}">${dif(d.delta)} נק׳</div>`;
+  }else if(d?.kind==='composition'){
+   deltaHtml=`<div class="delta flat">הרכב השתנה</div>`;
+  }
+  const covElig=s.eligibleCoverage==null?'':` · זכאים ${(100*s.eligibleCoverage).toFixed(0)}%`;
+  const fc=groupForecastRange(s);
+  const forecast=fc?`<div class="forecast-line">תרחיש סיום משוער: ${fc.lo.toFixed(0)}%–${fc.hi.toFixed(0)}%</div>`:(state.showForecasts?`<div class="forecast-line">תרחישי סיום — אין בסיס מאומת להצגה</div>`:'');
+  const cities=selectedInGroup(g.id).map(r=>{
+   const l=getLive(r.name),p=livePct(l),prog=p!=null&&r.p2022>0?100*p/r.p2022:null;
+   const st=!l?'אין':l.preserved_previous?'נשמר':!complete(l)?'חלקי':'מלא';
+   return `<tr><td>${esc(r.name)}</td><td class="num">${fmt(p)}</td><td class="num">${fmt(r.p2022)}</td><td class="num">${prog==null?'—':prog.toFixed(0)+'%'}</td><td>${st}</td></tr>`;
+  }).join('');
+  return `<div class="group-row${open}" data-gid="${g.id}"><div class="group-row-main">
+   <div class="group-name">${esc(g.title)}${chip}<small>${s.fullCount?`מדווחים ${s.fullCount}/${s.n}${covElig}`:'ממתין לדיווח'}</small></div>
+   <div class="${pctCls}">${s.current==null?'—':s.current.toFixed(1)+'%'}</div>
+   <div class="track-wrap"><div class="track"><div class="fill" style="width:${fill}%"></div>${markPos!=null?`<div class="mark2022" style="right:${markPos}%"></div>`:''}</div>
+   <div class="ref2022">סופי ב־2022: ${s.baseline==null?'—':s.baseline.toFixed(1)+'%'}${s.fullCount&&s.fullCount<s.n?' · על היישובים המדווחים':''}</div>${forecast}</div>
+   <div class="meta-col">${deltaHtml}<div>${s.progress==null?'':('התקדמות מול 2022: '+s.progress.toFixed(0)+'%')}</div></div>
+  </div><div class="group-cities"><table><thead><tr><th>יישוב</th><th>2026</th><th>2022</th><th>התקדמות</th><th>סטטוס</th></tr></thead><tbody>${cities}</tbody></table></div></div>`;
  }).join('');
- panel.innerHTML=`<h3>הנחות הסימולציה — 27.10.2026 בשעה 20:00</h3>
-  <p class="scenario-intro">אלה <b>מספרים מומצאים בכוונה</b>, כדי לבחון את תצוגת האתר בלבד. שיעורי ההצבעה ההיסטוריים הם נתוני סיום; תרחיש 20:00 נגזר מהם בעזרת מקדמי התקדמות שנקבעו מראש, <b>ולא מתוך נתוני הצבעה עירוניים לפי שעה</b>.</p>
-  <div class="scenario-kpis">
-   <div class="scenario-kpi"><small>הצבעה ארצית מדומה ב־20:00</small><strong>66.0%</strong></div>
-   <div class="scenario-kpi"><small>ב־2020 באותה שעה (היסטורי)</small><strong>65.6%</strong></div>
-   <div class="scenario-kpi"><small>הנחת סיום ארצית, לא תחזית</small><strong>72.0%</strong></div>
-  </div>
-  <div class="tablewrap"><table><thead><tr><th>קבוצה</th><th>יעד סיום לפי</th><th>יעד סיום משוקלל</th><th>חלקו שהושג עד 20:00</th><th>הצבעה מדומה ב־20:00</th><th>פער התקדמות מהארצי</th></tr></thead><tbody>${rowsHtml}</tbody></table></div>
-  <p class="scenario-foot">מקדמים: ל־2020 — 65.6÷71.52 = 91.72%; ל־2022 — 66.3÷70.63 = 93.87%. לערים הערביות נקבעו לצורך הדוגמה 90% מרמת 2022. הנתונים בכל היישובים מחושבים לפי מספר בעלי זכות הבחירה שלהם <b>ב־2022</b> לצורך הדמיה, ולא לפי מרשם זכאים אמיתי של 2026. הנתון הארצי 66.0% מוזן בנפרד ואינו נגזר מ־44 היישובים, שאינם מדגם מייצג. הפערים במדד ההתקדמות אינם תחזית לתוצאות הבחירות.</p>`;
+ root.querySelectorAll('.group-row').forEach(el=>{
+  el.addEventListener('click',ev=>{if(ev.target.closest('a,button,input'))return;const id=el.getAttribute('data-gid');state.openGroup=state.openGroup===id?null:id;renderBoard();});
+ });
 }
-
-function render(){let q=norm($('filterCity').value),order=$('sort').value;let grpHtml=groups.map(g=>{const groupRows=rows.filter(x=>x.group===g.id),s=makeSummary(groupRows);let sorted=groupRows.filter(x=>!q||norm(x.name).includes(q));if(order==='name')sorted.sort((a,b)=>a.name.localeCompare(b.name,'he'));if(order==='p2022')sorted.sort((a,b)=>b.p2022-a.p2022);if(order==='change')sorted.sort((a,b)=>(b.p2022-b.p2021)-(a.p2022-a.p2021));if(order==='share')sorted.sort((a,b)=>(b.subshare2022??b.share2022??-1)-(a.subshare2022??a.share2022??-1));if(order==='live')sorted.sort((a,b)=>(livePct(getLive(b.name))??-1)-(livePct(getLive(a.name))??-1));if(order==='gap'){const np=nationalLive().value;const natp=np===null?null:100*np/nationalHistory[2022];const diff=r=>{let l=getLive(r.name),p=complete(l)?livePct(l):null;return p!==null&&natp!==null&&r.p2022>0?100*p/r.p2022-natp:null};sorted.sort((a,b)=>{let x=diff(a),y=diff(b);return (x===null?1:0)-(y===null?1:0)||(x===null?0:x-y)})};
-const tableRows=sorted.map(x=>{let l=getLive(x.name),p=livePct(l),part=l&&!complete(l),mark=l&&l.as_of?' · '+renderTime(l.as_of):'';let share=x.group==='right'?x.subshare2022:x.share2022;let ch=x.p2022-x.p2021;return `<tr><td><label class="choiceline"><input type="checkbox" data-key="${esc(x.key)}" ${state.selected.has(x.key)?'checked':''}>${esc(x.name)}</label></td><td class="num">${fmt(share)}</td><td class="num">${fmt(x.p2020)}</td><td class="num">${fmt(x.p2021)}</td><td class="num"><strong>${fmt(x.p2022)}</strong></td><td class="num ${ch>=0?'positive':'negative'}">${dif(ch)}</td><td class="num ${part?'flag':''}">${p===null?'—':fmt(p)}${part?'*':''}</td><td class="num">${p==null?'—':dif(p-x.p2022)}</td><td title="${esc(mark)}">${!l?'אין':part?'חלקי':l.total_stations!=null?`${esc(l.reported_stations??'?')}/${esc(l.total_stations)}`:'מלא'}</td></tr>`}).join('');
-return `<section class="panel group" data-group="${g.id}"><div class="group-title"><h3>${esc(g.title)}</h3><span class="count">${s.n} נבחרו</span></div><p class="help">${esc(g.sub)}</p><div class="group-metrics"><div class="mini"><div class="title">הצבעה מצרפית 2022</div><div class="num">${fmt(s.hist)}</div><small>${s.hist==null?'חסרים נתוני זכאים מלאים':'משוקלל לפי זכאים'}</small></div><div class="mini"><div class="title">הצבעה מצרפית 2026</div><div class="num">${fmt(s.live)}</div><small>${s.live==null?'ממתין לנתונים מלאים':'נתונים מדווחים'}</small></div><div class="mini"><div class="title">כיסוי דיווח</div><div class="num">${s.coverage}</div><small>יישובים מדווחים; ${s.fullCount} מלאים</small></div></div><div class="tablewrap"><table><thead><tr><th>יישוב</th><th>${g.id==='right'?'ימין בלי חרדיות':g.id==='zionism'?'הציונות הדתית':'תמיכה בגוש' } 2022</th><th>2020</th><th>2021</th><th>2022</th><th>שינוי 21–22</th><th>2026 מדווח</th><th>פער מ־2022</th><th>דיווח</th></tr></thead><tbody>${tableRows}</tbody></table></div></section>`}).join('');
- $('groupContainer').innerHTML=grpHtml;
- renderComparisons();
- renderAll44();
- renderPulse();
- renderScenarioDetails();
- const selected=rows.filter(x=>state.selected.has(x.key));let liveCount=selected.filter(x=>getLive(x.name)).length;let completeCount=selected.filter(x=>complete(getLive(x.name))).length;
- const allEligible=selected.filter(x=>val(x.eligible2022)>0&&val(x.voters2022)!=null);let candidates=rows.filter(x=>x.group==='right'&&state.selected.has(x.key)).length;
- const top=[['יישובים פעילים',nf.format(selected.length),'בחמש קבוצות וקבוצת חלופות'],['יישובים שקיבלו דיווח',nf.format(liveCount),'מתוך '+selected.length],['יישובים עם דיווח מלא',nf.format(completeCount),'לפי סימוני הכיסוי'],['ערי ימין נבחרות',nf.format(candidates),'ניתנות להחלפה בלחיצה'],['עדכון נתונים אחרון',renderTime(state.updatedAt),state.feed?'מקור: '+state.source:'היסטוריה בלבד']];
- $('cards').innerHTML=top.map(([label,value,desc])=>`<article class="card"><div class="label">${esc(label)}</div><div class="value" style="font-size:${label==='עדכון נתונים אחרון'?'17px':'26px'}">${esc(value)}</div><div class="desc">${esc(desc)}</div></article>`).join('');
- $('demoBanner').style.display=state.feed&&(/הדגמה|סימולציה|demo|simulation/i).test(String(state.source))?'block':'none';$('demoBanner').textContent=String(state.source).includes('סימולציה')?'⚠ סימולציה ל־20:00 — כל נתוני 2026 המוצגים מומצאים לצורך בדיקה, אינם מדיווח של ועדת הבחירות.':'⚠ נתוני הדגמה בלבד — אלה אינם נתוני בחירות אמיתיים. נועדו רק לבדיקת פעולת האתר.';$('lastUpdate').textContent='עודכן לאחרונה: '+renderTime(state.updatedAt);$('sourceName').textContent='מקור: '+(state.feed?state.source:'לא מחובר');$('connStatus').textContent=state.live.size?`התקבלו ${state.live.size} יישובים`:(state.nationalPct!==null?'נתון ארצי בלבד — ממתין ליישובים':(state.feed?'ממתין לדיווחי השתתפות':'ממתין לפיד השתתפות רשמי'));$('connDot').classList.toggle('ok',state.live.size>0||state.nationalPct!==null);
- document.querySelectorAll('input[data-key]').forEach(el=>el.addEventListener('change',()=>{el.checked?state.selected.add(el.dataset.key):state.selected.delete(el.dataset.key);render()}));
+function renderNational(){
+ const nat=nationalLive();
+ $('nationalPct').textContent=nat.value==null?'—':nat.value.toFixed(1)+'%';
+ const bits=[];
+ bits.push(nat.value==null?'ממתין לדיווח רשמי':('שעת דיווח: '+renderTime(state.updatedAt)));
+ bits.push('מקור: '+(nat.manual?'הזנה ידנית':(state.feed?state.source:'לא מחובר')));
+ if(state.nationalPreserved)bits.push('נתון ארצי שנשמר מעדכון קודם');
+ $('nationalMeta').textContent=bits.join(' · ');
+ const fc=nationalForecast(nat.value,state.updatedAt);
+ if(fc){
+  $('nationalForecastValue').textContent=fc.mid.toFixed(1)+'% · טווח '+fc.lo.toFixed(0)+'–'+fc.hi.toFixed(0)+'%';
+  $('nationalForecastNote').textContent='תרחישים היסטוריים לפי '+fc.n+' מערכות · לא רווח סמך סטטיסטי';
+ }else{
+  $('nationalForecastValue').textContent='—';
+  $('nationalForecastNote').textContent='אין עדיין נתוני שעה מאומתים לחמש המערכות — לא מוצגת תחזית מספרית.';
+ }
 }
-function setStatus(message,type='warn'){$('dataStatus').textContent=message;$('dataStatus').className='alert'+(type==='ok'?' success':type==='err'?' error':'')}
+function renderInsights(){
+ const box=$('insights');if(!box)return;
+ const stats=primaryGroups.map(id=>groupStats(id)).filter(s=>s.current!=null);
+ if(stats.length<2){box.innerHTML=`<article class="insight"><b>תובנות</b><p>יופיעו כשיהיו דיווחים מלאים לשתי קבוצות לפחות — מעבר למה שכבר רואים בלוח.</p></article>`;return;}
+ const byRate=[...stats].sort((a,b)=>b.current-a.current);
+ const gap=byRate[0].current-byRate[byRate.length-1].current;
+ const byProg=stats.filter(s=>s.progress!=null).sort((a,b)=>b.progress-a.progress);
+ const items=[];
+ if(gap>=3){
+  items.push({t:'פער השתתפות בין קבוצות',p:`פער של ${gap.toFixed(1)} נקודות אחוז בשיעור ההצבעה בין ${esc(groupById[byRate[0].id].title)} (${byRate[0].current.toFixed(1)}%) לבין ${esc(groupById[byRate[byRate.length-1].id].title)} (${byRate[byRate.length-1].current.toFixed(1)}%). זה שיעור השתתפות, לא מספר מצביעים מוחלט.`});
+ }
+ if(byProg.length>=2){
+  const lead=byProg[0],rateLead=byRate[0];
+  if(lead.id!==rateLead.id){
+   items.push({t:'התקדמות מול רף 2022',p:`${esc(groupById[lead.id].title)} מובילה בהתקדמות מול הסיום שלה ב־2022 (${lead.progress.toFixed(0)}% מהרף), אף ששיעור ההצבעה הגבוה ביותר כרגע הוא ב־${esc(groupById[rateLead.id].title)}. מדד ההתקדמות אינו תחזית לסיום.`});
+  }else if(byProg[1]&&(lead.progress-byProg[1].progress)>=4){
+   items.push({t:'התקדמות מול רף 2022',p:`${esc(groupById[lead.id].title)} מתקדמת משמעותית מול הרף ההיסטורי שלה (${lead.progress.toFixed(0)}% מ־2022), בפער ניכר מהקבוצה הבאה אחריה.`});
+  }
+ }
+ // rank change vs previous history point
+ if(state.history.length>=2){
+  const prevMap=historyCityMap(state.history[state.history.length-2]);
+  const prevRates=primaryGroups.map(id=>{
+   const selected=selectedInGroup(id);const full=[];
+   for(const r of selected){for(const row of prevMap.values()){if(norm(row.name)===norm(r.name)){full.push(row);break}}}
+   if(!full.length)return null;
+   const e=full.reduce((s,x)=>s+x.eligible,0),v=full.reduce((s,x)=>s+x.voted,0);
+   return e>0?{id,pct:100*v/e}:null;
+  }).filter(Boolean).sort((a,b)=>b.pct-a.pct);
+  const nowOrder=byRate.map(s=>s.id),prevOrder=prevRates.map(s=>s.id);
+  if(prevOrder.length>=2&&nowOrder[0]!==prevOrder[0]){
+   items.push({t:'שינוי בדירוג השיעורים',p:`בראש שיעור ההצבעה כעת: ${esc(groupById[nowOrder[0]].title)} (קודם: ${esc(groupById[prevOrder[0]].title)}).`});
+  }
+ }
+ if(!items.length){
+  items.push({t:'תמונת הקבוצות',p:'הפערים בין הקבוצות עדיין קטנים או שהכיסוי חלקי — אין תובנה מעבר לנתונים שבלוח.'});
+ }
+ box.innerHTML=items.slice(0,2).map(i=>`<article class="insight"><b>${i.t}</b><p>${i.p}</p></article>`).join('');
+}
+function renderChart(){
+ const empty=$('chartEmpty'),svg=$('dayChart'),legend=$('chartLegend');
+ const points=state.history||[];
+ legend.innerHTML=primaryGroups.map(id=>{
+  const g=groupById[id],on=!state.chartHidden.has(id);
+  return `<button type="button" class="${on?'on':'off'}" data-cid="${id}" style="--c:${g.color}"><span style="color:${g.color}">●</span> ${esc(g.title)}</button>`;
+ }).join('');
+ legend.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{const id=btn.getAttribute('data-cid');if(state.chartHidden.has(id))state.chartHidden.delete(id);else state.chartHidden.add(id);renderChart();});
+ if(points.length<2){empty.classList.remove('hidden');svg.classList.add('hidden');empty.textContent='ממתינים לשתי נקודות דיווח אמינות לפחות כדי להציג מגמה.';return;}
+ const series={};
+ for(const id of primaryGroups)series[id]=[];
+ for(const pt of points){
+  const t=Date.parse(pt.as_of||pt.recorded_at);if(!Number.isFinite(t))continue;
+  const map=historyCityMap(pt);
+  for(const id of primaryGroups){
+   const selected=selectedInGroup(id);const full=[];
+   for(const r of selected){for(const row of map.values()){if(norm(row.name)===norm(r.name)){full.push(row);break}}}
+   if(!full.length){series[id].push({t,y:null});continue;}
+   const e=full.reduce((s,x)=>s+x.eligible,0),v=full.reduce((s,x)=>s+x.voted,0);
+   series[id].push({t,y:e>0?100*v/e:null});
+  }
+ }
+ const usable=primaryGroups.some(id=>series[id].filter(p=>p.y!=null).length>=2);
+ if(!usable){empty.classList.remove('hidden');svg.classList.add('hidden');return;}
+ empty.classList.add('hidden');svg.classList.remove('hidden');
+ const allY=primaryGroups.flatMap(id=>series[id].map(p=>p.y).filter(y=>y!=null));
+ const allT=points.map(p=>Date.parse(p.as_of||p.recorded_at)).filter(Number.isFinite);
+ const minT=Math.min(...allT),maxT=Math.max(...allT);
+ const minY=0,maxY=Math.max(80,Math.ceil((Math.max(...allY)+5)/10)*10);
+ const W=800,H=260,padL=44,padR=16,padT=16,padB=36;
+ const x=t=>padL+(W-padL-padR)*((t-minT)/Math.max(1,maxT-minT));
+ const y=v=>padT+(H-padT-padB)*(1-(v-minY)/Math.max(1,maxY-minY));
+ let html=`<rect x="0" y="0" width="${W}" height="${H}" fill="#fbfdff"/>`;
+ for(let tick=0;tick<=maxY;tick+=20){
+  const yy=y(tick);html+=`<line x1="${padL}" y1="${yy}" x2="${W-padR}" y2="${yy}" stroke="#e4ebf2"/><text x="${padL-6}" y="${yy+3}" font-size="10" text-anchor="end" fill="#7a8b9c">${tick}%</text>`;
+ }
+ for(const id of primaryGroups){
+  if(state.chartHidden.has(id))continue;
+  const pts=series[id].filter(p=>p.y!=null);
+  if(pts.length<2)continue;
+  const d=pts.map((p,i)=>(i?'L':'M')+x(p.t).toFixed(1)+' '+y(p.y).toFixed(1)).join(' ');
+  html+=`<path d="${d}" fill="none" stroke="${groupById[id].color}" stroke-width="2.5"/>`;
+  for(const p of pts)html+=`<circle cx="${x(p.t)}" cy="${y(p.y)}" r="3" fill="${groupById[id].color}"/>`;
+ }
+ const labels=[minT,maxT];
+ for(const t of labels){
+  html+=`<text x="${x(t)}" y="${H-10}" font-size="10" text-anchor="middle" fill="#7a8b9c">${new Date(t).toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'})}</text>`;
+ }
+ svg.innerHTML=html;
+}
+function renderTable(){
+ const q=norm($('filterCity')?.value),gid=$('filterGroup')?.value,order=$('sort')?.value||'group';
+ let list=rows.filter(r=>state.selected.has(r.key));
+ if(gid)list=list.filter(r=>r.group===gid);
+ if(q)list=list.filter(r=>norm(r.name).includes(q));
+ const prog=r=>{const p=complete(getLive(r.name))?livePct(getLive(r.name)):null;return p!=null&&r.p2022>0?100*p/r.p2022:null};
+ if(order==='name')list.sort((a,b)=>a.name.localeCompare(b.name,'he'));
+ if(order==='live')list.sort((a,b)=>(livePct(getLive(b.name))??-1)-(livePct(getLive(a.name))??-1));
+ if(order==='p2022')list.sort((a,b)=>b.p2022-a.p2022);
+ if(order==='progress')list.sort((a,b)=>(prog(b)??-1)-(prog(a)??-1));
+ if(order==='group')list.sort((a,b)=>primaryGroups.indexOf(a.group)-primaryGroups.indexOf(b.group)||a.name.localeCompare(b.name,'he'));
+ $('cityTable').innerHTML=list.map(r=>{
+  const l=getLive(r.name),p=livePct(l),pr=prog(r);
+  const st=!l?'אין':l.preserved_previous?'נשמר':!complete(l)?'חלקי':'מלא';
+  return `<tr><td>${esc(r.name)}</td><td>${esc(groupById[r.group]?.title||r.group)}</td><td class="num">${fmt(p)}</td><td class="num">${fmt(r.p2022)}</td><td class="num">${pr==null?'—':pr.toFixed(0)+'%'}</td><td>${st}</td></tr>`;
+ }).join('');
+}
+function renderStatus(){
+ $('lastUpdate').textContent='עודכן לאחרונה: '+renderTime(state.updatedAt);
+ $('sourceName').textContent='מקור: '+(state.feed?state.source:'לא מחובר');
+ $('connStatus').textContent=state.live.size?`התקבלו ${state.live.size} יישובים`:(state.nationalPct!=null?'נתון ארצי בלבד':(state.feed?'ממתין לדיווחי יישובים':'ממתין לפיד רשמי'));
+ $('connDot').classList.toggle('ok',!!(state.live.size||state.nationalPct!=null));
+ const demo=state.feed&&(/הדגמה|סימולציה|demo|simulation/i).test(String(state.source));
+ $('demoBanner').classList.toggle('hidden',!demo);
+ $('demoBanner').style.display=demo?'block':'none';
+ $('demoBanner').textContent=String(state.source).includes('סימולציה')?'⚠ סימולציה — נתונים מומצאים לבדיקה בלבד.':'⚠ נתוני הדגמה בלבד — אינם נתוני בחירות אמיתיים.';
+}
+function render(){
+ renderBoard();renderNational();renderInsights();renderChart();renderTable();renderStatus();updateElectionTimer();
+}
 function ingest(feed,method){
  requestVersion++;
- if(feedMode==='local'||method!=='עדכון אוטומטי'||feed?.national_turnout_pct!=null)$('nationalManual').value='';
+ if(feedMode==='local'||method!=='עדכון אוטומטי'||feed?.national_turnout_pct!=null){if($('nationalManual'))$('nationalManual').value='';}
  feedMode=method==='עדכון אוטומטי'?'live':'local';
-if(!feed||!Array.isArray(feed.records))throw Error('הקובץ חייב לכלול מערך records');let map=new Map(),issues=[];for(const r of feed.records){if(!r||!r.city){issues.push('רשומה בלי שם יישוב');continue}let p=livePct(r);if(p==null||p<0||p>100){issues.push(String(r.city)+' — חסר שיעור השתתפות תקין');continue}const k=norm(r.city);map.set(k,r)}state.live=map;state.feed=true;
- state.nationalPreserved=feed.national_preserved_previous===true;
- let n=val(feed.national_turnout_pct),ne=val(feed.national_eligible),nv=val(feed.national_voted);
+ if(!feed||!Array.isArray(feed.records))throw Error('הקובץ חייב לכלול מערך records');
+ const map=new Map(),issues=[];
+ for(const r of feed.records){
+  if(!r||!r.city){issues.push('רשומה בלי שם');continue}
+  const p=livePct(r);if(p==null||p<0||p>100){issues.push(String(r.city)+' — חסר שיעור תקין');continue}
+  map.set(norm(r.city),r);
+ }
+ state.live=map;state.feed=true;state.nationalPreserved=feed.national_preserved_previous===true;
+ const n=val(feed.national_turnout_pct),ne=val(feed.national_eligible),nv=val(feed.national_voted);
  state.nationalPct=n!==null&&n>=0&&n<=100?n:ne>0&&nv!==null&&nv>=0&&nv<=ne?100*nv/ne:null;
- state.source=feed.source||method||'ייבוא ידני';state.updatedAt=feed.updated_at||null;state.rawCount=feed.records.length;render();setStatus(`נטענו ${map.size} יישובים (${method}). ${issues.length?'דולגו '+issues.length+' רשומות לא תקינות.':''} נתונים חסרים אינם מוצגים כ־0%.`,'ok')}
+ state.source=feed.source||method||'ייבוא ידני';state.updatedAt=feed.updated_at||null;state.rawCount=feed.records.length;
+ appendClientHistory(feed);
+ render();
+ setStatus(`נטענו ${map.size} יישובים (${method}). ${issues.length?'דולגו '+issues.length+'.':''}`,'ok');
+}
+function appendClientHistory(feed){
+ if(!feed?.updated_at)return;
+ if(!feed.records?.length&&feed.national_turnout_pct==null)return;
+ const cities={};
+ for(const r of feed.records||[]){
+  cities[norm(r.city)]={city:r.city,eligible:r.eligible,voted:r.voted,turnout_pct:livePct(r),partial:!!r.partial,as_of:r.as_of||feed.updated_at,preserved_previous:!!r.preserved_previous};
+ }
+ const fp=JSON.stringify({as_of:feed.updated_at,n:feed.national_turnout_pct,c:Object.keys(cities).sort().map(k=>[k,cities[k].voted,cities[k].eligible,cities[k].partial])});
+ if(state.history.length&&state.history[state.history.length-1]._fp===fp)return;
+ state.history.push({as_of:feed.updated_at,recorded_at:new Date().toISOString(),source:feed.source||'',national_turnout_pct:feed.national_turnout_pct??null,cities,_fp:fp});
+ if(state.history.length>200)state.history=state.history.slice(-200);
+}
 async function fetchFeed(silent=false){
  if(silent&&feedMode!=='live')return;
  const url=$('feedUrl').value.trim();if(!url)return;
@@ -528,112 +558,102 @@ async function fetchFeed(silent=false){
    for(const [key,old] of state.live){
     const next=fresh.get(key),oldTime=old.as_of||state.updatedAt;
     const nextPartial=!!next&&(next.partial===true||stationPartial(next));
-    const keep= !next
-      || Date.parse(next.as_of||data.updated_at)<Date.parse(oldTime)
-      || (reportFull(old)&&nextPartial);
+    const keep=!next||Date.parse(next.as_of||data.updated_at)<Date.parse(oldTime)||(reportFull(old)&&nextPartial);
     if(keep)fresh.set(key,{...old,as_of:oldTime,preserved_previous:true});
    }
    data.records=[...fresh.values()];
    if(data.national_turnout_pct==null&&state.nationalPct!==null){data.national_turnout_pct=state.nationalPct;data.national_preserved_previous=true;}
   }
   ingest(data,'עדכון אוטומטי');
-  if(!data.records.length&&data.national_turnout_pct==null)setStatus('ממתינים לפיד השתתפות רשמי. טרם התקבלו דיווחי יישובים או אחוז ארצי — נבדוק שוב כל שתי דקות.');
-  else if(!data.records.length)setStatus('קובץ הנתונים זמין עם נתון ארצי, אך טרם התקבלו דיווחי יישובים. נבדוק שוב כל שתי דקות.');
+  if(!data.records.length&&data.national_turnout_pct==null)setStatus('ממתינים לפיד השתתפות רשמי.');
+  else if(!data.records.length)setStatus('קובץ זמין עם נתון ארצי, אך טרם התקבלו דיווחי יישובים.');
  }catch(e){
   if(version!==requestVersion)return;
-  setStatus('רענון הנתונים נכשל: '+e.message+'. הנתונים המוצגים, אם קיימים, הם מהטעינה הקודמת ועלולים להיות ישנים.','err');
+  setStatus('רענון הנתונים נכשל: '+e.message+'. הנתונים המוצגים, אם קיימים, הם מהטעינה הקודמת.','err');
   $('connStatus').textContent='הרענון נכשל — בדקו את שעת הדיווח';$('connDot').classList.remove('ok');
  }
 }
+async function loadPublicHistory(){
+ try{
+  const u=new URL('./turnout-history.json',location.href);u.searchParams.set('t',Date.now());
+  const res=await fetch(u,{cache:'no-store'});if(!res.ok)return;
+  const data=await res.json();
+  if(Array.isArray(data.points)&&data.points.length){
+   state.history=data.points.map(p=>({...p,_fp:p.fingerprint||p.as_of}));
+  }
+ }catch{}
+ try{
+  const u=new URL('./data/national_hourly_history.json',location.href);u.searchParams.set('t',Date.now());
+  const res=await fetch(u,{cache:'no-store'});if(!res.ok)return;
+  state.hourlyHistory=await res.json();
+ }catch{}
+}
 function csvCells(line){const arr=[];let cell='',quoted=false;for(let i=0;i<line.length;i++){let c=line[i];if(c==='"'){if(quoted&&line[i+1]==='"'){cell+='"';i++}else quoted=!quoted}else if(c===','&&!quoted){arr.push(cell);cell=''}else cell+=c}arr.push(cell);return arr}
-function readCsv(text){let lines=text.replace(/^\uFEFF/,'').split(/\r?\n/).filter(s=>s.trim());if(!lines.length)return [];let separator=lines[0].includes(';')?';':',';if(separator===';')return csvSemicolon(lines);let head=csvCells(lines.shift()).map(x=>x.trim().toLowerCase());return lines.map(l=>{let arr=csvCells(l);return Object.fromEntries(head.map((h,i)=>[h,arr[i]]))})}
-function csvSemicolon(lines){const headers=lines.shift().split(';').map(x=>x.trim().toLowerCase());return lines.map(l=>{let a=l.split(';');return Object.fromEntries(headers.map((h,i)=>[h,a[i]]))})}
-function csvToFeed(text){const lines=readCsv(text);function pick(r,keys){for(const k of keys){if(r[k]!=null&&r[k]!=='')return r[k]}return null}return {source:'ייבוא CSV',updated_at:new Date().toISOString(),records:lines.map(r=>({city:pick(r,['city','יישוב','שם יישוב','שם היישוב']),eligible:val(pick(r,['eligible','זכאים','בעלי זכות בחירה'])),voted:val(pick(r,['voted','מצביעים','הצביעו'])),turnout_pct:val(pick(r,['turnout_pct','אחוז הצבעה','שיעור הצבעה'])),reported_stations:val(pick(r,['reported_stations','קלפיות מדווחות'])),total_stations:val(pick(r,['total_stations','כלל קלפיות'])),as_of:pick(r,['as_of','שעת דיווח']),partial:pick(r,['partial','חלקי'])==='true'}))}}
-$('comparisonGroup').onchange=()=>{state.comparisonGroup=$('comparisonGroup').value;state.comparisonCity='';renderComparisons()};
-$('comparisonCity').onchange=()=>{state.comparisonCity=$('comparisonCity').value;renderComparisons()};
+function readCsv(text){let lines=text.replace(/^\uFEFF/,'').split(/\r?\n/).filter(s=>s.trim());if(!lines.length)return [];let separator=lines[0].includes(';')?';':',';if(separator===';'){const headers=lines.shift().split(';').map(x=>x.trim().toLowerCase());return lines.map(l=>{let a=l.split(';');return Object.fromEntries(headers.map((h,i)=>[h,a[i]]))})}let head=csvCells(lines.shift()).map(x=>x.trim().toLowerCase());return lines.map(l=>{let arr=csvCells(l);return Object.fromEntries(head.map((h,i)=>[h,arr[i]]))})}
+function csvToFeed(text){const lines=readCsv(text);function pick(r,keys){for(const k of keys){if(r[k]!=null&&r[k]!=='')return r[k]}return null}return {source:'ייבוא CSV',updated_at:new Date().toISOString(),records:lines.map(r=>({city:pick(r,['city','יישוב','שם יישוב']),eligible:val(pick(r,['eligible','זכאים'])),voted:val(pick(r,['voted','מצביעים'])),turnout_pct:val(pick(r,['turnout_pct','אחוז הצבעה'])),reported_stations:val(pick(r,['reported_stations'])),total_stations:val(pick(r,['total_stations'])),as_of:pick(r,['as_of']),partial:pick(r,['partial'])==='true'}))}}
+const scenarioConfigs={right:{year:2022,factor:66.3/70.63},opp:{year:2020,factor:65.6/71.52},haredi:{year:2020,factor:65.6/71.52},arab:{year:2022,factor:.90},zionism:{year:2020,factor:65.6/71.52},near:{year:2020,factor:65.6/71.52}};
+function simulateAtEight(){
+ try{
+  const records=rows.filter(r=>val(r.eligible2022)>0).map(r=>{
+   const s=scenarioConfigs[r.group]||scenarioConfigs.near;const end=r['p'+s.year];const rate=Math.max(0,Math.min(100,(end||r.p2022)*s.factor));
+   const e=r.eligible2022,v=Math.round(e*rate/100);
+   return {city:r.name,eligible:e,voted:v,turnout_pct:100*v/e,partial:false,reported_stations:10,total_stations:10,as_of:'2026-10-27T20:00:00+02:00'};
+  });
+  ingest({source:'סימולציה — תרחיש 20:00 — נתונים מומצאים בלבד',updated_at:'2026-10-27T20:00:00+02:00',national_turnout_pct:66.0,records},'סימולציה 20:00');
+  const panel=$('scenarioDetails');if(panel){panel.classList.remove('hidden');panel.innerHTML='<p class="tiny">סימולציה לבדיקת תצוגה בלבד.</p>';}
+ }catch(e){setStatus('הסימולציה נכשלה: '+e.message,'err')}
+}
+// Timer
+const POLL_OPEN=new Date('2026-10-27T07:00:00+02:00'),POLL_CLOSE=new Date('2026-10-27T22:00:00+02:00');
+let timerPhase=null,timerMinuteKey=null;
+function pad2(n){return String(n).padStart(2,'0')}
+function splitRemain(ms){const total=Math.max(0,Math.floor(ms/1000));return {days:Math.floor(total/86400),hours:Math.floor((total%86400)/3600),mins:Math.floor((total%3600)/60),secs:total%60}}
+function timerCopy(phase){
+ const live=state.live.size>0;
+ if(phase==='before')return{label:'עד פתיחת הקלפיות',sub:live?'המדד מחובר — אחרי 07:00 נעקוב אחרי התקדמות בכל קבוצה':'אחרי 07:00 נוכל לעקוב איך שיעור ההצבעה מתקדם בכל קבוצה לעומת 2022'};
+ if(phase==='voting')return{label:'הקלפיות פתוחות · עד הסגירה',sub:live?'המדד מעודכן מנתונים חיים':'המדד משווה השתתפות לפי קבוצה — לא תחזית תוצאות'};
+ return{label:'הקלפיות נסגרו',sub:'הדיווחים ממשיכים להתעדכן; המדד נשאר השוואת השתתפות לפי קבוצה'};
+}
+function updateElectionTimer(now=new Date()){
+ const root=$('electionTimer');if(!root||!root.dataset)return;
+ let phase='before',target=POLL_OPEN;
+ if(now>=POLL_CLOSE){phase='closed';target=null}else if(now>=POLL_OPEN){phase='voting';target=POLL_CLOSE}
+ root.dataset.phase=phase;const copy=timerCopy(phase);const minuteKey=Math.floor(now.getTime()/60000);const liveFlag=state.live.size>0?'1':'0';
+ if(phase!==timerPhase||minuteKey!==timerMinuteKey||root.dataset.live!==liveFlag){
+  if($('timerLabel'))$('timerLabel').textContent=copy.label;if($('timerSub'))$('timerSub').textContent=copy.sub;
+  root.dataset.live=liveFlag;timerPhase=phase;timerMinuteKey=minuteKey;
+ }
+ if(phase==='closed')return;
+ const rem=splitRemain(target-now);const daysUnit=root.querySelector('[data-unit=days]');if(daysUnit)daysUnit.hidden=!(rem.days>0);
+ if($('tDays'))$('tDays').textContent=String(rem.days);if($('tHours'))$('tHours').textContent=pad2(rem.hours);if($('tMins'))$('tMins').textContent=pad2(rem.mins);if($('tSecs'))$('tSecs').textContent=pad2(rem.secs);
+}
+// wire UI
+$('filterGroup').innerHTML='<option value="">כל הקבוצות</option>'+primaryGroups.map(id=>`<option value="${id}">${esc(groupById[id].title)}</option>`).join('');
+$('showForecasts').onchange=()=>{state.showForecasts=$('showForecasts').checked;renderBoard();};
+$('boardSort').onchange=()=>renderBoard();
 $('nationalManual').oninput=()=>render();
-
+$('filterCity').oninput=()=>renderTable();$('filterGroup').onchange=()=>renderTable();$('sort').onchange=()=>renderTable();
 $('scenarioDemo').onclick=simulateAtEight;
 $('loadFullDemo').onclick=()=>{try{
  const benchmark={right:.87,opp:.95,haredi:.97,arab:.90,zionism:.90,near:.92};
- const rec=rows.filter(r=>val(r.eligible2022)>0).map((r,i)=>{
-  const e=val(r.eligible2022),fraction=benchmark[r.group]??.92;
-  const delta= ((i%5)-2)*.004;
-  const share=Math.min(.98,r.p2022/100*(fraction+delta));
-  const v=Math.round(e*share);
-  return {city:r.name,eligible:e,voted:v,turnout_pct:100*v/e,partial:false,reported_stations:10,total_stations:10,as_of:'2026-10-27T20:00:00+02:00'};
- });
- ingest({source:'הדגמה מלאה — נתונים מומצאים בלבד',updated_at:'2026-10-27T20:00:00+02:00',national_turnout_pct:64.70,records:rec},'הדגמה מלאה');
- }catch(e){setStatus('ההדגמה נכשלה: '+e.message,'err')}
-};
+ const rec=rows.filter(r=>val(r.eligible2022)>0&&r.active).map((r,i)=>{const e=val(r.eligible2022),fraction=benchmark[r.group]??.92;const share=Math.min(.98,r.p2022/100*(fraction+((i%5)-2)*.004));const v=Math.round(e*share);return {city:r.name,eligible:e,voted:v,turnout_pct:100*v/e,partial:false,reported_stations:10,total_stations:10,as_of:'2026-10-27T16:00:00+02:00'};});
+ ingest({source:'הדגמה מלאה — נתונים מומצאים בלבד',updated_at:'2026-10-27T16:00:00+02:00',national_turnout_pct:64.70,records:rec},'הדגמה מלאה');
+}catch(e){setStatus('ההדגמה נכשלה: '+e.message,'err')}};
 $('loadDemo').onclick=()=>{try{ingest(JSON.parse($('embedded-demo').textContent),'הדגמה מובנית')}catch(e){setStatus('נתוני הדגמה נכשלו: '+e.message,'err')}};
-$('returnLive').onclick=()=>{
- requestVersion++;feedMode='live';state.live=new Map();state.feed=null;state.source='לא מחובר';state.updatedAt=null;state.nationalPct=null;state.nationalPreserved=false;
- $('nationalManual').value='';$('feedUrl').value='./live-turnout.json';
- try{localStorage.removeItem('election_feed_url')}catch{}
- render();fetchFeed();
-};
-$('refresh').onclick=()=>fetchFeed();$('feedUrl').onchange=()=>{if(testEnvironment)return;try{localStorage.setItem('election_feed_url',$('feedUrl').value)}catch{}};
-$('filterCity').oninput=render;$('sort').onchange=render;$('print').onclick=()=>window.print();$('upload').onchange=async ev=>{let f=ev.target.files?.[0];if(!f)return;try{const text=await f.text();let obj=f.name.toLowerCase().endsWith('.csv')?csvToFeed(text):JSON.parse(text);ingest(obj,'קובץ מקומי')}catch(e){setStatus('קובץ לא תקין: '+e.message,'err')}ev.target.value=''};
-$('export').onclick=()=>{let header=['קבוצה','יישוב','נבחר','תמיכה 2022','הצבעה 2020','הצבעה 2021','הצבעה 2022','הצבעה 2026','פער 2026-2022','דיווח מלא'];let lines=[header];rows.forEach(x=>{let live=getLive(x.name),p=livePct(live);lines.push([groups.find(g=>g.id===x.group).title,x.name,state.selected.has(x.key)?'כן':'לא',x.subshare2022??x.share2022??'',x.p2020??'',x.p2021,x.p2022,p??'',p!=null?(p-x.p2022).toFixed(2):'',complete(live)?'כן':'לא'])});let output='\uFEFF'+lines.map(r=>r.map(c=>'"'+String(c).replaceAll('"','""')+'"').join(',')).join('\r\n');let blob=new Blob([output],{type:'text/csv;charset=utf-8'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='election-turnout-dashboard-2026.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
-try{let stored=testEnvironment?null:localStorage.getItem('election_feed_url');if(stored)$('feedUrl').value=stored}catch{}
-
-/* Asia/Jerusalem wall times for election day (DST ended 25.10.2026 → UTC+2). */
-const POLL_OPEN=new Date('2026-10-27T07:00:00+02:00');
-const POLL_CLOSE=new Date('2026-10-27T22:00:00+02:00');
-let timerPhase=null,timerMinuteKey=null;
-function pad2(n){return String(n).padStart(2,'0')}
-function splitRemain(ms){
- const total=Math.max(0,Math.floor(ms/1000));
- return {days:Math.floor(total/86400),hours:Math.floor((total%86400)/3600),mins:Math.floor((total%3600)/60),secs:total%60};
-}
-function timerCopy(phase){
- const live=state.live.size>0;
- if(phase==='before')return{label:'עד פתיחת הקלפיות',sub:live?'המדד כבר מחובר לנתונים — אחרי 07:00 נעקוב אחרי התקדמות ההצבעה בכל קבוצה':'אחרי 07:00 נוכל לעקוב איך שיעור ההצבעה מתקדם בכל קבוצה לעומת 2022'};
- if(phase==='voting')return{label:'הקלפיות פתוחות · עד הסגירה',sub:live?'המדד מעודכן מנתונים חיים — משווים התקדמות השתתפות לפי קבוצה מול הארצי, לא תחזית תוצאות':'המדד משווה התקדמות השתתפות לפי קבוצה מול הארצי — לא תחזית תוצאות'};
- return{label:'הקלפיות נסגרו',sub:live?'הדיווחים ממשיכים להתעדכן; המדד נשאר השוואת השתתפות לפי קבוצה':'הדיווחים ממשיכים להתעדכן כשיתפרסמו; המדד נשאר השוואת השתתפות לפי קבוצה'};
-}
-function updateElectionTimer(now=new Date()){
- const root=$('electionTimer');
- if(!root||!root.dataset)return; // dashboard.test.cjs stubs lack dataset/querySelector
- let phase='before',target=POLL_OPEN;
- if(now>=POLL_CLOSE){phase='closed';target=null}
- else if(now>=POLL_OPEN){phase='voting';target=POLL_CLOSE}
- root.dataset.phase=phase;
- const copy=timerCopy(phase);
- const minuteKey=Math.floor(now.getTime()/60000);
- const liveFlag=state.live.size>0?'1':'0';
- const labelEl=$('timerLabel'),subEl=$('timerSub');
- if(phase!==timerPhase||minuteKey!==timerMinuteKey||root.dataset.live!==liveFlag){
-  if(labelEl)labelEl.textContent=copy.label;
-  if(subEl)subEl.textContent=copy.sub;
-  let spoken=copy.label+'. '+copy.sub;
-  if(phase!=='closed'&&target){
-   const rem=splitRemain(target-now);
-   const parts=rem.days>0?[rem.days+' ימים']:[];
-   parts.push(rem.hours+' שעות',rem.mins+' דקות');
-   spoken=copy.label+': '+parts.join(', ')+'. '+copy.sub;
-  }
-  if(typeof root.setAttribute==='function')root.setAttribute('aria-label',spoken);
-  root.dataset.live=liveFlag;
-  timerPhase=phase;timerMinuteKey=minuteKey;
- }
- if(phase==='closed')return;
- const rem=splitRemain(target-now);
- const showDays=rem.days>0;
- const daysUnit=typeof root.querySelector==='function'?root.querySelector('[data-unit=days]'):null;
- if(daysUnit)daysUnit.hidden=!showDays;
- const d=$('tDays'),h=$('tHours'),m=$('tMins'),s=$('tSecs');
- if(d)d.textContent=String(rem.days);
- if(h)h.textContent=pad2(rem.hours);
- if(m)m.textContent=pad2(rem.mins);
- if(s)s.textContent=pad2(rem.secs);
-}
-const _render=render;
-render=function(){_render();updateElectionTimer()};
-updateElectionTimer();
-setInterval(()=>updateElectionTimer(),1000);
-
-render();if(location.protocol==='http:'||location.protocol==='https:')fetchFeed(true);else setStatus('הקובץ נפתח מהמחשב. אפשר לייבא קובץ נתונים; לצורך רענון אוטומטי יש לפתוח אותו באמצעות אתר מאוחסן.');setInterval(()=>{if(location.protocol==='http:'||location.protocol==='https:')fetchFeed(true)},120000);
+$('returnLive').onclick=()=>{requestVersion++;feedMode='live';state.live=new Map();state.feed=null;state.source='לא מחובר';state.updatedAt=null;state.nationalPct=null;state.nationalPreserved=false;$('nationalManual').value='';$('feedUrl').value='./live-turnout.json';render();fetchFeed();};
+$('refresh').onclick=()=>fetchFeed();
+$('print').onclick=()=>window.print();
+$('upload').onchange=async ev=>{const f=ev.target.files?.[0];if(!f)return;try{const text=await f.text();const obj=f.name.toLowerCase().endsWith('.csv')?csvToFeed(text):JSON.parse(text);ingest(obj,'קובץ מקומי')}catch(e){setStatus('קובץ לא תקין: '+e.message,'err')}ev.target.value=''};
+$('export').onclick=()=>{const header=['קבוצה','יישוב','הצבעה 2022','הצבעה 2026','התקדמות מול 2022','דיווח מלא'];const lines=[header];rows.forEach(x=>{const live=getLive(x.name),p=livePct(live),pr=p!=null&&x.p2022>0?100*p/x.p2022:null;lines.push([groupById[x.group]?.title,x.name,x.p2022,p??'',pr??'',complete(live)?'כן':'לא'])});const output='\uFEFF'+lines.map(r=>r.map(c=>'"'+String(c).replaceAll('"','""')+'"').join(',')).join('\r\n');const blob=new Blob([output],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='election-turnout-dashboard-2026.csv';a.click();};
+try{const stored=testEnvironment?null:localStorage.getItem('election_feed_url');if(stored)$('feedUrl').value=stored}catch{}
+$('feedUrl').onchange=()=>{if(testEnvironment)return;try{localStorage.setItem('election_feed_url',$('feedUrl').value)}catch{}};
+updateElectionTimer();setInterval(()=>updateElectionTimer(),1000);
+globalThis.api={state,rows,ingest,fetchFeed,newPulseStats,nationalLive,groupStats};
+(async()=>{
+ if(location.protocol==='http:'||location.protocol==='https:'){await loadPublicHistory();await fetchFeed(true);setInterval(()=>fetchFeed(true),120000);}
+ else setStatus('הקובץ נפתח מהמחשב. אפשר לייבא קובץ; לרענון אוטומטי יש לפתוח מאתר מאוחסן.');
+ render();
 })();
-</script></body></html>
+})();
+</script>
+</body></html>

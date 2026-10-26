@@ -1,0 +1,12 @@
+{
+  "format_version": 1,
+  "description": "Verified national turnout-by-hour for forecast models. Empty until sources are curated.",
+  "note": "Do not invent points. Interpolation only between two verified timestamps in the same election.",
+  "elections": {
+    "2019-04": {"label": "אפריל 2019 · כנסת 21", "final_turnout_pct": 68.46, "points": []},
+    "2019-09": {"label": "ספטמבר 2019 · כנסת 22", "final_turnout_pct": 69.83, "points": []},
+    "2020-03": {"label": "מרץ 2020 · כנסת 23", "final_turnout_pct": 71.52, "points": []},
+    "2021-03": {"label": "מרץ 2021 · כנסת 24", "final_turnout_pct": 67.44, "points": []},
+    "2022-11": {"label": "נובמבר 2022 · כנסת 25", "final_turnout_pct": 70.63, "points": []}
+  }
+}

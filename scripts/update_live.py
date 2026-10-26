@@ -107,6 +107,14 @@ def main():
     temporary = DEST.with_suffix('.json.tmp')
     temporary.write_text(json.dumps(feed, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     temporary.replace(DEST)
+    try:
+        from append_history import append_history
+        if append_history(feed):
+            print('Appended turnout-history.json point.')
+        else:
+            print('turnout-history.json unchanged (duplicate or empty).')
+    except Exception as exc:  # noqa: BLE001 — history must not block live publish
+        print(f'History append skipped: {exc}')
     print(f'Updated {len(feed["records"])} reports; deploy this snapshot in the same workflow.')
 
 
