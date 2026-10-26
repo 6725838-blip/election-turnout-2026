@@ -140,6 +140,23 @@ button.primary:hover{background:#0a5748}
 .alert{padding:11px 13px;border-radius:var(--radius);background:#f7ecd8;color:#6a4210;font-size:.875rem;border:1px solid #e2c894;margin:10px 0}
 .alert.success{background:#e2f3ec;border-color:#9ccfbe;color:#0a5a4a}.alert.error{background:#f8e6e8;border-color:#e0b0b6;color:#8a303a}
 .hidden{display:none!important}.tiny{font-size:.8125rem;color:var(--muted)}.foot{font-size:.8125rem;color:var(--muted);margin-top:18px;line-height:1.8;max-width:52rem}
+.pm-card{margin-top:14px}
+.pm-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:10px}
+.pm-head a{color:var(--accent);font-weight:700;font-size:.875rem;text-decoration:none;border-bottom:1px solid transparent}
+.pm-head a:hover{border-bottom-color:var(--accent)}
+.pm-meta{font-size:.8125rem;color:var(--muted);margin:0 0 12px;line-height:1.55}
+.pm-list{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:var(--radius);background:var(--elev);overflow:hidden}
+.pm-row{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(100px,1.4fr) auto;gap:12px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}
+.pm-row:last-child{border-bottom:0}
+.pm-name{font-weight:700;font-size:.9375rem;display:flex;gap:10px;align-items:center;min-width:0}
+.pm-name img{width:28px;height:28px;border-radius:2px;object-fit:cover;background:#dce4df;flex-shrink:0}
+.pm-name span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pm-bar{height:8px;background:#d9e2dd;border-radius:2px;overflow:hidden}
+.pm-bar i{display:block;height:100%;background:var(--live);border-radius:2px}
+.pm-pct{font-variant-numeric:tabular-nums;font-weight:800;direction:ltr;unicode-bidi:isolate;text-align:end;min-width:3.5rem}
+.pm-empty{padding:20px;color:var(--muted);font-size:.875rem}
+.pm-note{margin-top:10px;font-size:.8125rem;color:var(--muted);line-height:1.6}
+@media(max-width:600px){.pm-row{grid-template-columns:1fr auto;gap:8px}.pm-bar{grid-column:1/-1}}
 @keyframes mast{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
 @media(prefers-reduced-motion:reduce){.head,.dot.ok{animation:none}html{scroll-behavior:auto}}
@@ -220,6 +237,19 @@ button.primary:hover{background:#0a5748}
   <select id="sort"><option value="group">לפי קבוצה</option><option value="live">שיעור 2026</option><option value="p2022">סופי 2022</option><option value="p2021">סופי 2021</option><option value="p2020">סופי 2020</option><option value="progress">התקדמות מול 2022</option><option value="name">שם</option></select>
  </div>
  <div class="tablewrap"><table class="data"><thead><tr><th>יישוב</th><th>קבוצה</th><th>2026 עכשיו</th><th>סופי 2022</th><th>סופי 2021</th><th>סופי 2020</th><th>התקדמות מול 2022</th><th>סטטוס</th></tr></thead><tbody id="cityTable"></tbody></table></div>
+</section>
+
+<section class="card pm-card" id="polymarketCard" aria-labelledby="pmTitle">
+ <div class="pm-head">
+  <div>
+   <h2 id="pmTitle" style="margin:0">שוק Polymarket: ראש הממשלה הבא</h2>
+   <p class="tiny" style="margin:4px 0 0">סיכויי מסחר חיצוניים · לא חלק ממדד ההשתתפות</p>
+  </div>
+  <a id="pmLink" href="https://polymarket.com/event/who-will-be-the-next-prime-minister-of-israel-after-the-next-election" target="_blank" rel="noopener noreferrer">לאירוע ב־Polymarket</a>
+ </div>
+ <p class="pm-meta" id="pmMeta">טוען נתוני שוק…</p>
+ <div class="pm-list" id="pmList" role="list"></div>
+ <p class="pm-note" id="pmNote"></p>
 </section>
 
 <details class="tools noprint">
@@ -598,6 +628,42 @@ function renderTable(){
   </tr>`;
  }).join('');
 }
+function renderPolymarket(data){
+ const list=$('pmList'),meta=$('pmMeta'),note=$('pmNote'),link=$('pmLink');
+ if(!list)return;
+ if(!data||!Array.isArray(data.candidates)||!data.candidates.length){
+  list.innerHTML='<div class="pm-empty">אין כרגע נתוני שוק להצגה.</div>';
+  if(meta)meta.textContent='';
+  if(note)note.textContent='';
+  return;
+ }
+ if(link&&data.url){link.href=data.url}
+ const vol=data.volume!=null?nf.format(Math.round(data.volume)):'—';
+ const when=data.updated_at?new Date(data.updated_at).toLocaleString('he-IL',{dateStyle:'short',timeStyle:'short'}):'—';
+ if(meta)meta.textContent=`נפח מסחר מצטבר ≈ $${vol} · עודכן ${when}`;
+ if(note)note.textContent=data.disclaimer_he||'סיכויי שוק Polymarket בלבד, לא סקר ולא תחזית רשמית.';
+ const top=data.candidates.filter(c=>c.pct>=0.5||data.candidates.indexOf(c)<12).slice(0,12);
+ const maxPct=Math.max(...top.map(c=>c.pct||0),1);
+ list.innerHTML=top.map(c=>{
+  const label=esc(c.name_he||c.name);
+  const en=c.name_he&&c.name_he!==c.name?` <span class="tiny">(${esc(c.name)})</span>`:'';
+  const img=c.image?`<img src="${esc(c.image)}" alt="" width="28" height="28" loading="lazy" referrerpolicy="no-referrer">`:'';
+  const w=Math.max(2,Math.round(100*(c.pct||0)/maxPct));
+  return `<div class="pm-row" role="listitem"><div class="pm-name">${img}<span>${label}${en}</span></div><div class="pm-bar" aria-hidden="true"><i style="width:${w}%"></i></div><div class="pm-pct">${(c.pct??0).toFixed(1)}%</div></div>`;
+ }).join('');
+}
+async function loadPolymarket(){
+ try{
+  const u=new URL('./polymarket-pm.json',location.href);u.searchParams.set('t',Date.now());
+  const res=await fetch(u,{cache:'no-store'});
+  if(!res.ok)throw new Error('HTTP '+res.status);
+  renderPolymarket(await res.json());
+ }catch{
+  const list=$('pmList');
+  if(list)list.innerHTML='<div class="pm-empty">לא ניתן לטעון את נתוני Polymarket כרגע.</div>';
+  if($('pmMeta'))$('pmMeta').textContent='';
+ }
+}
 function renderStatus(){
  $('lastUpdate').textContent='עודכן לאחרונה: '+renderTime(state.updatedAt);
  $('sourceName').textContent='מקור: '+(state.feed?state.source:'לא מחובר');
@@ -754,7 +820,12 @@ $('feedUrl').onchange=()=>{if(testEnvironment)return;try{localStorage.setItem('e
 updateElectionTimer();setInterval(()=>updateElectionTimer(),1000);
 globalThis.api={state,rows,ingest,fetchFeed,newPulseStats,nationalLive,groupStats};
 (async()=>{
- if(location.protocol==='http:'||location.protocol==='https:'){await loadPublicHistory();await fetchFeed(true);setInterval(()=>fetchFeed(true),120000);}
+ if(location.protocol==='http:'||location.protocol==='https:'){
+  await loadPublicHistory();
+  await Promise.all([fetchFeed(true),loadPolymarket()]);
+  setInterval(()=>fetchFeed(true),120000);
+  setInterval(()=>loadPolymarket(),300000);
+ }
  else setStatus('הקובץ נפתח מהמחשב. אפשר לייבא קובץ; לרענון אוטומטי יש לפתוח מאתר מאוחסן.');
  render();
 })();

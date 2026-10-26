@@ -1,0 +1,238 @@
+{
+  "format_version": 1,
+  "source": "Polymarket",
+  "title": "Prime Minister of Israel after the next election?",
+  "title_he": "מי יהיה ראש הממשלה אחרי הבחירות הבאות?",
+  "slug": "who-will-be-the-next-prime-minister-of-israel-after-the-next-election",
+  "url": "https://polymarket.com/event/who-will-be-the-next-prime-minister-of-israel-after-the-next-election",
+  "updated_at": "2026-10-26T17:08:34.967930+00:00",
+  "event_end": "2026-10-28T03:59:00Z",
+  "volume": 55154635.74,
+  "candidates": [
+    {
+      "name": "Gadi Eizenkot",
+      "name_he": "גדי איזנקוט",
+      "prob": 0.5635,
+      "pct": 56.4,
+      "volume": 3925900.29,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/israel-gadi-eizenkot-ccb92a000c.jpg"
+    },
+    {
+      "name": "Benjamin Netanyahu",
+      "name_he": "בנימין נתניהו",
+      "prob": 0.265,
+      "pct": 26.5,
+      "volume": 12389521.59,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/israel-benjamin-netanyahu-9221e795d7.jpg"
+    },
+    {
+      "name": "Naftali Bennett",
+      "name_he": "נפתלי בנט",
+      "prob": 0.105,
+      "pct": 10.5,
+      "volume": 4286667.22,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/israel-naftali-bennett-f03400507a.jpg"
+    },
+    {
+      "name": "Avigdor Lieberman",
+      "name_he": "אביגדור ליברמן",
+      "prob": 0.023,
+      "pct": 2.3,
+      "volume": 3682200.54,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/israel-avigdor-lieberman-c7d6358ef7.jpg"
+    },
+    {
+      "name": "Israel Katz",
+      "name_he": "ישראל כץ",
+      "prob": 0.0035,
+      "pct": 0.4,
+      "volume": 1211329.64,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/israel-israel-katz-d5c3b05934.jpg"
+    },
+    {
+      "name": "Moshe Feiglin",
+      "name_he": "משה פייגלין",
+      "prob": 0.0035,
+      "pct": 0.4,
+      "volume": 2445013.91,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/israel-moshe-feiglin-649ca67ccd.jpg"
+    },
+    {
+      "name": "Itamar Ben Gvir",
+      "name_he": "איתמר בן גביר",
+      "prob": 0.0015,
+      "pct": 0.1,
+      "volume": 2004267.86,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/israel-itamar-ben-gvir-9bd7ddaf0c.jpg"
+    },
+    {
+      "name": "Ofer Winter",
+      "name_he": "עופר וינטר",
+      "prob": 0.0015,
+      "pct": 0.1,
+      "volume": 600767.91,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/cand-ofer-winter-a0c2e45959.jpg"
+    },
+    {
+      "name": "Yossi Cohen",
+      "name_he": "יוסי כהן",
+      "prob": 0.0015,
+      "pct": 0.1,
+      "volume": 3799257.91,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/israel-yossi-cohen-88b739d047.jpg"
+    },
+    {
+      "name": "Amir Ohana",
+      "name_he": "אמיר אוחנה",
+      "prob": 0.001,
+      "pct": 0.1,
+      "volume": 2849299.24,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/israel-amir-ohana-ba4e395dcb.jpg"
+    },
+    {
+      "name": "Benny Gantz",
+      "name_he": "בני גנץ",
+      "prob": 0.001,
+      "pct": 0.1,
+      "volume": 2333073.81,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/israel-benny-gantz-6ad07f5aac.jpg"
+    },
+    {
+      "name": "Gideon Sa’ar",
+      "name_he": "Gideon Sa’ar",
+      "prob": 0.001,
+      "pct": 0.1,
+      "volume": 2441244.76,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/israel-gideon-sa-ar-5325d9f8b5.jpg"
+    },
+    {
+      "name": "Gilad Erdan",
+      "name_he": "גלעד ארדן",
+      "prob": 0.001,
+      "pct": 0.1,
+      "volume": 834532.29,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/will-gilad-erdan-be-the-next-prime-minister-of-israel-_Xp95pYYgf7l.jpg"
+    },
+    {
+      "name": "Yair Golan",
+      "name_he": "יאיר גולן",
+      "prob": 0.001,
+      "pct": 0.1,
+      "volume": 2730069.6,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/israel-yair-golan-c3afd4d033.jpg"
+    },
+    {
+      "name": "Yair Lapid",
+      "name_he": "יאיר לפיד",
+      "prob": 0.001,
+      "pct": 0.1,
+      "volume": 1957939.6,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/israel-yair-lapid-889bc9b2d0.jpg"
+    },
+    {
+      "name": "Yariv Levin",
+      "name_he": "Yariv Levin",
+      "prob": 0.001,
+      "pct": 0.1,
+      "volume": 2000991.47,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/israel-yariv-levin-808f1837b7.jpg"
+    },
+    {
+      "name": "Yoaz Hendel",
+      "name_he": "Yoaz Hendel",
+      "prob": 0.001,
+      "pct": 0.1,
+      "volume": 1744552.02,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/israel-yoaz-hendel-a69e1d2f17.jpg"
+    },
+    {
+      "name": "Ayelet Shaked",
+      "name_he": "איילת שקד",
+      "prob": 0.0005,
+      "pct": 0.1,
+      "volume": 2080729.25,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/israel-ayelet-shaked-adb9e47abe.jpg"
+    },
+    {
+      "name": "Nir Barkat",
+      "name_he": "Nir Barkat",
+      "prob": 0.0005,
+      "pct": 0.1,
+      "volume": 1837276.82,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/israel-nir-barkat-2e11cadea2.jpg"
+    },
+    {
+      "name": "Other",
+      "name_he": "Other",
+      "prob": 0.0,
+      "pct": 0.0,
+      "volume": 0.0,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/who-will-be-the-next-prime-minister-of-israel-after-the-2026-election-lWDmU0z7U_Vj.png"
+    },
+    {
+      "name": "Person H",
+      "name_he": "Person H",
+      "prob": 0.0,
+      "pct": 0.0,
+      "volume": 0.0,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/who-will-be-the-next-prime-minister-of-israel-after-the-2026-election-lWDmU0z7U_Vj.png"
+    },
+    {
+      "name": "Person I",
+      "name_he": "Person I",
+      "prob": 0.0,
+      "pct": 0.0,
+      "volume": 0.0,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/who-will-be-the-next-prime-minister-of-israel-after-the-2026-election-lWDmU0z7U_Vj.png"
+    },
+    {
+      "name": "Person J",
+      "name_he": "Person J",
+      "prob": 0.0,
+      "pct": 0.0,
+      "volume": 0.0,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/who-will-be-the-next-prime-minister-of-israel-after-the-2026-election-lWDmU0z7U_Vj.png"
+    },
+    {
+      "name": "Person K",
+      "name_he": "Person K",
+      "prob": 0.0,
+      "pct": 0.0,
+      "volume": 0.0,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/who-will-be-the-next-prime-minister-of-israel-after-the-2026-election-lWDmU0z7U_Vj.png"
+    },
+    {
+      "name": "Person L",
+      "name_he": "Person L",
+      "prob": 0.0,
+      "pct": 0.0,
+      "volume": 0.0,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/who-will-be-the-next-prime-minister-of-israel-after-the-2026-election-lWDmU0z7U_Vj.png"
+    },
+    {
+      "name": "Person M",
+      "name_he": "Person M",
+      "prob": 0.0,
+      "pct": 0.0,
+      "volume": 0.0,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/who-will-be-the-next-prime-minister-of-israel-after-the-2026-election-lWDmU0z7U_Vj.png"
+    },
+    {
+      "name": "Person N",
+      "name_he": "Person N",
+      "prob": 0.0,
+      "pct": 0.0,
+      "volume": 0.0,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/who-will-be-the-next-prime-minister-of-israel-after-the-2026-election-lWDmU0z7U_Vj.png"
+    },
+    {
+      "name": "Person O",
+      "name_he": "Person O",
+      "prob": 0.0,
+      "pct": 0.0,
+      "volume": 0.0,
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/who-will-be-the-next-prime-minister-of-israel-after-the-2026-election-lWDmU0z7U_Vj.png"
+    }
+  ],
+  "disclaimer_he": "סיכויי שוק הימורים (Polymarket), לא סקר ולא תחזית רשמית. אינם קשורים לנתוני ההשתתפות בדשבורד."
+}

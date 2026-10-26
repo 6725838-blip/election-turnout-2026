@@ -5,8 +5,10 @@ import shutil
 ROOT = Path(__file__).resolve().parents[1]
 target = ROOT / '_site'
 target.mkdir(exist_ok=True)
-for name in ('index.html', 'live-turnout.json', 'turnout-history.json', '.nojekyll'):
-    shutil.copyfile(ROOT / name, target / name)
+for name in ('index.html', 'live-turnout.json', 'turnout-history.json', 'polymarket-pm.json', '.nojekyll'):
+    src = ROOT / name
+    if src.exists():
+        shutil.copyfile(src, target / name)
 data_src = ROOT / 'data' / 'national_hourly_history.json'
 if data_src.exists():
     (target / 'data').mkdir(exist_ok=True)
@@ -19,4 +21,4 @@ html=html.replace('<header class="head">','<div id="testEnvironmentBanner" role=
 (test/'index.html').write_text(html,encoding='utf-8')
 shutil.copyfile(ROOT/'test/live-turnout.json',test/'live-turnout.json')
 shutil.copyfile(ROOT/'turnout-history.json', test/'turnout-history.json')
-print('Packaged index.html, live-turnout.json, turnout-history.json and .nojekyll')
+print('Packaged public site assets into _site/')
