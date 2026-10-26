@@ -142,8 +142,6 @@ button.primary:hover{background:#0a5748}
 .hidden{display:none!important}.tiny{font-size:.8125rem;color:var(--muted)}.foot{font-size:.8125rem;color:var(--muted);margin-top:18px;line-height:1.8;max-width:52rem}
 .pm-card{margin-top:14px}
 .pm-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:10px}
-.pm-head a{color:var(--accent);font-weight:700;font-size:.875rem;text-decoration:none;border-bottom:1px solid transparent}
-.pm-head a:hover{border-bottom-color:var(--accent)}
 .pm-meta{font-size:.8125rem;color:var(--muted);margin:0 0 12px;line-height:1.55}
 .pm-list{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:var(--radius);background:var(--elev);overflow:hidden}
 .pm-row{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(100px,1.4fr) auto;gap:12px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}
@@ -245,7 +243,6 @@ button.primary:hover{background:#0a5748}
    <h2 id="pmTitle" style="margin:0">שוק Polymarket: ראש הממשלה הבא</h2>
    <p class="tiny" style="margin:4px 0 0">סיכויי מסחר חיצוניים · לא חלק ממדד ההשתתפות</p>
   </div>
-  <a id="pmLink" href="https://polymarket.com/event/who-will-be-the-next-prime-minister-of-israel-after-the-next-election" target="_blank" rel="noopener noreferrer">לאירוע ב־Polymarket</a>
  </div>
  <p class="pm-meta" id="pmMeta">טוען נתוני שוק…</p>
  <div class="pm-list" id="pmList" role="list"></div>
@@ -629,7 +626,7 @@ function renderTable(){
  }).join('');
 }
 function renderPolymarket(data){
- const list=$('pmList'),meta=$('pmMeta'),note=$('pmNote'),link=$('pmLink');
+ const list=$('pmList'),meta=$('pmMeta'),note=$('pmNote');
  if(!list)return;
  if(!data||!Array.isArray(data.candidates)||!data.candidates.length){
   list.innerHTML='<div class="pm-empty">אין כרגע נתוני שוק להצגה.</div>';
@@ -637,7 +634,6 @@ function renderPolymarket(data){
   if(note)note.textContent='';
   return;
  }
- if(link&&data.url){link.href=data.url}
  const vol=data.volume!=null?nf.format(Math.round(data.volume)):'—';
  const when=data.updated_at?new Date(data.updated_at).toLocaleString('he-IL',{dateStyle:'short',timeStyle:'short'}):'—';
  if(meta)meta.textContent=`נפח מסחר מצטבר ≈ $${vol} · עודכן ${when}`;
