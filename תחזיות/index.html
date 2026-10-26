@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#142949">
+  <title>תחרות התחזיות השיתופית | בחירות 2026</title>
+  <style>
+    :root {
+      --ink:#16263e; --muted:#64738a; --bg:#f4f6fa; --card:#fff; --line:#dfe5ee;
+      --right:#386fe8; --center:#8b60dc; --arab:#13a98e; --empty:#e7ebf1;
+      --good:#15804e; --bad:#c64842; --warm:#c9891b;
+      --shadow:0 12px 36px rgba(20,41,73,.055);
+    }
+    * {box-sizing:border-box}
+    body {margin:0;color:var(--ink);background:var(--bg);font-family:Arial,"Noto Sans Hebrew",sans-serif;font-size:15px;line-height:1.55}
+    button,input {font:inherit}
+    button {cursor:pointer}
+    button:focus-visible,input:focus-visible {outline:3px solid #a9c5ff;outline-offset:2px}
+    button:disabled {opacity:.55;cursor:not-allowed}
+    .shell {max-width:1200px;margin:auto;padding:24px 18px 54px}
+    .masthead {border-radius:24px;padding:30px 34px;color:#fff;background:radial-gradient(circle at 0% -20%,rgba(89,146,238,.55),transparent 35%),linear-gradient(120deg,#142949,#193e72);position:relative;overflow:hidden}
+    .masthead:after {content:"120";position:absolute;left:25px;top:-45px;font-weight:900;font-size:180px;letter-spacing:-12px;color:rgba(255,255,255,.055);pointer-events:none}
+    .eyebrow {display:inline-block;letter-spacing:.04em;font-size:13px;font-weight:bold;color:#a9caff;margin-bottom:7px}
+    h1 {font-size:clamp(28px,3.6vw,42px);margin:0 0 9px;letter-spacing:-.7px;line-height:1.23}
+    .masthead p {font-size:16px;color:#dfebfa;margin:0;max-width:700px}
+    .layout {display:grid;grid-template-columns:minmax(0,1.15fr) minmax(330px,.85fr);gap:18px;margin-top:18px;align-items:start}
+    .main-col,.side-col {display:grid;gap:18px;min-width:0}
+    .card {background:var(--card);border:1px solid var(--line);border-radius:20px;padding:23px 24px;box-shadow:var(--shadow);min-width:0}
+    .heading {display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:14px}
+    h2 {font-size:21px;letter-spacing:-.15px;margin:0}
+    h3 {font-size:16px;margin:0}
+    .subtext {color:var(--muted);font-size:13px;margin:2px 0 13px}
+    .tag {display:inline-block;padding:5px 11px;border-radius:100px;background:#eef3ff;color:#2858a5;font-size:12px;font-weight:700;white-space:nowrap}
+    .fields {display:grid;grid-template-columns:1fr 1fr;gap:13px}
+    .field-label {font-weight:700;font-size:13px;display:block;margin-bottom:7px}
+    .text-input {display:block;width:100%;padding:11px 12px;border:1px solid #ccd6e5;border-radius:11px;background:#fff;color:var(--ink);min-height:44px}
+    .notice {margin-top:12px;background:#f5f8ff;color:#536781;border:1px solid #e2eaf6;border-radius:12px;padding:10px 13px;font-size:13px}
+    .party-group {margin-top:18px}
+    .group-title {display:flex;gap:10px;align-items:center;border-bottom:1px solid var(--line);padding-bottom:9px;margin-bottom:2px}
+    .dot {width:10px;height:10px;border-radius:50%;display:inline-block;flex-shrink:0;background:var(--right)}
+    .dot.center {background:var(--center)}
+    .dot.arab {background:var(--arab)}
+    .group-title .count {margin-right:auto;color:var(--muted);font-size:12px;font-weight:700}
+    .party-row {display:grid;grid-template-columns:minmax(0,1fr) 154px;align-items:center;gap:10px;border-bottom:1px solid #eff1f5;padding:12px 1px}
+    .party-row:last-child {border-bottom:0}
+    .party-name {font-weight:700;font-size:14px}
+    .party-sub {font-size:12px;color:var(--muted);margin-top:1px}
+    .stepper {display:grid;grid-template-columns:34px minmax(0,1fr) 34px;gap:5px;direction:ltr;align-items:center}
+    .stepper button {width:34px;height:36px;border-radius:9px;border:1px solid #d7e0ed;background:#f8faff;color:#2f4c76;font-size:22px;line-height:1}
+    .stepper button:hover:not(:disabled) {background:#eaf1ff}
+    .stepper button:disabled {opacity:.32;background:#f2f4f8;cursor:not-allowed}
+    .stepper input {min-width:0;text-align:center;height:36px;font-size:17px;border:1px solid #ccd6e5;border-radius:9px;font-weight:750;color:var(--ink);appearance:textfield;-moz-appearance:textfield;background:#fff}
+    .stepper input::-webkit-inner-spin-button,.stepper input::-webkit-outer-spin-button {-webkit-appearance:none;margin:0}
+    .stepper input.invalid {border-color:var(--bad);background:#fff4f3}
+    .summary-grid {display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:15px}
+    .quota-track {height:12px;background:#e8edf6;border-radius:30px;overflow:hidden;margin-top:13px}
+    .quota-fill {height:100%;width:0;background:linear-gradient(90deg,#467dec,#21a7b0);border-radius:30px;transition:width .15s}
+    .quota-help {font-size:12px;color:var(--muted);margin-top:5px}
+    .mini-stat {padding:12px 14px;background:#f7f9fd;border:1px solid #e3e9f4;border-radius:12px}
+    .mini-stat span {display:block;color:var(--muted);font-size:12px}
+    .mini-stat strong {font-size:23px;font-variant-numeric:tabular-nums;line-height:1.35}
+    .good {color:var(--good)} .bad {color:var(--bad)}
+    .sticky {position:sticky;top:16px}
+    .donut-wrap {display:flex;justify-content:center;align-items:center;gap:16px;flex-wrap:wrap;margin:9px 0 21px}
+    .donut {width:172px;height:172px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--empty) 0% 100%);transition:background .15s}
+    .donut-inner {width:122px;height:122px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 0 1px #f0f2f5 inset}
+    .donut-inner strong {font-size:30px;line-height:1.1;direction:ltr;font-variant-numeric:tabular-nums}
+    .donut-inner span {font-size:11px;color:var(--muted)}
+    .bloc-list {flex:1;min-width:178px;display:grid;gap:12px}
+    .bloc-item {display:flex;align-items:center;gap:9px}
+    .bloc-item .title {flex:1;font-weight:650;font-size:13px}
+    .bloc-item strong {font-size:19px;min-width:27px;text-align:left;font-variant-numeric:tabular-nums}
+    .stack-caption {font-size:12px;color:var(--muted);margin-bottom:7px}
+    .stack-wrap {position:relative;padding-top:16px}
+    .stack {height:22px;width:100%;direction:ltr;display:flex;border-radius:10px;overflow:hidden;background:var(--empty)}
+    .seg {height:100%;min-width:0;transition:width .15s}
+    .seg.r {background:var(--right)} .seg.c {background:var(--center)} .seg.a {background:var(--arab)}
+    .majority-mark {position:absolute;left:50.833333%;height:32px;top:9px;border-left:2px dashed #172b4d;pointer-events:none}
+    .majority-text {position:absolute;left:50.833333%;top:-5px;transform:translateX(-50%);color:#263952;font-size:11px;font-weight:bold;white-space:nowrap;direction:rtl}
+    .bloc-note {padding:10px 12px;margin-top:16px;background:#eff5ff;border-radius:11px;color:#304e78;font-size:13px;font-weight:700}
+    .bloc-note.majority {background:#e9f7ee;color:#16663e}
+    .bloc-note.error {background:#fff1f0;color:var(--bad)}
+    .decisions {display:grid;gap:9px}
+    .decision {padding:12px 13px;border:1px solid var(--line);border-radius:12px;display:flex;gap:10px;align-items:center;justify-content:space-between}
+    .decision .topic {font-size:13px;font-weight:700}
+    .decision .detail {font-size:11px;color:var(--muted)}
+    .status-chip {white-space:nowrap;padding:6px 9px;background:#f0f4fa;border-radius:8px;font-size:12px;font-weight:700;color:#5b6680}
+    .status-chip.yes {background:#e8f7ef;color:#167246}
+    .status-chip.no {background:#fff0ee;color:#b04640}
+    .score-rules {display:grid;gap:9px}
+    .score-row {display:flex;gap:10px;align-items:start;justify-content:space-between;border-bottom:1px solid #edf0f5;padding:7px 0}
+    .score-row:last-child {border:0}
+    .score-row .label {font-weight:650;font-size:13px}
+    .score-row .description {font-size:12px;color:var(--muted)}
+    .score-row .points {font-weight:800;color:#3159ad;white-space:nowrap;font-size:13px}
+    .help {font-size:12px;color:var(--muted);margin:12px 0 0;line-height:1.7}
+    .actions {display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    .btn {border-radius:11px;padding:12px 16px;border:1px solid transparent;font-weight:700;font-size:14px;min-height:44px}
+    .btn.primary {color:white;background:#234c9b}
+    .btn.primary:hover {background:#193e85}
+    .btn.secondary {border-color:#d6dfed;background:#f7f9fd;color:#2c4773}
+    .btn.secondary:hover {background:#e9effa}
+    .message {display:none;padding:11px 13px;margin-top:14px;border-radius:11px;font-size:13px;line-height:1.65}
+    .message.show {display:block}
+    .message.ok {background:#eaf8ef;border:1px solid #bce5cb;color:#16683e}
+    .message.err {background:#fff4f0;border:1px solid #f0cbbe;color:#a03b36}
+    .footer {font-size:12px;color:#728095;line-height:1.7;padding:0 3px}
+
+    .bloc-input-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:15px 0}
+    .bloc-input-card {border:1px solid var(--line);border-radius:13px;padding:13px;background:#fbfcff}
+    .bloc-input-card label {display:block;font-size:13px;font-weight:750;margin-bottom:8px}
+    .bloc-input-card input.invalid {border-color:var(--bad);background:#fff4f3}
+    .bloc-input-card input {width:100%;min-height:44px;border:1px solid #ccd6e5;border-radius:10px;padding:9px 11px;font-size:18px;font-weight:750;text-align:center;background:#fff;color:var(--ink)}
+    .public-section {margin-top:18px}
+    .public-summary {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0 18px}
+    .public-stat {border:1px solid var(--line);border-radius:12px;padding:13px;background:#f8faff}
+    .public-stat span {display:block;color:var(--muted);font-size:12px}
+    .public-stat strong {font-size:24px;font-variant-numeric:tabular-nums}
+    .forecast-list {display:grid;gap:12px}
+    .forecast-card {border:1px solid var(--line);border-radius:15px;padding:15px;background:#fff;min-width:0}
+    .forecast-head {display:flex;align-items:start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+    .forecast-name {font-size:17px;font-weight:800;overflow-wrap:anywhere}
+    .forecast-meta {font-size:12px;color:var(--muted)}
+    .forecast-method {font-size:13px;color:#475a75;margin:8px 0;overflow-wrap:anywhere}
+    .forecast-blocs {display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 13px}
+    .forecast-bloc {background:#f1f5fb;border:1px solid #e0e7f1;border-radius:10px;padding:7px 10px;font-size:13px}
+    .forecast-bloc strong {font-size:16px;margin-right:5px}
+    .party-table-wrap {overflow-x:auto;border:1px solid #e7ebf2;border-radius:10px}
+    .party-table {width:100%;border-collapse:collapse;font-size:12px;min-width:520px}
+    .party-table th,.party-table td {padding:7px 9px;border-bottom:1px solid #edf0f5;text-align:right;white-space:nowrap}
+    .party-table th {background:#f6f8fc;color:#50617b;font-weight:750}
+    .party-table tr:last-child td {border-bottom:0}
+    .public-empty {padding:22px;text-align:center;border:1px dashed #ccd6e5;border-radius:13px;color:var(--muted)}
+    .public-actions {display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .public-status {font-size:12px;color:var(--muted)}
+    .consensus-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+    .consensus-group {border:1px solid var(--line);border-radius:12px;padding:12px;min-width:0}
+    .consensus-group h3 {font-size:14px;margin:0 0 8px}
+    .consensus-line {display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid #edf0f5;font-size:12px}
+    .consensus-line:last-child {border-bottom:0}
+    .consensus-line strong {white-space:nowrap}
+    @media(max-width:650px) {.bloc-input-grid,.public-summary,.consensus-grid{grid-template-columns:1fr}.bloc-input-card{display:grid;grid-template-columns:1fr 100px;align-items:center;gap:10px}.bloc-input-card label{margin:0}}
+
+    @media(max-width:900px) {.layout{grid-template-columns:1fr}.sticky{position:static}.side-col{grid-row:1}}
+    @media(max-width:560px) {.shell{padding:12px 9px 36px}.masthead{padding:24px 20px;border-radius:16px}.card{padding:17px 15px;border-radius:15px}.fields{grid-template-columns:1fr}.party-row{grid-template-columns:minmax(0,1fr) 138px}.stepper{grid-template-columns:30px minmax(0,1fr) 30px}.stepper button{width:30px} .donut{width:150px;height:150px}.donut-inner{width:106px;height:106px}}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="masthead">
+      <span class="eyebrow">תחרות שיתופית · מפלגות · גושים</span>
+      <h1>מי יפגע בתוצאות?</h1>
+      <p>תחרות התחזיות לבחירות 2026. מגישים תחזית מפלגות ותחזית גושים, והתחזיות נשמרות במאגר משותף שכל המשתתפים יכולים לראות.</p>
+    </header>
+    <div class="layout">
+      <main class="main-col">
+        <section class="card">
+          <div class="heading"><h2>01 · הפרטים שלי</h2><span class="tag">שלב ראשון</span></div>
+          <div class="fields">
+            <div><label class="field-label" for="participant">שם המשתתף</label><input class="text-input" id="participant" type="text" placeholder="איך קוראים לך?" autocomplete="name" maxlength="70"></div>
+            <div><label class="field-label" for="method">על מה התחזית מבוססת? <span style="font-weight:normal;color:var(--muted)">(לא חובה)</span></label><input class="text-input" id="method" type="text" maxlength="150" placeholder="סקרים, נתונים, אינטואיציה..." /></div>
+          </div>
+        </section>
+        <section class="card">
+          <div class="heading"><h2>02 · מחלקים את המנדטים</h2><span class="tag">120 מנדטים</span></div>
+          <p class="subtext">לכל מפלגה אפשר לתת <strong>0</strong> (אינה עוברת) או <strong>4–120 מנדטים</strong> (עוברת). <strong>אי אפשר להקצות יותר מ־120 בסך הכול</strong>; כפתורי +/− והקלדה מכבדים את יתרת המנדטים.</p>
+          <div id="partiesContainer"></div>
+          <div class="summary-grid" aria-live="polite">
+            <div class="mini-stat"><span>מנדטים שחולקו</span><strong id="partyTotal">0 / 120</strong></div>
+            <div class="mini-stat"><span>כמה עוד נשאר?</span><strong id="seatsLeft">120</strong></div>
+          </div>
+          <div class="quota-track" role="progressbar" aria-label="מנדטים שחולקו" aria-valuemin="0" aria-valuemax="120" aria-valuenow="0" id="quotaTrack"><div class="quota-fill" id="quotaFill"></div></div>
+          <div class="quota-help" id="quotaHelp" aria-live="polite">נותרו 120 מנדטים לחלוקה.</div>
+          <div class="notice">התרשים בצד מחושב אוטומטית מתוך תחזית המפלגות. בהמשך ממלאים גם תחזית גושים עצמאית, שתישמר ותוצג בנפרד.</div>
+          <div class="actions">
+            <button type="button" class="btn primary" id="submitBtn">בדיקה והגשת התחזית</button>
+            <button type="button" class="btn secondary" id="downloadBtn">הורדת JSON</button>
+            <button type="button" class="btn secondary" id="copyBtn">העתקת סיכום</button>
+            <button type="button" class="btn secondary" id="resetBtn">איפוס</button>
+          </div>
+          <div id="message" class="message" role="status" aria-live="polite"></div>
+        </section>
+        <section class="card">
+          <div class="heading"><h2>03 · תחזית הגושים שלי</h2><span class="tag">הקצאה עצמאית</span></div>
+          <p class="subtext">בנוסף לחלוקה למפלגות, הזינו תחזית נפרדת משלכם לשלושת הגושים. גם כאן הסכום חייב להיות בדיוק 120. התחזית הזו נשמרת בנפרד ואינה משנה את מפת הגושים שמחושבת מהמפלגות.</p>
+          <div class="bloc-input-grid">
+            <div class="bloc-input-card"><label for="bloc-right">ימין (כולל החרדים)</label><input id="bloc-right" type="number" min="0" max="120" step="1" value="0" inputmode="numeric"></div>
+            <div class="bloc-input-card"><label for="bloc-center">מרכז־שמאל</label><input id="bloc-center" type="number" min="0" max="120" step="1" value="0" inputmode="numeric"></div>
+            <div class="bloc-input-card"><label for="bloc-arab">ערבים</label><input id="bloc-arab" type="number" min="0" max="120" step="1" value="0" inputmode="numeric"></div>
+          </div>
+          <div class="summary-grid" aria-live="polite">
+            <div class="mini-stat"><span>מנדטים בתחזית הגושים</span><strong id="blocForecastTotal">0 / 120</strong></div>
+            <div class="mini-stat"><span>נותרו לחלוקה</span><strong id="blocForecastLeft">120</strong></div>
+          </div>
+          <div class="quota-track"><div class="quota-fill" id="blocQuotaFill"></div></div>
+          <div class="quota-help" id="blocQuotaHelp" aria-live="polite">יש לחלק 120 מנדטים בין הגושים.</div>
+        </section>
+      </main>
+      <aside class="side-col">
+        <section class="card sticky">
+          <div class="heading"><h2>04 · מפת הגושים</h2><span class="tag">חישוב חי</span></div>
+          <div class="donut-wrap">
+            <div id="donut" class="donut" role="img" aria-label="חלוקה חזותית של המנדטים לגושים">
+              <div class="donut-inner"><strong id="donutNumber">0/120</strong><span>מנדטים שחולקו</span></div>
+            </div>
+            <div class="bloc-list">
+              <div class="bloc-item"><i class="dot" aria-hidden="true"></i><span class="title">ימין (כולל החרדים)</span><strong id="rightValue">0</strong></div>
+              <div class="bloc-item"><i class="dot center" aria-hidden="true"></i><span class="title">מרכז־שמאל</span><strong id="centerValue">0</strong></div>
+              <div class="bloc-item"><i class="dot arab" aria-hidden="true"></i><span class="title">ערבים</span><strong id="arabValue">0</strong></div>
+            </div>
+          </div>
+          <div class="stack-caption">התפלגות 120 המושבים · הקו המקווקו מסמן 61</div>
+          <div class="stack-wrap"><span class="majority-text">61</span><span class="majority-mark"></span><div id="stack" class="stack" role="img" aria-label="תרשים מוטות של חלוקת הגושים"><div class="seg r" id="segRight"></div><div class="seg c" id="segCenter"></div><div class="seg a" id="segArab"></div></div></div>
+          <div id="majorityNote" class="bloc-note">לפי התחזית כרגע חסרים 61 מנדטים לימין כדי להגיע ל־61.</div>
+        </section>
+        <section class="card">
+          <div class="heading"><h2>05 · ההימורים הקריטיים</h2><span class="tag">נגזרים אוטומטית</span></div>
+          <p class="subtext">אין צורך לענות שוב על שאלות שכבר נובעות ממספר המנדטים שבחרתם.</p>
+          <div class="decisions">
+            <div class="decision"><div><div class="topic">וינטר — עמך ישראל</div><div class="detail">6 נקודות עונש על החמצת אחוז החסימה</div></div><span class="status-chip" id="winterChip">לא עוברת</span></div>
+            <div class="decision"><div><div class="topic">הנדל–זליכה</div><div class="detail">6 נקודות עונש על החמצת אחוז החסימה</div></div><span class="status-chip" id="zalichaChip">לא עוברת</span></div>
+            <div class="decision"><div><div class="topic">האם לגוש הימין יש 61?</div><div class="detail">12 נקודות עונש אם התחזית טועה — בשני הכיוונים</div></div><span class="status-chip" id="majorityChip">לא</span></div>
+          </div>
+        </section>
+        <section class="card">
+          <div class="heading"><h2>איך נקבע המנצח?</h2><span class="tag">פחות עונש = טוב יותר</span></div>
+          <div class="score-rules">
+            <div class="score-row"><div><div class="label">דיוק במפלגות</div><div class="description">מפלגות עם 9+ מנדטים בתוצאות האמת: 1 לכל מנדט טעות; מפלגות עם 4–8: 1.25. סוכמים את השגיאות המשוקללות ומחלקים ב־2.</div></div><span class="points">1 / 1.25</span></div>
+            <div class="score-row"><div><div class="label">דיוק בגושים</div><div class="description">סוכמים את הפרשי המנדטים בשלושת הגושים, מחלקים ב־2 ומכפילים ב־3. זהו קנס נוסף לניקוד המפלגות.</div></div><span class="points">3 למנדט שעבר גוש</span></div>
+            <div class="score-row"><div><div class="label">וינטר — עובר או לא</div><div class="description">שאלת אחוז החסימה</div></div><span class="points">6 על טעות</span></div>
+            <div class="score-row"><div><div class="label">הנדל–זליכה — עוברים או לא</div><div class="description">שאלת אחוז החסימה</div></div><span class="points">6 על טעות</span></div>
+            <div class="score-row"><div><div class="label">הימין מגיע ל־61</div><div class="description">פספוס הסף של 61 מנדטים; הקנס זהה אם התחזית הייתה גבוהה מדי או נמוכה מדי</div></div><span class="points">12 על טעות</span></div>
+          </div>
+          <div class="notice"><strong>דוגמה לשאלת ה־61:</strong> אם בגוש הימין התוצאה היא 61, תחזית של 60 גוררת 3 נקודות על מנדט שעבר גוש ועוד 12 על החמצת הרוב, כלומר 15. תחזית של 59 גוררת 6+12=18 נקודות. בשני המקרים מתווסף גם ניקוד הדיוק במפלגות.</div>
+          <p class="help">המנצח הוא מי שצבר הכי מעט נקודות עונש. בחישוב המפלגות, מפלגה שקיבלה 0 מנדטים בתוצאות האמת מחושבת במשקל רגיל של 1 לכל מנדט תחזית שגוי, ובנוסף יוטל קנס אחוז החסימה הרלוונטי אם מדובר בוינטר או בהנדל–זליכה. הניקוד ייקבע אחרי פרסום תוצאות האמת. שיוך המפלגות לשלושת הגושים נקבע מראש לצורכי המשחק.</p>
+        </section>
+      </aside>
+    </div>
+    <section class="card public-section" id="publicForecasts">
+      <div class="heading"><div><h2>06 · תחזיות המשתתפים</h2><p class="subtext">כל התחזיות התקינות שהוגשו לתחרות, כולל תחזית המפלגות ותחזית הגושים הנפרדת.</p></div><div class="public-actions"><button type="button" class="btn secondary" id="refreshPublicBtn">רענון תחזיות</button><span class="public-status" id="publicStatus">טוען תחזיות…</span></div></div>
+      <div class="public-summary">
+        <div class="public-stat"><span>מספר תחזיות שהוגשו</span><strong id="publicCount">0</strong></div>
+        <div class="public-stat"><span>ממוצע גוש ימין</span><strong id="avgRight">—</strong></div>
+        <div class="public-stat"><span>ממוצע גוש מרכז־שמאל</span><strong id="avgCenter">—</strong></div>
+      </div>
+      <div id="consensusContainer"></div>
+      <div style="height:14px"></div>
+      <div id="leaderboardContainer"></div>
+      <div style="height:14px"></div>
+      <div id="forecastList" class="forecast-list"><div class="public-empty">מתחבר למאגר התחזיות…</div></div>
+    </section>
+    <p class="footer">התחזית המקומית נשמרת כטיוטה בדפדפן. בלחיצה על „הגשת התחזית” היא תישלח למאגר המרכזי, והתחזיות הציבוריות יוצגו בהמשך הדף. אל תזינו מידע אישי רגיש; הכינוי והתחזית גלויים לכל מי שיש לו את הקישור.</p>
+  </div>
+<script>
+(function () {
+  'use strict';
+  // רשימת המפלגות והשיוך לגושים הם הגדרות התחרות על פי המבוקש, לא סיווג רשמי.
+  const parties = [
+    { id:'likud', name:'הליכוד', bloc:'right' },
+    { id:'otzma', name:'עוצמה יהודית', bloc:'right' },
+    { id:'tzionut', name:'הציונות הדתית', bloc:'right' },
+    { id:'shas', name:'ש״ס', bloc:'right' },
+    { id:'utj', name:'יהדות התורה', bloc:'right' },
+    { id:'winter', name:'עמך ישראל (וינטר)', bloc:'right', sub:'אחוז החסימה ייקבע אוטומטית' },
+    { id:'bennett', name:'ביחד (בנט ויש עתיד)', bloc:'center' },
+    { id:'yashar', name:'ישר (אייזנקוט)', bloc:'center' },
+    { id:'democrats', name:'הדמוקרטים', bloc:'center' },
+    { id:'liberman', name:'ישראל ביתנו', bloc:'center' },
+    { id:'zalicha', name:'המילואימניקים והכלכלית (הנדל–זליכה)', bloc:'center', sub:'אחוז החסימה ייקבע אוטומטית' },
+    { id:'raam', name:'רע״מ', bloc:'arab' },
+    { id:'joint', name:'המשותפת (חד״ש–תע״ל–בל״ד)', bloc:'arab' }
+  ];
+  const groups = [
+    { id:'right', name:'ימין (כולל החרדים)', dot:'dot' },
+    { id:'center', name:'מרכז־שמאל', dot:'dot center' },
+    { id:'arab', name:'ערבים', dot:'dot arab' }
+  ];
+  const key = 'election-forecast-2026-v3'; // ממשיכים להשתמש בטיוטות של גרסאות קודמות
+  const $ = id => document.getElementById(id);
+  const values = Object.fromEntries(parties.map(p => [p.id, 0]));
+  const blocForecast = {right:0, center:0, arab:0};
+  const controls = {};
+  function maxSeatsFor(id) {
+    // הגבלת כל מפלגה למושבים שנותרו, נוסף על המושבים שכבר שויכו לה.
+    return Math.min(120, values[id] + Math.max(0, 120 - currentData().total));
+  }
+  function isValidSeat(n) {return Number.isInteger(n) && n>=0 && n<=120 && (n===0 || n>=4);}
+  function updateLimits() {
+    for(const p of parties) {
+      const c=controls[p.id]; if(!c) continue;
+      const cap=maxSeatsFor(p.id);
+      c.input.max=String(cap);
+      c.plus.disabled=(values[p.id]===0 ? cap<4 : values[p.id]>=cap);
+      c.minus.disabled=values[p.id]===0;
+    }
+  }
+
+  function build() {
+    const container = $('partiesContainer');
+    groups.forEach(g => {
+      const section = document.createElement('section');
+      section.className = 'party-group';
+      const heading = document.createElement('div');
+      heading.className = 'group-title';
+      heading.innerHTML = '<i class="' + g.dot + '" aria-hidden="true"></i><h3>' + g.name + '</h3><span class="count" id="count-' + g.id + '">0 מנדטים</span>';
+      section.appendChild(heading);
+      parties.filter(p => p.bloc === g.id).forEach(p => {
+        const row = document.createElement('div');
+        row.className = 'party-row';
+        const desc = document.createElement('div');
+        const name = document.createElement('div');
+        name.className = 'party-name';
+        name.textContent = p.name;
+        const sub = document.createElement('div');
+        sub.className = 'party-sub';
+        sub.textContent = p.sub || '0 = לא עוברת · 4+ = עוברת';
+        desc.append(name,sub);
+        const stepper = document.createElement('div');
+        stepper.className = 'stepper';
+        const minus = document.createElement('button');
+        minus.type='button';minus.textContent='−';minus.setAttribute('aria-label', 'להפחית מנדט עבור ' + p.name);
+        const input = document.createElement('input');
+        input.type='number'; input.min='0';input.max='120';input.step='1';input.value='0'; input.id='party-'+p.id;
+        input.inputMode='numeric'; input.setAttribute('aria-label','מנדטים עבור ' + p.name);
+        const plus = document.createElement('button');
+        plus.type='button';plus.textContent='+';plus.setAttribute('aria-label','להוסיף מנדט עבור ' + p.name);
+        stepper.append(minus,input,plus);row.append(desc,stepper);section.appendChild(row);
+        controls[p.id]={input,plus,minus};
+        const writeSeat=(n) => {
+          values[p.id]=n;input.value=String(n);input.classList.remove('invalid');sync();
+        };
+        plus.addEventListener('click', () => {
+          const desired=values[p.id]===0?4:values[p.id]+1;
+          if(desired<=maxSeatsFor(p.id))writeSeat(desired);
+        });
+        minus.addEventListener('click', () => writeSeat(values[p.id]<=4?0:values[p.id]-1));
+        input.addEventListener('input', () => {
+          const raw=input.value, n=Number(raw), cap=maxSeatsFor(p.id);
+          // לעולם לא מקבלים יותר מ־120 במפלגה או בסך הכול — גם בהדבקת מספר.
+          if(raw!=='' && Number.isFinite(n) && n>cap) {
+            const fixed=cap>=4?cap:0;
+            writeSeat(fixed);
+            showMessage('אין מספיק מנדטים פנויים להקצאה נוספת. המקסימום האפשרי למפלגה זו הוא '+cap+'.',false);
+            return;
+          }
+          if(raw!=='' && isValidSeat(n))writeSeat(n);
+          else {
+            // הקלדה של 1–3 היא מצב ביניים כדי לאפשר כתיבת 12, למשל.
+            input.classList.add('invalid');
+            refresh();
+          }
+        });
+        input.addEventListener('blur', () => {
+          const n=Number(input.value), cap=maxSeatsFor(p.id);
+          let fixed=(!Number.isFinite(n) || n<=0)?0:Math.round(n);
+          if(fixed>0 && fixed<4)fixed=cap>=4?4:0;
+          if(fixed>cap)fixed=cap>=4?cap:0;
+          if(!isValidSeat(fixed))fixed=0;
+          writeSeat(fixed);
+        });
+      });
+      container.appendChild(section);
+    });
+  }
+
+  function currentData() {
+    const bloc = {right:0, center:0, arab:0};
+    for(const p of parties) bloc[p.bloc] += values[p.id];
+    return {bloc,total:bloc.right+bloc.center+bloc.arab};
+  }
+  function chip(id,yes,yesText,noText) {
+    const el = $(id);
+    el.textContent = yes?yesText:noText;
+    el.className = 'status-chip '+(yes?'yes':'no');
+  }
+  function refresh() {
+    const {bloc,total} = currentData();
+    $('partyTotal').textContent = total + ' / 120';
+    $('quotaFill').style.width=Math.min(100, 100*total/120)+'%';
+    $('quotaTrack').setAttribute('aria-valuenow',String(total));
+    $('quotaHelp').textContent=total===120?'כל 120 המנדטים חולקו — כדי להוסיף למפלגה אחת יש להפחית מאחרת.':'נותרו '+(120-total)+' מנדטים לחלוקה.';
+    updateLimits();
+    $('partyTotal').className = total===120?'good':(total>120?'bad':'');
+    $('seatsLeft').textContent = total===120?'✓ הושלם':(total>120?'עודף '+(total-120):120-total);
+    $('seatsLeft').className = total===120?'good':(total>120?'bad':'');
+    $('donutNumber').textContent = total+'/120';
+    $('rightValue').textContent = bloc.right;
+    $('centerValue').textContent = bloc.center;
+    $('arabValue').textContent = bloc.arab;
+    for(const g of groups) $('count-'+g.id).textContent=bloc[g.id]+' מנדטים';
+    // הממשק אינו מאפשר עודף מנדטים, ולכן קנה המידה קבוע על 120.
+    const scale = 120;
+    const a=100*bloc.right/scale, b=100*bloc.center/scale, c=100*bloc.arab/scale;
+    $('donut').style.background='conic-gradient(var(--right) 0% '+a+'%,var(--center) '+a+'% '+(a+b)+'%,var(--arab) '+(a+b)+'% '+(a+b+c)+'%,var(--empty) '+(a+b+c)+'% 100%)';
+    $('segRight').style.width=a+'%';$('segCenter').style.width=b+'%';$('segArab').style.width=c+'%';
+    $('donut').setAttribute('aria-label',bloc.right+' לימין, '+bloc.center+' למרכז־שמאל, '+bloc.arab+' לערבים; סך הכול '+total);
+    $('stack').setAttribute('aria-label',bloc.right+' לימין, '+bloc.center+' למרכז־שמאל, '+bloc.arab+' לערבים; סך הכול '+total);
+    const note=$('majorityNote');
+    if(bloc.right>=61) {note.textContent='לפי התחזית שלך, לגוש הימין יש '+bloc.right+' מנדטים — 61 ומעלה.';note.className='bloc-note majority';}
+    else {note.textContent='לפי התחזית שלך, הימין עומד על '+bloc.right+' מנדטים; חסרים '+(61-bloc.right)+' כדי להגיע ל־61.';note.className='bloc-note';}
+    chip('winterChip',values.winter>=4,'עוברת · '+values.winter,'לא עוברת · 0');
+    chip('zalichaChip',values.zalicha>=4,'עוברת · '+values.zalicha,'לא עוברת · 0');
+    chip('majorityChip',bloc.right>=61,'כן · '+bloc.right,'לא · '+bloc.right);
+  }
+  function persist() {
+    try {localStorage.setItem(key, JSON.stringify({values,blocForecast,participant:$('participant').value,method:$('method').value}));} catch(e) {}
+  }
+  function sync(){refresh();persist();$('message').className='message';}
+  function restore() {
+    try {
+      const parsed=JSON.parse(localStorage.getItem(key)||'null');
+      if(!parsed) return;
+      // טיוטות ישנות עשויות לכלול יותר מ־120 — משחזרים בלי לאפשר חריגה.
+      let available=120;
+      for(const p of parties) {
+        const n=Number(parsed.values && parsed.values[p.id]);
+        if(isValidSeat(n) && n<=available)values[p.id]=n;
+        else if(isValidSeat(n) && n>available && available>=4)values[p.id]=available;
+        else values[p.id]=0;
+        available-=values[p.id];
+        $('party-'+p.id).value=values[p.id];
+      }
+      for(const id of ['right','center','arab']) {
+        const n=Number(parsed.blocForecast && parsed.blocForecast[id]);
+        blocForecast[id]=Number.isInteger(n)&&n>=0&&n<=120?n:0;
+        $('bloc-'+id).value=blocForecast[id];
+      }
+      $('participant').value=String(parsed.participant||'').slice(0,70);
+      $('method').value=String(parsed.method||'').slice(0,150);
+    }catch(e){}
+  }
+  function refreshBlocForecast() {
+    const total=blocForecast.right+blocForecast.center+blocForecast.arab;
+    $('blocForecastTotal').textContent=total+' / 120';
+    $('blocForecastLeft').textContent=total===120?'✓ הושלם':(total>120?'עודף '+(total-120):120-total);
+    $('blocForecastTotal').className=total===120?'good':(total>120?'bad':'');
+    $('blocForecastLeft').className=total===120?'good':(total>120?'bad':'');
+    $('blocQuotaFill').style.width=Math.min(100,100*total/120)+'%';
+    $('blocQuotaHelp').textContent=total===120?'תחזית הגושים הושלמה.':'נותרו '+(120-total)+' מנדטים לחלוקה בגושים.';
+  }
+
+  function showMessage(text,ok) {
+    $('message').textContent=text;
+    $('message').className='message show '+(ok?'ok':'err');
+  }
+  function validate() {
+    for(const p of parties){
+      const el=$('party-'+p.id),n=Number(el.value);
+      if(el.value===''||!Number.isInteger(n)||n<0||n>120||(n>0&&n<4)) {
+        showMessage('מנדטים לא תקינים במפלגת '+p.name+'. יש לבחור 0 או מספר שלם מ־4 ומעלה.',false);
+        el.focus();return false;
+      }
+    }
+    if(!$('participant').value.trim()) {showMessage('צריך למלא שם משתתף לפני הורדת התחזית.',false);$('participant').focus();return false;}
+    const {total}=currentData();
+    if(total!==120) {showMessage('כדי להשלים את תחזית המפלגות צריך לחלק בדיוק 120 מנדטים. כרגע חילקת '+total+'.',false);return false;}
+    for(const id of ['right','center','arab']) {
+      const raw=$('bloc-'+id).value,n=Number(raw);
+      if(raw===''||!Number.isInteger(n)||n<0||n>120) {showMessage('תחזית הגושים אינה תקינה. יש להזין מספרים שלמים בין 0 ל־120.',false);$('bloc-'+id).focus();return false;}
+    }
+    const btotal=blocForecast.right+blocForecast.center+blocForecast.arab;
+    if(btotal!==120) {showMessage('גם תחזית הגושים חייבת להסתכם ב־120. כרגע הוקצו '+btotal+' מנדטים.',false);return false;}
+    showMessage('התחזית תקינה: גם המפלגות וגם הגושים מסתכמים ב־120 מנדטים.',true);
+    return true;
+  }
+  function exportData() {
+    const {bloc,total}=currentData();
+    return {
+      version:'2026-v6',
+      participant:$('participant').value.trim(), method:$('method').value.trim(),
+      saved_at:new Date().toISOString(),
+      parties:parties.map(p=>({id:p.id,name:p.name,bloc:p.bloc,seats:values[p.id]})),
+      blocs:{...blocForecast}, derived_blocs:bloc,total_seats:total,
+      special_predictions:{winter_pass:values.winter>=4,zalicha_pass:values.zalicha>=4,right_61:bloc.right>=61}
+    };
+  }
+  function download(){
+    if(!validate()) return;
+    const content=JSON.stringify(exportData(),null,2);
+    const blob=new Blob([content],{type:'application/json;charset=utf-8'});
+    const url=URL.createObjectURL(blob),link=document.createElement('a');
+    link.href=url;link.download='תחזית-בחירות-2026.json';document.body.append(link);link.click();link.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }
+  function summaryText(){
+    const data=exportData(), lines=['תחרות תחזיות בחירות 2026','משתתף: '+data.participant,''];
+    lines.push('תחזית גושים נפרדת:');
+    for(const g of groups) lines.push(' • '+g.name+': '+data.blocs[g.id]);
+    lines.push('');
+    lines.push('תחזית מפלגות:');
+    for(const g of groups){
+      lines.push(g.name+' ('+data.derived_blocs[g.id]+'):');
+      for(const p of data.parties.filter(x=>x.bloc===g.id && x.seats>0))lines.push(' • '+p.name+': '+p.seats);
+      lines.push('');
+    }
+    lines.push('ימין 61+ לפי תחזית המפלגות: '+(data.special_predictions.right_61?'כן':'לא'));
+    lines.push('וינטר עוברת: '+(data.special_predictions.winter_pass?'כן':'לא'));
+    lines.push('הנדל–זליכה עוברים: '+(data.special_predictions.zalicha_pass?'כן':'לא'));
+    return lines.join('\n');
+  }
+  async function copySummary() {
+    if(!validate())return;
+    const text=summaryText();
+    try {await navigator.clipboard.writeText(text);showMessage('הסיכום הועתק ללוח. שימו לב: העתקה אינה הגשה לתחרות.',true);}
+    catch(err) {
+      const el=document.createElement('textarea');el.value=text;el.style.position='fixed';el.style.opacity='0';document.body.appendChild(el);el.select();
+      let copied=false;try{copied=document.execCommand('copy');}catch(e){} el.remove();
+      showMessage(copied?'הסיכום הועתק ללוח. העתקה אינה הגשה לתחרות.':'הדפדפן חסם העתקה אוטומטית. אפשר להשתמש בהורדת התחזית.',copied);
+    }
+  }
+  function buildSubmissionPayload() {
+    const data=exportData();
+    return {
+      participant:data.participant,
+      method:data.method,
+      parties:data.parties.map(p=>({id:p.id,name:p.name,bloc:p.bloc,seats:p.seats})),
+      blocs:{...blocForecast},
+      version:'2026-v6-shared'
+    };
+  }
+  function submitOnline() {
+    if(!validate()) return;
+    if(!(window.google && google.script && google.script.run)) {
+      showMessage('הדף עדיין אינו מחובר לשרת. יש לפרסם אותו כ־Google Apps Script Web App לפי הוראות README.',false);
+      return;
+    }
+    const button=$('submitBtn');button.disabled=true;button.textContent='שולח…';
+    google.script.run
+      .withSuccessHandler(result=>{
+        button.disabled=false;button.textContent='בדיקה והגשת התחזית';
+        if(!result || !result.ok) {showMessage(result && result.message ? result.message : 'ההגשה לא נשמרה.',false);return;}
+        showMessage(result.message || 'התחזית נשמרה במאגר המשותף.',true);
+        loadPublicForecasts();
+      })
+      .withFailureHandler(err=>{
+        button.disabled=false;button.textContent='בדיקה והגשת התחזית';
+        showMessage('שגיאה בשמירת התחזית: '+(err && err.message ? err.message : 'שגיאה לא ידועה'),false);
+      })
+      .submitForecast(buildSubmissionPayload());
+  }
+  function escapeHtml(value) {
+    return String(value==null?'':value).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+  function loadPublicForecasts() {
+    const status=$('publicStatus');
+    if(!(window.google && google.script && google.script.run)) {
+      status.textContent='נדרשת פריסה כ־Web App';
+      $('forecastList').innerHTML='<div class="public-empty">התחזיות הציבוריות יופיעו כאן לאחר פרסום האפליקציה וחיבור המאגר.</div>';
+      return;
+    }
+    status.textContent='מעדכן…';
+    google.script.run
+      .withSuccessHandler(data=>renderPublicForecasts(data))
+      .withFailureHandler(err=>{
+        status.textContent='לא ניתן לטעון';
+        $('forecastList').innerHTML='<div class="public-empty">לא הצלחנו לטעון את התחזיות. '+escapeHtml(err&&err.message?err.message:'')+'</div>';
+      })
+      .getPublicForecasts();
+  }
+  function renderPublicForecasts(data) {
+    const forecasts=(data&&data.forecasts)||[];
+    $('publicStatus').textContent=data&&data.closed?'ההגשות נסגרו':(forecasts.length?'עודכן עכשיו':'אין עדיין הגשות');
+    $('publicCount').textContent=String(forecasts.length);
+    const avg=(data&&data.consensus&&data.consensus.blocs)||{};
+    $('avgRight').textContent=avg.right==null?'—':Number(avg.right).toFixed(1);
+    $('avgCenter').textContent=avg.center==null?'—':Number(avg.center).toFixed(1);
+    const consensus=(data&&data.consensus)||null;
+    const leaderboardContainer=$('leaderboardContainer');
+    if(data&&data.truthReady&&(data.leaderboard||[]).length) {
+      const rows=data.leaderboard.map(r=>'<tr><td><strong>'+r.rank+'</strong></td><td>'+escapeHtml(r.participant)+'</td><td>'+Number(r.partyError).toFixed(2)+'</td><td>'+Number(r.blocError).toFixed(2)+'</td><td>'+Number(r.winterPenalty+r.zalichaPenalty+r.majorityPenalty).toFixed(2)+'</td><td><strong>'+Number(r.total).toFixed(2)+'</strong></td></tr>').join('');
+      leaderboardContainer.innerHTML='<h3 style="margin:0 0 10px">דירוג התחרות — לאחר הזנת תוצאות האמת</h3><div class="party-table-wrap"><table class="party-table" style="min-width:640px"><thead><tr><th>מקום</th><th>משתתף</th><th>שגיאת מפלגות</th><th>שגיאת גושים</th><th>קנסות מיוחדים</th><th>ציון כולל ↓</th></tr></thead><tbody>'+rows+'</tbody></table></div><p class="help">ציון נמוך יותר הוא טוב יותר. השגיאה במפלגות משוקללת לפי תוצאות האמת; שגיאת הגושים מוכפלת ב־3. קנסות מיוחדים: 6 על כל טעות בשאלות עמך ישראל והנדל–זליכה, ו־12 על טעות בשאלת רוב של 61 לימין.</p>';
+    } else {
+      leaderboardContainer.innerHTML='<div class="notice"><strong>הדירוג יופיע לאחר הזנת תוצאות האמת.</strong> בעל הפרויקט צריך למלא את עמודת „תוצאת אמת — מנדטים” בגיליון הפרטי „תוצאות אמת”, כך שכל המפלגות יסתכמו ב־120.</div>';
+    }
+    const consensusContainer=$('consensusContainer');
+    if(!consensus || !forecasts.length) consensusContainer.innerHTML='';
+    else {
+      let markup='<h3 style="margin:0 0 10px">קונצנזוס המשתתפים — ממוצע מנדטים</h3><div class="consensus-grid">';
+      for(const g of groups) {
+        markup+='<div class="consensus-group"><h3>'+escapeHtml(g.name)+' · '+Number(consensus.blocs[g.id]||0).toFixed(1)+'</h3>';
+        const list=parties.filter(p=>p.bloc===g.id).map(p=>({name:p.name,seats:Number((consensus.parties||{})[p.id]||0)})).sort((a,b)=>b.seats-a.seats);
+        for(const p of list) markup+='<div class="consensus-line"><span>'+escapeHtml(p.name)+'</span><strong>'+p.seats.toFixed(1)+'</strong></div>';
+        markup+='</div>';
+      }
+      markup+='</div>';consensusContainer.innerHTML=markup;
+    }
+    if(!forecasts.length) {
+      $('forecastList').innerHTML='<div class="public-empty">עדיין לא הוגשו תחזיות. אפשר להיות הראשון שמגיש!</div>';
+      return;
+    }
+    const sorted=forecasts.slice().sort((a,b)=>String(b.timestamp).localeCompare(String(a.timestamp)));
+    $('forecastList').innerHTML=sorted.map((f,index)=>{
+      const partyValues=f.parties||{};const blocValues=f.blocs||{};
+      let partyMarkup='';
+      for(const g of groups) {
+        const list=parties.filter(p=>p.bloc===g.id).map(p=>({name:p.name,seats:Number(partyValues[p.id]||0)}));
+        partyMarkup+='<div style="font-weight:750;padding:8px 9px;background:#f7f9fd;border-bottom:1px solid #e7ebf2">'+escapeHtml(g.name)+'</div><table class="party-table"><thead><tr><th>מפלגה</th><th>מנדטים</th></tr></thead><tbody>';
+        partyMarkup+=list.map(p=>'<tr><td>'+escapeHtml(p.name)+'</td><td><strong>'+p.seats+'</strong></td></tr>').join('');
+        partyMarkup+='</tbody></table>';
+      }
+      const blocMarkup=groups.map(g=>'<div class="forecast-bloc">'+escapeHtml(g.name)+' <strong>'+Number(blocValues[g.id]||0)+'</strong></div>').join('');
+      const time=f.timestamp?new Date(f.timestamp).toLocaleString('he-IL',{dateStyle:'short',timeStyle:'short'}):'';
+      return '<article class="forecast-card"><div class="forecast-head"><div><div class="forecast-name">'+escapeHtml(f.participant||'משתתף '+(index+1))+'</div><div class="forecast-meta">הוגש: '+escapeHtml(time)+'</div></div></div>'+
+        (f.method?'<div class="forecast-method">נימוק: '+escapeHtml(f.method)+'</div>':'')+
+        '<div style="font-weight:750;font-size:13px">תחזית הגושים העצמאית</div><div class="forecast-blocs">'+blocMarkup+'</div>'+
+        '<details><summary style="cursor:pointer;font-weight:750;padding:6px 0">הצגת תחזית המפלגות</summary><div class="party-table-wrap">'+partyMarkup+'</div></details></article>';
+    }).join('');
+  }
+
+  function reset() {
+    if(!window.confirm('לאפס את כל המנדטים והפרטים שמילאת?'))return;
+    for(const p of parties){values[p.id]=0;$('party-'+p.id).value=0;$('party-'+p.id).classList.remove('invalid')}
+    for(const id of ['right','center','arab']) {blocForecast[id]=0;$('bloc-'+id).value=0;}
+    $('participant').value='';$('method').value='';sync();refreshBlocForecast();persist();
+  }
+  build();restore();refresh();refreshBlocForecast();loadPublicForecasts();
+  for(const id of ['right','center','arab']) $('bloc-'+id).addEventListener('input',()=>{
+    const raw=$('bloc-'+id).value,n=Number(raw);
+    if(raw==='' || !Number.isInteger(n) || n<0 || n>120) { $('bloc-'+id).classList.add('invalid'); return; }
+    $('bloc-'+id).classList.remove('invalid');blocForecast[id]=n;refreshBlocForecast();persist();
+  });
+  $('participant').addEventListener('input',persist);
+  $('method').addEventListener('input',persist);
+  $('submitBtn').addEventListener('click',submitOnline);
+  $('refreshPublicBtn').addEventListener('click',loadPublicForecasts);
+  $('downloadBtn').addEventListener('click',download);
+  $('copyBtn').addEventListener('click',copySummary);
+  $('resetBtn').addEventListener('click',reset);
+})();
+</script>
+</body>
+</html>
+
+<!-- Injection By NetFree -->
+<script src="https://netfree.link/injection-script/note-in-site.js" type="text/javascript" async  id="netfree-note-site" jsondata="%7B%22noteSite%22:%22%D7%9B%D7%93%D7%99%20%D7%A9%D7%94%D7%AA%D7%9E%D7%95%D7%A0%D7%95%D7%AA%20%D7%91%D7%90%D7%AA%D7%A8%20%D7%94%D7%96%D7%94%20%D7%99%D7%97%D7%96%D7%A8%D7%95%20%D7%9E%D7%91%D7%93%D7%99%D7%A7%D7%94%2C%20%D7%99%D7%A9%20%D7%9C%D7%94%D7%92%D7%93%D7%99%D7%A8%20%5C%22%D7%90%D7%A4%D7%A9%D7%A8%20%D7%9C%D7%A1%D7%A0%D7%9F%20%D7%AA%D7%95%D7%9B%D7%9F%20%D7%A9%D7%99%D7%93%D7%95%D7%A2%20%D7%9B%D7%90%D7%99%D7%A9%D7%99%20%D7%90%D7%95%20%D7%A4%D7%A8%D7%98%D7%99%5C%22%20%D7%91%D7%94%D7%92%D7%93%D7%A8%D7%95%D7%AA%20%D7%A1%D7%99%D7%A0%D7%95%D7%9F%20%5B%5B%D7%A6%D7%90%D7%98_AI_%D7%91%D7%A0%D7%98%D7%A4%D7%A8%D7%99%7C%D7%94%D7%99%D7%9B%D7%A0%D7%A1%D7%95%20%D7%9C%D7%9B%D7%90%D7%9F%20%D7%9C%D7%94%D7%A1%D7%91%D7%A8%20%D7%9E%D7%A4%D7%95%D7%A8%D7%98%5D%5D%22%2C%22noteSiteEn%22:%22For%20images%20on%20this%20website%20to%20work%20you%20need%20to%20set%20%5C%22Filter%20content%20that%20is%20known%20as%20personal%20or%20private%5C%22%20%5B%5BAI_Chats_in_NetFree%7CClick%20here%20to%20read%20more%5D%5D%22%7D"></script><script src="//netfree.link/injection-script/go-payment.js" type="text/javascript" async ></script>
+<script src="//netfree.link/injection-script/popup-card-init.js" type="text/javascript" async ></script>

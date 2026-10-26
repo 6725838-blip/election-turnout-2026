@@ -1,0 +1,18 @@
+{
+  "parties": {
+    "likud": null,
+    "otzma": null,
+    "tzionut": null,
+    "shas": null,
+    "utj": null,
+    "winter": null,
+    "bennett": null,
+    "yashar": null,
+    "democrats": null,
+    "liberman": null,
+    "zalicha": null,
+    "raam": null,
+    "joint": null
+  },
+  "_comment": "לאחר פרסום תוצאות האמת מלאו כאן מספר שלם לכל מפלגה כך שהסכום יהיה 120, ואז העלו commit. הדירוג יתעדכן אוטומטית."
+}

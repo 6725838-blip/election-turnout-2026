@@ -1,0 +1,93 @@
+{
+  "forecasts": [],
+  "consensus": null,
+  "truthReady": false,
+  "leaderboard": [],
+  "count": 0,
+  "closed": false,
+  "cutoff": "2026-10-27T07:00:00+02:00",
+  "parties": [
+    {
+      "id": "likud",
+      "name": "הליכוד",
+      "bloc": "right"
+    },
+    {
+      "id": "otzma",
+      "name": "עוצמה יהודית",
+      "bloc": "right"
+    },
+    {
+      "id": "tzionut",
+      "name": "הציונות הדתית",
+      "bloc": "right"
+    },
+    {
+      "id": "shas",
+      "name": "ש״ס",
+      "bloc": "right"
+    },
+    {
+      "id": "utj",
+      "name": "יהדות התורה",
+      "bloc": "right"
+    },
+    {
+      "id": "winter",
+      "name": "עמך ישראל (וינטר)",
+      "bloc": "right"
+    },
+    {
+      "id": "bennett",
+      "name": "ביחד (בנט ויש עתיד)",
+      "bloc": "center"
+    },
+    {
+      "id": "yashar",
+      "name": "ישר (אייזנקוט)",
+      "bloc": "center"
+    },
+    {
+      "id": "democrats",
+      "name": "הדמוקרטים",
+      "bloc": "center"
+    },
+    {
+      "id": "liberman",
+      "name": "ישראל ביתנו",
+      "bloc": "center"
+    },
+    {
+      "id": "zalicha",
+      "name": "המילואימניקים והכלכלית (הנדל–זליכה)",
+      "bloc": "center"
+    },
+    {
+      "id": "raam",
+      "name": "רע״מ",
+      "bloc": "arab"
+    },
+    {
+      "id": "joint",
+      "name": "המשותפת (חד״ש–תע״ל–בל״ד)",
+      "bloc": "arab"
+    }
+  ],
+  "blocs": [
+    {
+      "id": "right",
+      "name": "ימין (כולל החרדים)"
+    },
+    {
+      "id": "center",
+      "name": "מרכז־שמאל"
+    },
+    {
+      "id": "arab",
+      "name": "ערבים"
+    }
+  ],
+  "syncedAt": "2026-10-26T22:16:03.918892Z",
+  "delivery": "same-origin-snapshot",
+  "status": "ok"
+}

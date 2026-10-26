@@ -1,16 +1,27 @@
 """Package only public website assets, excluding scripts and local backups."""
 from pathlib import Path
+import os
 import shutil
 
 ROOT = Path(__file__).resolve().parents[1]
 target = ROOT / '_site'
 target.mkdir(exist_ok=True)
+TOKEN_PLACEHOLDER = '__FORECAST_DISPATCH_TOKEN__'
+dispatch_token = (os.environ.get('FORECAST_DISPATCH_TOKEN') or '').strip()
 for name in (
-    'index.html', 'live-turnout.json', 'turnout-history.json', 'polymarket-pm.json', '.nojekyll',
+    'index.html', 'forecast.html', 'forecasts-public.json',
+    'live-turnout.json', 'turnout-history.json', 'polymarket-pm.json', '.nojekyll',
     'favicon-32.png', 'favicon-64.png', 'apple-touch-icon.png', 'logo-mark.png',
 ):
     src = ROOT / name
-    if src.exists():
+    if not src.exists():
+        continue
+    if name == 'forecast.html' and dispatch_token:
+        html = src.read_text(encoding='utf-8')
+        if TOKEN_PLACEHOLDER not in html:
+            raise SystemExit('forecast.html missing intake token placeholder')
+        (target / name).write_text(html.replace(TOKEN_PLACEHOLDER, dispatch_token), encoding='utf-8')
+    else:
         shutil.copyfile(src, target / name)
 (target / 'data').mkdir(exist_ok=True)
 for name in ('national_hourly_history.json', 'historical_group_turnout.json'):

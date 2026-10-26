@@ -87,7 +87,10 @@ jobs:
         with:
           ref: ${{ needs.update.outputs.sha }}
           persist-credentials: false
-      - run: python3 scripts/prepare_site.py
+      - name: Package public site
+        env:
+          FORECAST_DISPATCH_TOKEN: ${{ secrets.FORECAST_DISPATCH_TOKEN }}
+        run: python3 scripts/prepare_site.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
