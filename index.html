@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>מדד השתתפות ביישובים 2026 | דשבורד בחירות</title>
+<link rel="icon" href="./favicon.svg?v=2026-1" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./favicon.svg?v=2026-1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -31,7 +33,11 @@ button,input,select{font:inherit}a{color:#0a5a6e}
  animation:mast .55s cubic-bezier(.16,1,.3,1) both;
 }
 .head::after{content:"";position:absolute;inset-inline:0;bottom:0;height:2px;background:var(--live)}
-.head h1{font-size:clamp(1.7rem,3.2vw,2.35rem);margin:0 0 8px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+.head-brand{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+.head-brand img{width:44px;height:44px;flex-shrink:0;border-radius:7px}
+.head-brand .titles{min-width:0}
+.head h1{font-size:clamp(1.55rem,3vw,2.2rem);margin:0;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+.head .year{display:block;margin-top:2px;font-size:.8125rem;font-weight:600;color:#8fa39b;letter-spacing:.02em}
 .head .sub{color:#c5d0cb;font-size:.95rem;max-width:48rem;font-weight:400;line-height:1.65;margin:0}
 .statbar{
  display:flex;gap:0;flex-wrap:wrap;margin-top:16px;border:1px solid #2a3a44;background:#121c24;
@@ -132,6 +138,35 @@ button,input,select{font:inherit}a{color:#0a5a6e}
 #dayChart{width:100%;height:270px;display:block;background:var(--elev);border:1px solid var(--line);border-radius:var(--radius)}
 .chart-empty{padding:44px 18px;text-align:center;color:var(--muted);font-size:.9375rem;background:var(--elev);border:1px dashed var(--line);border-radius:var(--radius)}
 .table-card{margin-top:14px}
+.city-acc{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:var(--radius);background:var(--elev);overflow:hidden}
+.city-acc-item{border-bottom:1px solid var(--line)}
+.city-acc-item:last-child{border-bottom:0}
+.city-acc-btn{
+ width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;
+ padding:12px 14px;border:0;background:transparent;cursor:pointer;text-align:start;font:inherit;color:inherit;
+}
+.city-acc-btn:hover,.city-acc-btn:focus-visible{background:#f0f4f2;outline:none}
+.city-acc-btn:focus-visible{box-shadow:inset 0 0 0 2px var(--focus)}
+.city-acc-btn[aria-expanded=true]{background:#eef3f0;box-shadow:inset 3px 0 0 var(--g,var(--accent))}
+.city-acc-btn .nm{font-weight:800;font-size:.9375rem;color:var(--navy);display:flex;align-items:center;gap:8px;min-width:0}
+.city-acc-btn .nm .gmark{flex-shrink:0}
+.city-acc-btn .meta{font-size:.8125rem;color:var(--muted);font-weight:600;white-space:nowrap}
+.city-acc-btn .chev{width:1.1rem;height:1.1rem;transition:transform .18s ease;color:var(--muted);flex-shrink:0}
+.city-acc-btn[aria-expanded=true] .chev{transform:rotate(180deg)}
+.city-acc-panel{display:none;padding:0 10px 12px;border-top:1px solid var(--line);background:#fbfdff}
+.city-acc-item.open .city-acc-panel{display:block}
+.city-acc-panel .tablewrap{margin-top:10px;padding:0;border:0;background:transparent}
+.city-acc-panel table.data{min-width:560px}
+.city-acc-panel th.sortable{cursor:pointer;user-select:none}
+.city-acc-panel th.sortable:hover{color:var(--accent)}
+.city-acc-panel tr.hit td{background:#e8f2ee}
+.city-acc-empty{padding:14px;color:var(--muted);font-size:.875rem}
+@media(max-width:700px){
+ .city-acc-panel table.data{min-width:0}
+ .city-acc-panel .col-extra{display:none}
+ .city-acc-btn{grid-template-columns:minmax(0,1fr) auto;gap:8px}
+ .city-acc-btn .meta{grid-column:1;justify-self:start}
+}
 .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
 .controls input,.controls select{border:1px solid var(--line);border-radius:var(--radius);padding:9px 11px;min-height:40px;background:var(--elev);font-weight:500}
 .controls input:focus,.controls select:focus,button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
@@ -232,13 +267,19 @@ button.primary:hover{background:#0a5748}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
 @media(prefers-reduced-motion:reduce){.head,.dot.ok{animation:none}html{scroll-behavior:auto}}
 @media(max-width:900px){.main-grid,.insights,.hist-insights{grid-template-columns:1fr}.group-row-main{grid-template-columns:1fr 1fr;gap:8px}.group-pct{grid-column:2;grid-row:1}.meta-col{grid-column:2}.track-wrap{grid-column:1/-1}.stat{border-inline-end:0;border-bottom:1px solid #2a3a44;flex:1 1 100%}.stat:last-child{border-bottom:0}}
-@media(max-width:600px){.wrap{padding:12px 10px 48px}.head{padding:22px 16px}.group-pct{font-size:1.5rem}.national-card .big{font-size:2.4rem}}
+@media(max-width:600px){.wrap{padding:12px 10px 48px}.head{padding:22px 16px}.head-brand img{width:38px;height:38px}.group-pct{font-size:1.5rem}.national-card .big{font-size:2.4rem}}
 @media print{.tools,.noprint{display:none!important}body{background:#fff}.card,.head,.national-card{box-shadow:none}}
 </style>
 </head>
 <body><main class="wrap">
 <header class="head">
- <h1>מדד השתתפות ביישובים</h1>
+ <div class="head-brand">
+  <img src="./logo-mark.svg?v=2026-1" width="44" height="44" alt="">
+  <div class="titles">
+   <h1>מדד השתתפות ביישובים</h1>
+   <span class="year">בחירות 2026</span>
+  </div>
+ </div>
  <p class="sub">בחירות לכנסת ה־26, 27.10.2026. מעקב משוקלל אחר 44 יישובים בחמש קבוצות מחקר. השיעור הנוכחי אינו תוצאה סופית, ואין כאן תחזית מנדטים או מסקנה למי הצביעו.</p>
  <div class="election-timer" id="electionTimer" data-phase="before" aria-label="ספירה לאחור ליום הבחירות">
   <div class="election-timer-top">
@@ -307,14 +348,14 @@ button.primary:hover{background:#0a5748}
  <svg id="dayChart" class="hidden" viewBox="0 0 800 260" role="img" aria-label="גרף התקדמות הקבוצות"></svg>
 </section>
 
-<section class="card table-card">
+<section class="card table-card" id="cityTableCard">
  <h2>טבלת יישובים</h2>
+ <p class="tiny" style="margin:2px 0 10px">בחרו קבוצה לפתיחה · החיפוש מחפש בכל 44 היישובים</p>
  <div class="controls noprint">
-  <input id="filterCity" type="text" placeholder="חיפוש יישוב…" style="flex:1;min-width:160px">
-  <select id="filterGroup"><option value="">כל הקבוצות</option></select>
-  <select id="sort"><option value="group">לפי קבוצה</option><option value="live">שיעור 2026</option><option value="p2022">סופי 2022</option><option value="p2021">סופי 2021</option><option value="p2020">סופי 2020</option><option value="progress">התקדמות מול 2022</option><option value="name">שם</option></select>
+  <input id="filterCity" type="search" placeholder="חיפוש יישוב בכל הקבוצות…" style="flex:1;min-width:160px" autocomplete="off">
+  <select id="sort" aria-label="מיון בתוך קבוצה פתוחה"><option value="name">שם</option><option value="live">שיעור 2026</option><option value="p2022">סופי 2022</option><option value="progress">התקדמות מול 2022</option><option value="delta">שינוי מהדיווח הקודם</option><option value="status">סטטוס</option></select>
  </div>
- <div class="tablewrap"><table class="data"><thead><tr><th>יישוב</th><th>קבוצה</th><th>2026 עכשיו</th><th>סופי 2022</th><th>סופי 2021</th><th>סופי 2020</th><th>התקדמות מול 2022</th><th>סטטוס</th></tr></thead><tbody id="cityTable"></tbody></table></div>
+ <div class="city-acc" id="cityGroups" role="region" aria-label="יישובים לפי קבוצה"></div>
 </section>
 
 <section class="card hist-card" id="historicalCard" aria-labelledby="histTitle">
@@ -411,7 +452,7 @@ let feedMode='live', requestVersion=0;
 const state={
  selected:new Set(rows.filter(x=>x.active).map(x=>x.key)),
  live:new Map(),feed:null,source:'לא מחובר',updatedAt:null,rawCount:0,nationalPct:null,
- nationalPreserved:false,nationalAsOf:null,history:[],hourlyHistory:null,showForecasts:false,openGroup:null,chartHidden:new Set(),
+ nationalPreserved:false,nationalAsOf:null,history:[],hourlyHistory:null,showForecasts:false,openGroup:null,openTableGroup:null,tableSortDir:1,chartHidden:new Set(),
  pm:null,pmSelected:null,pmFidelity:5,pmInterval:'1w',pmHistoryCache:new Map(),pmHistoryLoading:false,pmChartGeom:null
 };
 const PM_TRACKED=['Gadi Eizenkot','Benjamin Netanyahu','Naftali Bennett'];
@@ -635,7 +676,7 @@ function renderBoard(){
  let list=primaryGroups.map(id=>({g:groupById[id],s:groupStats(id),d:deltaSame(id)}));
  if(sort==='live')list.sort((a,b)=>(b.s.current??-1)-(a.s.current??-1));
  root.innerHTML=list.map(({g,s,d})=>{
-  const open=state.openGroup===g.id?' open':'';
+  const open=(state.openTableGroup===g.id||state.openGroup===g.id)?' open':'';
   const chip=s.empty?'<span class="chip none">אין דיווח</span>':(s.partial||s.fullCount<s.n?`<span class="chip partial">חלקי ${s.fullCount}/${s.n}</span>`:`<span class="chip full">מלא ${s.fullCount}/${s.n}</span>`);
   const pctCls=s.current==null?'group-pct missing':'group-pct';
   const baseMax=Math.max(s.baseline||0,s.current||0,100);
@@ -651,35 +692,43 @@ function renderBoard(){
   const covElig=s.eligibleCoverage==null?'':` · זכאים ${(100*s.eligibleCoverage).toFixed(0)}%`;
   const fc=groupForecastRange(s);
   const forecast=fc?`<div class="forecast-line">תרחיש סיום משוער: ${fc.lo.toFixed(0)}%–${fc.hi.toFixed(0)}%</div>`:(state.showForecasts?`<div class="forecast-line">תרחישי סיום — אין בסיס מאומת להצגה</div>`:'');
-  const cities=selectedInGroup(g.id).map(r=>{
-   const l=getLive(r.name),p=complete(l)?livePct(l):(l&&!l.preserved_previous?livePct(l):null);
-   const liveShow=l?livePct(l):null;
-   const prog=complete(l)&&liveShow!=null&&r.p2022>0?100*liveShow/r.p2022:null;
-   const st=!l?'אין דיווח':l.preserved_previous?'נשמר':!complete(l)?'חלקי':'מלא';
-   return `<tr>
-    <td>${esc(r.name)}</td>
-    <td class="num" data-col="y2026">${liveShow==null?'—':fmt(liveShow)}</td>
-    <td class="num" data-col="y2022">${fmt(r.p2022)}</td>
-    <td class="num" data-col="y2021">${fmt(r.p2021)}</td>
-    <td class="num" data-col="y2020">${fmt(r.p2020)}</td>
-    <td class="num" data-col="prog">${prog==null?'—':prog.toFixed(0)+'%'}</td>
-    <td data-col="status">${esc(st)}</td>
-   </tr>`;
-  }).join('');
   const refNote=s.empty?'סופי ב־2022 (כל הקבוצה)':(s.baselineIsPartial?'סופי ב־2022 (יישובים מדווחים)':'סופי ב־2022');
-  return `<div class="group-row${open}" data-gid="${g.id}" style="--g:${g.color}"><div class="group-row-main">
-   <div class="group-name"><span class="gmark" aria-hidden="true"></span>${esc(g.title)}${chip}<small>${s.fullCount?`מדווחים ${s.fullCount}/${s.n}${covElig}`:'ממתין לדיווח'}</small></div>
+  return `<div class="group-row${open}" data-gid="${g.id}" style="--g:${g.color}" role="button" tabindex="0" aria-controls="cityTableCard" title="מעבר לטבלת היישובים של הקבוצה"><div class="group-row-main">
+   <div class="group-name"><span class="gmark" aria-hidden="true"></span>${esc(g.title)}${chip}<small>${s.fullCount?`מדווחים ${s.fullCount}/${s.n}${covElig}`:'ממתין לדיווח'} · לחיצה לפירוט יישובים</small></div>
    <div class="${pctCls}">${s.current==null?'—':s.current.toFixed(1)+'%'}</div>
    <div class="track-wrap"><div class="track"><div class="fill" style="width:${fill}%"></div>${markPos!=null?`<div class="mark2022" style="right:${markPos}%"></div>`:''}</div>
    <div class="ref2022">${refNote}: ${s.baseline==null?'—':s.baseline.toFixed(1)+'%'}</div>${forecast}</div>
    <div class="meta-col">${deltaHtml}<div>${s.progress==null?'':('התקדמות מול 2022: '+s.progress.toFixed(0)+'%')}</div></div>
-  </div><div class="group-cities"><div class="tablewrap"><table class="city-mini">
-   <thead><tr><th>יישוב</th><th>2026 עכשיו</th><th>סופי 2022</th><th>סופי 2021</th><th>סופי 2020</th><th>התקדמות מול 2022</th><th>סטטוס</th></tr></thead>
-   <tbody>${cities}</tbody></table></div></div></div>`;
+  </div></div>`;
  }).join('');
  root.querySelectorAll('.group-row').forEach(el=>{
-  el.addEventListener('click',ev=>{if(ev.target.closest('a,button,input'))return;const id=el.getAttribute('data-gid');state.openGroup=state.openGroup===id?null:id;renderBoard();});
+  const go=()=>{const id=el.getAttribute('data-gid');openCityGroup(id,true)};
+  el.addEventListener('click',ev=>{if(ev.target.closest('a,button,input'))return;go();});
+  el.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();go();}});
  });
+}
+function cityDeltaPp(name){
+ if(state.history.length<2)return null;
+ const a=historyCityMap(state.history[state.history.length-2]);
+ const b=historyCityMap(state.history[state.history.length-1]);
+ const key=norm(name);
+ const prev=a.get(key),cur=b.get(key);
+ if(!prev||!cur||prev.turnout==null||cur.turnout==null)return null;
+ return cur.turnout-prev.turnout;
+}
+function openCityGroup(id, scroll){
+ state.openTableGroup=id;
+ state.openGroup=id;
+ renderBoard();
+ renderTable();
+ if(scroll){
+  const card=$('cityTableCard');
+  card?.scrollIntoView({behavior:'smooth',block:'start'});
+  requestAnimationFrame(()=>{
+   const btn=card?.querySelector(`.city-acc-btn[data-gid="${id}"]`);
+   btn?.focus({preventScroll:true});
+  });
+ }
 }
 function renderNational(){
  const nat=nationalLive();
@@ -818,32 +867,99 @@ function renderChart(){
  svg.innerHTML=html;
 }
 function renderTable(){
- const q=norm($('filterCity')?.value),gid=$('filterGroup')?.value,order=$('sort')?.value||'group';
- let list=rows.filter(r=>state.selected.has(r.key));
- if(gid)list=list.filter(r=>r.group===gid);
- if(q)list=list.filter(r=>norm(r.name).includes(q));
+ const root=$('cityGroups');if(!root)return;
+ const qRaw=$('filterCity')?.value||'';
+ const q=norm(qRaw);
+ const order=$('sort')?.value||'name';
+ const dir=state.tableSortDir||1;
  const prog=r=>{const p=complete(getLive(r.name))?livePct(getLive(r.name)):null;return p!=null&&r.p2022>0?100*p/r.p2022:null};
- if(order==='name')list.sort((a,b)=>a.name.localeCompare(b.name,'he'));
- if(order==='live')list.sort((a,b)=>(livePct(getLive(b.name))??-1)-(livePct(getLive(a.name))??-1));
- if(order==='p2022')list.sort((a,b)=>(b.p2022??-1)-(a.p2022??-1));
- if(order==='p2021')list.sort((a,b)=>(b.p2021??-1)-(a.p2021??-1));
- if(order==='p2020')list.sort((a,b)=>(b.p2020??-1)-(a.p2020??-1));
- if(order==='progress')list.sort((a,b)=>(prog(b)??-1)-(prog(a)??-1));
- if(order==='group')list.sort((a,b)=>primaryGroups.indexOf(a.group)-primaryGroups.indexOf(b.group)||a.name.localeCompare(b.name,'he'));
- $('cityTable').innerHTML=list.map(r=>{
-  const l=getLive(r.name),p=l?livePct(l):null,pr=prog(r);
-  const st=!l?'אין דיווח':l.preserved_previous?'נשמר':!complete(l)?'חלקי':'מלא';
-  return `<tr>
-   <td>${esc(r.name)}</td>
-   <td>${esc(groupById[r.group]?.title||r.group)}</td>
-   <td class="num">${p==null?'—':fmt(p)}</td>
-   <td class="num">${fmt(r.p2022)}</td>
-   <td class="num">${fmt(r.p2021)}</td>
-   <td class="num">${fmt(r.p2020)}</td>
-   <td class="num">${pr==null?'—':pr.toFixed(0)+'%'}</td>
-   <td>${esc(st)}</td>
-  </tr>`;
+ const statusRank=r=>{const l=getLive(r.name);if(!l)return 0;if(l.preserved_previous)return 1;if(!complete(l))return 2;return 3};
+ const sortList=list=>{
+  const copy=[...list];
+  const cmp=(va,vb)=>{
+   if(va==null&&vb==null)return 0;if(va==null)return 1;if(vb==null)return -1;
+   if(typeof va==='string')return va.localeCompare(vb,'he')*dir;
+   return (va-vb)*dir;
+  };
+  if(order==='name')copy.sort((a,b)=>cmp(a.name,b.name));
+  else if(order==='live')copy.sort((a,b)=>cmp(livePct(getLive(a.name)),livePct(getLive(b.name))));
+  else if(order==='p2022')copy.sort((a,b)=>cmp(a.p2022,b.p2022));
+  else if(order==='progress')copy.sort((a,b)=>cmp(prog(a),prog(b)));
+  else if(order==='delta')copy.sort((a,b)=>cmp(cityDeltaPp(a.name),cityDeltaPp(b.name)));
+  else if(order==='status')copy.sort((a,b)=>cmp(statusRank(a),statusRank(b)));
+  else copy.sort((a,b)=>a.name.localeCompare(b.name,'he'));
+  return copy;
+ };
+ // Auto-open groups that match search (single match → that group; multi → first + keep open if already matching)
+ const matchIds=new Set();
+ if(q){
+  for(const r of rows){if(state.selected.has(r.key)&&primaryGroups.includes(r.group)&&norm(r.name).includes(q))matchIds.add(r.group)}
+  if(matchIds.size&&(!state.openTableGroup||!matchIds.has(state.openTableGroup))){
+   state.openTableGroup=[...matchIds][0];
+  }
+ }
+ const chev='<svg class="chev" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 7.5 10 12.5 15 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+ root.innerHTML=primaryGroups.map(gid=>{
+  const g=groupById[gid];
+  let list=rows.filter(r=>state.selected.has(r.key)&&r.group===gid);
+  const total=list.length;
+  const reported=list.filter(r=>complete(getLive(r.name))).length;
+  const hits=q?list.filter(r=>norm(r.name).includes(q)):[];
+  if(q)list=hits;
+  list=sortList(list);
+  const open=state.openTableGroup===gid;
+  const panelId=`city-panel-${gid}`;
+  const rowsHtml=list.length?list.map(r=>{
+   const l=getLive(r.name),p=l?livePct(l):null,pr=prog(r),dlt=cityDeltaPp(r.name);
+   const st=!l?'אין דיווח':l.preserved_previous?'נשמר':!complete(l)?'חלקי':'מלא';
+   const hit=q&&norm(r.name).includes(q)?' hit':'';
+   return `<tr class="${hit.trim()}" data-city="${esc(r.name)}">
+    <td>${esc(r.name)}</td>
+    <td class="num">${p==null?'—':fmt(p)}</td>
+    <td class="num">${fmt(r.p2022)}</td>
+    <td class="num">${pr==null?'—':pr.toFixed(0)+'%'}</td>
+    <td class="num col-extra">${dlt==null?'—':dif(dlt)}</td>
+    <td>${esc(st)}</td>
+    <td class="num col-extra">${fmt(r.p2021)}</td>
+    <td class="num col-extra">${fmt(r.p2020)}</td>
+   </tr>`;
+  }).join(''):`<tr><td colspan="8" class="city-acc-empty">${q?'אין תוצאות חיפוש בקבוצה זו.':'אין יישובים בקבוצה.'}</td></tr>`;
+  const th=(key,label,extra='')=>`<th scope="col" class="sortable${extra}" data-sort="${key}" aria-sort="${order===key?(dir>0?'ascending':'descending'):'none'}">${label}</th>`;
+  return `<div class="city-acc-item${open?' open':''}" data-gid="${gid}" style="--g:${g.color}">
+   <button type="button" class="city-acc-btn" data-gid="${gid}" aria-expanded="${open?'true':'false'}" aria-controls="${panelId}" id="city-acc-${gid}">
+    <span class="nm"><span class="gmark" aria-hidden="true" style="--g:${g.color}"></span>${esc(g.title)}</span>
+    <span class="meta">${reported}/${total} דיווחו${q?` · ${hits.length} בחיפוש`:''}</span>
+    ${chev}
+   </button>
+   <div class="city-acc-panel" id="${panelId}" role="region" aria-labelledby="city-acc-${gid}" ${open?'':'hidden'}>
+    <div class="tablewrap"><table class="data"><thead><tr>
+     ${th('name','יישוב')}
+     ${th('live','2026 עכשיו')}
+     ${th('p2022','סופי 2022')}
+     ${th('progress','התקדמות מול 2022')}
+     ${th('delta','שינוי',' col-extra')}
+     ${th('status','סטטוס')}
+     <th scope="col" class="col-extra">סופי 2021</th>
+     <th scope="col" class="col-extra">סופי 2020</th>
+    </tr></thead><tbody>${rowsHtml}</tbody></table></div>
+   </div>
+  </div>`;
  }).join('');
+ root.querySelectorAll('.city-acc-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+   const id=btn.getAttribute('data-gid');
+   state.openTableGroup=state.openTableGroup===id?null:id;
+   renderTable();
+  });
+ });
+ root.querySelectorAll('th.sortable').forEach(th=>{
+  th.addEventListener('click',()=>{
+   const key=th.getAttribute('data-sort');
+   if($('sort').value===key)state.tableSortDir=-(state.tableSortDir||1);
+   else{state.tableSortDir=-1;$('sort').value=key}
+   renderTable();
+  });
+ });
 }
 function parsePmField(raw){
  if(raw==null)return null;
@@ -1341,12 +1457,12 @@ function updateElectionTimer(now=new Date()){
  if($('tDays'))$('tDays').textContent=String(rem.days);if($('tHours'))$('tHours').textContent=pad2(rem.hours);if($('tMins'))$('tMins').textContent=pad2(rem.mins);if($('tSecs'))$('tSecs').textContent=pad2(rem.secs);
 }
 // wire UI
-$('filterGroup').innerHTML='<option value="">כל הקבוצות</option>'+primaryGroups.map(id=>`<option value="${id}">${esc(groupById[id].title)}</option>`).join('');
 $('showForecasts').onchange=()=>{state.showForecasts=$('showForecasts').checked;renderBoard();};
 $('boardSort').onchange=()=>renderBoard();
 $('nationalManual').oninput=()=>render();
 $('nationalManualTime')&&($('nationalManualTime').oninput=()=>render());
-$('filterCity').oninput=()=>renderTable();$('filterGroup').onchange=()=>renderTable();$('sort').onchange=()=>renderTable();
+$('filterCity').oninput=()=>{state.tableSortDir=state.tableSortDir||1;renderTable()};
+$('sort').onchange=()=>{state.tableSortDir=-1;renderTable()};
 $('scenarioDemo').onclick=simulateAtEight;
 $('loadFullDemo').onclick=()=>{try{
  const benchmark={right:.87,opp:.95,haredi:.97,arab:.90,zionism:.90,near:.92};

@@ -14,9 +14,10 @@ function element(id){
 for(const id of ['baseline-data','embedded-demo'])element(id).textContent=html.match(new RegExp(`<script id="${id}" type="application/json">([\\s\\S]*?)<\\/script>`))[1];
 element('feedUrl').value='./live-turnout.json';
 element('boardSort').value='fixed';
-element('filterGroup').value='';
-element('sort').value='group';
+element('sort').value='name';
 element('showForecasts').checked=false;
+element('cityGroups').querySelectorAll=()=>[];
+element('cityGroups').querySelector=()=>null;
 const context=vm.createContext({
  document:{getElementById:element,querySelectorAll:()=>[]},
  location:{protocol:'file:',href:'https://example.invalid/project/',pathname:'/project/'},
