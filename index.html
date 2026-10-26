@@ -34,16 +34,9 @@ button,input,select{font:inherit}a{color:#0a5a6e}
  animation:mast .55s cubic-bezier(.16,1,.3,1) both;
 }
 .head::after{content:"";position:absolute;inset-inline:0;bottom:0;height:2px;background:var(--live)}
-.head-brand{display:flex;align-items:center;gap:14px;margin-bottom:8px;flex-wrap:wrap}
+.head-brand{display:flex;align-items:center;gap:14px;margin-bottom:8px}
 .head-brand img{width:48px;height:48px;flex-shrink:0;object-fit:contain;filter:drop-shadow(0 2px 6px #0006)}
-.head-brand .titles{min-width:0;flex:1}
-.head-contest{
- display:inline-flex;align-items:center;justify-content:center;gap:8px;margin-inline-start:auto;
- padding:10px 14px;border-radius:var(--radius);background:#b86a0a;color:#fff;font-weight:800;font-size:.875rem;
- text-decoration:none;border:1px solid #d4923a;white-space:nowrap;
-}
-.head-contest:hover{background:#a05c08;color:#fff}
-.head-contest:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.head-brand .titles{min-width:0}
 .head h1{font-size:clamp(1.55rem,3vw,2.2rem);margin:0;font-weight:800;letter-spacing:-.02em;line-height:1.2}
 .head .year{display:block;margin-top:2px;font-size:.8125rem;font-weight:600;color:#8fa39b;letter-spacing:.02em}
 .head .sub{color:#c5d0cb;font-size:.95rem;max-width:48rem;font-weight:400;line-height:1.65;margin:0}
@@ -286,8 +279,7 @@ button.primary:hover{background:#0a5748}
   <div class="titles">
    <h1>מדד השתתפות ביישובים</h1>
    <span class="year">בחירות 2026</span>
-  </div>
-  <a class="head-contest" href="./forecast.html">תחזית תוצאות הבחירות</a>
+   </div>
  </div>
  <p class="sub">בחירות לכנסת ה־26, 27.10.2026. מעקב משוקלל אחר 44 יישובים בחמש קבוצות מחקר. השיעור הנוכחי אינו תוצאה סופית, ואין כאן תחזית מנדטים או מסקנה למי הצביעו.</p>
  <div class="election-timer" id="electionTimer" data-phase="before" aria-label="ספירה לאחור עד סגירת הקלפיות">
