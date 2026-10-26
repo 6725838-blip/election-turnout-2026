@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
-"""Fetch Polymarket Israel PM odds for the three tracked candidates.
+"""Fetch Polymarket Israel PM odds + week price history into a same-origin snapshot.
 
-Soft-fails (exit 0, keep previous file) when the remote API is unreachable.
-Live charts refresh in the browser every minute via gamma/clob CORS;
-this snapshot is a cache for first paint and offline fallback.
+Browser clients under NetFree (and similar filters) cannot call polymarket.com
+directly. CI / this script pulls Gamma + CLOB server-side and writes
+polymarket-pm.json so GitHub Pages serves everything from one origin.
 """
 from __future__ import annotations
 
 import json
+import shutil
+import subprocess
 import sys
 import urllib.error
 import urllib.request
@@ -24,9 +26,11 @@ EVENT_URL = (
     'https://polymarket.com/event/'
     'who-will-be-the-next-prime-minister-of-israel-after-the-next-election'
 )
+CLOB = 'https://clob.polymarket.com/prices-history'
 MAX_BYTES = 2_500_000
+HISTORY_FIDELITY = 5  # densest week series; UI downsamples for coarser buttons
+HISTORY_INTERVAL = '1w'
 
-# Fixed board order (not sorted by odds).
 TRACKED = (
     {'name': 'Gadi Eizenkot', 'name_he': 'גדי איזנקוט', 'color': '#0d6b58'},
     {'name': 'Benjamin Netanyahu', 'name_he': 'בנימין נתניהו', 'color': '#b86a0a'},
@@ -89,7 +93,107 @@ def _yes_token(market: dict) -> str | None:
     return None
 
 
-def build_snapshot(event: dict) -> dict:
+def _http_get_json(url: str) -> dict | list:
+    req = urllib.request.Request(
+        url,
+        headers={
+            'Accept': 'application/json',
+            'User-Agent': (
+                'Mozilla/5.0 (compatible; ElectionDashboard/1.2; '
+                '+https://github.com/6725838-blip/election-turnout-2026)'
+            ),
+            'Origin': 'https://polymarket.com',
+            'Referer': 'https://polymarket.com/',
+        },
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=45) as resp:
+            if resp.status != 200:
+                raise FeedNotReady(f'HTTP {resp.status}')
+            raw = resp.read(MAX_BYTES + 1)
+    except FeedNotReady:
+        raise
+    except urllib.error.HTTPError as exc:
+        if exc.code in (404, 403, 418, 429, 502, 503, 504):
+            raise FeedNotReady(f'HTTP {exc.code}') from exc
+        raise
+    except (urllib.error.URLError, TimeoutError, OSError) as exc:
+        raise FeedNotReady(str(exc)) from exc
+    if len(raw) > MAX_BYTES:
+        raise FeedNotReady('response too large')
+    try:
+        return json.loads(raw.decode('utf-8'))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise FeedNotReady('invalid JSON') from exc
+
+
+def _fetch_history_node(token: str, interval: str, fidelity: int) -> list[dict]:
+    """Prefer Node fetch — CLOB often 403s plain urllib from some networks."""
+    node = shutil.which('node')
+    if not node:
+        raise FeedNotReady('node not available for CLOB history')
+    url = f'{CLOB}?market={token}&interval={interval}&fidelity={fidelity}'
+    script = (
+        'const u=process.argv[1];'
+        'fetch(u,{headers:{Accept:"application/json",'
+        'Origin:"https://polymarket.com",Referer:"https://polymarket.com/"}})'
+        '.then(async r=>{if(!r.ok){process.stderr.write("HTTP "+r.status);process.exit(2)}'
+        'process.stdout.write(JSON.stringify(await r.json()))})'
+        '.catch(e=>{process.stderr.write(String(e));process.exit(1)})'
+    )
+    try:
+        proc = subprocess.run(
+            [node, '-e', script, url],
+            capture_output=True,
+            text=True,
+            timeout=60,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        raise FeedNotReady(f'node history failed: {exc}') from exc
+    if proc.returncode != 0:
+        raise FeedNotReady(f'node history exit {proc.returncode}: {proc.stderr[:200]}')
+    try:
+        data = json.loads(proc.stdout)
+    except json.JSONDecodeError as exc:
+        raise FeedNotReady('node history invalid JSON') from exc
+    hist = data.get('history') if isinstance(data, dict) else None
+    if not isinstance(hist, list):
+        raise FeedNotReady('node history missing series')
+    out = []
+    for row in hist:
+        try:
+            t = int(row['t'])
+            p = float(row['p'])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if 0 <= p <= 1:
+            out.append({'t': t, 'p': round(p, 4)})
+    return out
+
+
+def fetch_price_history(token: str) -> list[dict]:
+    try:
+        return _fetch_history_node(token, HISTORY_INTERVAL, HISTORY_FIDELITY)
+    except FeedNotReady:
+        url = f'{CLOB}?market={token}&interval={HISTORY_INTERVAL}&fidelity={HISTORY_FIDELITY}'
+        data = _http_get_json(url)
+        hist = data.get('history') if isinstance(data, dict) else None
+        if not isinstance(hist, list):
+            raise FeedNotReady('missing history')
+        out = []
+        for row in hist:
+            try:
+                t = int(row['t'])
+                p = float(row['p'])
+            except (KeyError, TypeError, ValueError):
+                continue
+            if 0 <= p <= 1:
+                out.append({'t': t, 'p': round(p, 4)})
+        return out
+
+
+def build_snapshot(event: dict, histories: dict[str, list[dict]]) -> dict:
     by_name = {}
     for m in event.get('markets') or []:
         name = (m.get('groupItemTitle') or '').strip()
@@ -125,52 +229,30 @@ def build_snapshot(event: dict) -> dict:
     except (TypeError, ValueError):
         volume = 0.0
     return {
-        'format_version': 2,
+        'format_version': 3,
         'source': 'Polymarket',
+        'delivery': 'same-origin-snapshot',
         'title': event.get('title') or 'Prime Minister of Israel after the next election?',
         'title_he': 'מי יהיה ראש הממשלה אחרי הבחירות הבאות?',
         'slug': event.get('slug'),
         'url': EVENT_URL,
-        'gamma_url': API,
         'updated_at': datetime.now(timezone.utc).isoformat(),
         'event_end': event.get('endDate'),
         'volume': round(volume, 2),
         'poll_seconds': 60,
+        'history_interval': HISTORY_INTERVAL,
+        'history_fidelity': HISTORY_FIDELITY,
+        'histories': histories,
         'candidates': candidates,
         'disclaimer_he': (
             'סיכויי שוק הימורים (Polymarket), לא סקר ולא תחזית רשמית. '
-            'אינם קשורים לנתוני ההשתתפות בדשבורד. מתעדכן בדפדפן כל דקה.'
+            'הנתונים נמשכים בשרת ונשמרים באתר כדי לעבוד גם תחת חסימות רשת.'
         ),
     }
 
 
 def fetch_event() -> dict:
-    req = urllib.request.Request(
-        API,
-        headers={
-            'Accept': 'application/json',
-            'User-Agent': 'ElectionDashboard-Polymarket/1.1',
-        },
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            if resp.status != 200:
-                raise FeedNotReady(f'HTTP {resp.status}')
-            raw = resp.read(MAX_BYTES + 1)
-    except FeedNotReady:
-        raise
-    except urllib.error.HTTPError as exc:
-        if exc.code in (404, 403, 429, 502, 503, 504):
-            raise FeedNotReady(f'HTTP {exc.code}') from exc
-        raise
-    except (urllib.error.URLError, TimeoutError, OSError) as exc:
-        raise FeedNotReady(str(exc)) from exc
-    if len(raw) > MAX_BYTES:
-        raise FeedNotReady('response too large')
-    try:
-        data = json.loads(raw.decode('utf-8'))
-    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
-        raise FeedNotReady('invalid JSON') from exc
+    data = _http_get_json(API)
     if isinstance(data, list):
         if not data:
             raise FeedNotReady('empty event list')
@@ -185,19 +267,50 @@ def fetch_event() -> dict:
 
 
 def main() -> int:
+    prev = None
+    if DEST.exists():
+        try:
+            prev = json.loads(DEST.read_text(encoding='utf-8'))
+        except (OSError, json.JSONDecodeError):
+            prev = None
     try:
-        snap = build_snapshot(fetch_event())
+        event = fetch_event()
+        snap = build_snapshot(event, {})
     except FeedNotReady as exc:
         print(f'Polymarket not ready ({exc}); keeping previous snapshot.', flush=True)
         return 0
-    except Exception as exc:  # noqa: BLE001 — soft-fail for CI
+    except Exception as exc:  # noqa: BLE001
         print(f'Polymarket update soft-failed: {exc}; keeping previous snapshot.', flush=True)
         return 0
     if len(snap['candidates']) < 2:
         print('Polymarket snapshot has too few candidates; keeping previous.', flush=True)
         return 0
-    DEST.write_text(json.dumps(snap, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    print(f'Wrote {DEST.name}: {len(snap["candidates"])} candidates, volume={snap["volume"]}', flush=True)
+
+    histories: dict[str, list[dict]] = {}
+    for c in snap['candidates']:
+        token = c.get('yes_token')
+        if not token:
+            continue
+        try:
+            histories[token] = fetch_price_history(token)
+            print(f'History {c["name"]}: {len(histories[token])} points', flush=True)
+        except FeedNotReady as exc:
+            print(f'History soft-fail {c["name"]}: {exc}', flush=True)
+            old = (prev or {}).get('histories') or {}
+            if token in old:
+                histories[token] = old[token]
+    snap['histories'] = histories
+    if not histories and prev and prev.get('histories'):
+        snap['histories'] = prev['histories']
+        print('Reused previous histories after fetch failures.', flush=True)
+
+    DEST.write_text(json.dumps(snap, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8')
+    size_kb = DEST.stat().st_size / 1024
+    print(
+        f'Wrote {DEST.name}: {len(snap["candidates"])} candidates, '
+        f'{len(histories)} histories, {size_kb:.0f} KB',
+        flush=True,
+    )
     return 0
 
 

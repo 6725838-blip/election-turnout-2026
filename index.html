@@ -363,8 +363,7 @@ const PM_META={
  'Benjamin Netanyahu':{name_he:'בנימין נתניהו',color:'#b86a0a'},
  'Naftali Bennett':{name_he:'נפתלי בנט',color:'#2f5f8a'}
 };
-const PM_GAMMA='https://gamma-api.polymarket.com/events?slug=who-will-be-the-next-prime-minister-of-israel-after-the-next-election';
-const PM_CLOB='https://clob.polymarket.com/prices-history';
+const PM_SNAPSHOT='./polymarket-pm.json';
 const $=id=>document.getElementById(id),nf=new Intl.NumberFormat('he-IL');
 const fmt=x=>x==null||!Number.isFinite(x)?'—':x.toFixed(1)+'%';
 const dif=x=>x==null||!Number.isFinite(x)?'—':(x>0?'+':x<0?'−':'')+Math.abs(x).toFixed(1);
@@ -850,17 +849,39 @@ function renderPmMultiChart(series){
  hit.onpointerdown=onMove;
 }
 function pmCacheKey(token,interval,fidelity){return token+'|'+interval+'|'+fidelity}
+function downsamplePmHistory(points,fidelityMin){
+ if(!points?.length)return [];
+ const bucket=Math.max(1,Number(fidelityMin)||5)*60;
+ if(bucket<=300)return points.slice();
+ const out=[];
+ let curBucket=-1,last=null;
+ for(const p of points){
+  const b=Math.floor(p.t/bucket);
+  if(b!==curBucket){
+   if(last)out.push(last);
+   curBucket=b;
+  }
+  last=p;
+ }
+ if(last)out.push(last);
+ return out;
+}
+function slicePmHistory(points,interval){
+ if(interval!=='1d'||!points?.length)return points||[];
+ const cut=Math.floor(Date.now()/1000)-86400;
+ return points.filter(p=>p.t>=cut);
+}
+function historyFromSnapshot(token){
+ const raw=(state.pm?.histories&&state.pm.histories[token])||[];
+ return raw.map(p=>({t:Number(p.t),p:Number(p.p)})).filter(p=>Number.isFinite(p.t)&&Number.isFinite(p.p));
+}
 async function loadPmHistory(token,interval,fidelity){
  const key=pmCacheKey(token,interval,fidelity);
  if(state.pmHistoryCache.has(key))return state.pmHistoryCache.get(key);
- const u=new URL(PM_CLOB);
- u.searchParams.set('market',token);
- u.searchParams.set('interval',interval||'1w');
- u.searchParams.set('fidelity',String(fidelity));
- const res=await fetch(u,{cache:'no-store'});
- if(!res.ok)throw new Error('HTTP '+res.status);
- const data=await res.json();
- const history=(data.history||[]).map(p=>({t:Number(p.t),p:Number(p.p)})).filter(p=>Number.isFinite(p.t)&&Number.isFinite(p.p));
+ const base=historyFromSnapshot(token);
+ if(!base.length)throw new Error('no local history for token');
+ const sliced=slicePmHistory(base,interval||'1w');
+ const history=downsamplePmHistory(sliced,fidelity);
  state.pmHistoryCache.set(key,history);
  return history;
 }
@@ -924,12 +945,12 @@ function renderPolymarket(data){
  }
  const vol=data.volume!=null?nf.format(Math.round(data.volume)):'—';
  const when=data.updated_at?new Date(data.updated_at).toLocaleString('he-IL',{dateStyle:'short',timeStyle:'short'}):'—';
- const liveTag=data.live?' · רענון חי כל דקה':' · מטמון מקומי';
+ const liveTag=data.delivery==='same-origin-snapshot'?' · מטמון אתר (עוקף חסימות)':' · מטמון מקומי';
  if(meta)meta.textContent=`נפח אירוע ≈ $${vol} · עודכן ${when}${liveTag}`;
- if(note)note.textContent=data.disclaimer_he||'סיכויי שוק Polymarket בלבד. ריחוף על הגרף מציג את שלושת האחוזים.';
+ if(note)note.textContent=data.disclaimer_he||'סיכויי שוק Polymarket בלבד. הנתונים נשמרים באתר כדי לעבוד גם תחת חסימות רשת.';
  const maxPct=Math.max(...candidates.map(c=>c.pct||0),1);
  list.innerHTML=candidates.map(c=>{
-  const img=c.image?`<img src="${esc(c.image)}" alt="" width="36" height="36" loading="lazy" referrerpolicy="no-referrer">`:'';
+  const img=c.image?`<img src="${esc(c.image)}" alt="" width="36" height="36" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:'';
   const w=Math.max(3,Math.round(100*(c.pct||0)/maxPct));
   const active=state.pmSelected===c.name;
   const dim=state.pmSelected&&state.pmSelected!==c.name;
@@ -944,24 +965,16 @@ function renderPolymarket(data){
 }
 async function loadPolymarket(){
  try{
-  const res=await fetch(PM_GAMMA,{cache:'no-store'});
-  if(!res.ok)throw new Error('HTTP '+res.status);
-  const payload=await res.json();
-  const ev=Array.isArray(payload)?payload[0]:payload;
-  if(!ev?.markets)throw new Error('missing markets');
-  renderPolymarket(eventToPmSnapshot(ev));
-  return;
- }catch{}
- try{
-  const u=new URL('./polymarket-pm.json',location.href);u.searchParams.set('t',Date.now());
+  // Same-origin only: NetFree blocks gamma/clob.polymarket.com from the browser.
+  const u=new URL(PM_SNAPSHOT,location.href);u.searchParams.set('t',Date.now());
   const res=await fetch(u,{cache:'no-store'});
   if(!res.ok)throw new Error('HTTP '+res.status);
   const data=await res.json();
-  data.live=false;
+  state.pmHistoryCache.clear();
   renderPolymarket(data);
  }catch{
   const list=$('pmList');
-  if(list)list.innerHTML='<div class="pm-empty">לא ניתן לטעון את נתוני Polymarket כרגע.</div>';
+  if(list)list.innerHTML='<div class="pm-empty">לא ניתן לטעון את נתוני Polymarket מהאתר כרגע.</div>';
   if($('pmMeta'))$('pmMeta').textContent='';
  }
 }

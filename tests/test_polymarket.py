@@ -54,9 +54,12 @@ SAMPLE_EVENT = {
 
 class PolymarketSnapshotTests(unittest.TestCase):
     def test_only_tracked_three_in_fixed_order(self):
-        snap = pm.build_snapshot(SAMPLE_EVENT)
-        self.assertEqual(snap['format_version'], 2)
+        hist = {'111': [{'t': 1, 'p': 0.5}]}
+        snap = pm.build_snapshot(SAMPLE_EVENT, hist)
+        self.assertEqual(snap['format_version'], 3)
+        self.assertEqual(snap['delivery'], 'same-origin-snapshot')
         self.assertEqual(snap['poll_seconds'], 60)
+        self.assertEqual(snap['histories'], hist)
         names = [c['name'] for c in snap['candidates']]
         self.assertEqual(names, ['Gadi Eizenkot', 'Benjamin Netanyahu', 'Naftali Bennett'])
         self.assertEqual(snap['candidates'][0]['name_he'], 'גדי איזנקוט')
