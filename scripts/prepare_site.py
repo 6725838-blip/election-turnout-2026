@@ -5,7 +5,7 @@ import shutil
 ROOT = Path(__file__).resolve().parents[1]
 target = ROOT / '_site'
 target.mkdir(exist_ok=True)
-for name in ('index.html', 'live-turnout.json', 'turnout-history.json', 'polymarket-pm.json', '.nojekyll', 'favicon.svg', 'logo-mark.svg'):
+for name in ('index.html', 'live-turnout.json', 'turnout-history.json', 'polymarket-pm.json', '.nojekyll', 'favicon.svg', 'favicon-32.png', 'logo-mark.svg'):
     src = ROOT / name
     if src.exists():
         shutil.copyfile(src, target / name)
