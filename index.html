@@ -284,15 +284,16 @@ button.primary:hover{background:#0a5748}
  <div class="pm-chart-wrap" id="pmChartWrap">
   <div class="pm-chart-top">
    <div>
-    <h3 id="pmChartTitle">מגמת שבוע · שלושת המועמדים</h3>
-    <p class="pm-chart-sub" id="pmChartSub">סיכוי Yes בשוק · ריחוף מציג את שלושת האחוזים באותו רגע</p>
+    <h3 id="pmChartTitle">מגמת מחיר · שלושת המועמדים</h3>
+    <p class="pm-chart-sub" id="pmChartSub">סיכוי Yes בשוק · הריחוף מיישר את שלושת הקווים לאותו זמן</p>
    </div>
-   <div class="pm-res" id="pmRes" role="group" aria-label="רזולוציית גרף">
-    <button type="button" data-fid="15">15 דק׳</button>
-    <button type="button" data-fid="60" class="on">שעה</button>
-    <button type="button" data-fid="240">4 שעות</button>
-    <button type="button" data-fid="360">6 שעות</button>
-    <button type="button" data-fid="1440">שבוע</button>
+   <div class="pm-res" id="pmRes" role="group" aria-label="חלון זמן ורזולוציה">
+    <button type="button" data-interval="1w" data-fid="5" class="on">15 דק׳</button>
+    <button type="button" data-interval="1w" data-fid="15">שעה</button>
+    <button type="button" data-interval="1w" data-fid="60">4 שעות</button>
+    <button type="button" data-interval="1w" data-fid="180">6 שעות</button>
+    <button type="button" data-interval="1d" data-fid="5">יום</button>
+    <button type="button" data-interval="1w" data-fid="360">שבוע</button>
    </div>
   </div>
   <div class="pm-legend" id="pmLegend"></div>
@@ -354,7 +355,7 @@ const state={
  selected:new Set(rows.filter(x=>x.active).map(x=>x.key)),
  live:new Map(),feed:null,source:'לא מחובר',updatedAt:null,rawCount:0,nationalPct:null,
  nationalPreserved:false,history:[],hourlyHistory:null,showForecasts:false,openGroup:null,chartHidden:new Set(),
- pm:null,pmSelected:null,pmFidelity:60,pmHistoryCache:new Map(),pmHistoryLoading:false,pmChartGeom:null
+ pm:null,pmSelected:null,pmFidelity:5,pmInterval:'1w',pmHistoryCache:new Map(),pmHistoryLoading:false,pmChartGeom:null
 };
 const PM_TRACKED=['Gadi Eizenkot','Benjamin Netanyahu','Naftali Bennett'];
 const PM_META={
@@ -747,19 +748,24 @@ function eventToPmSnapshot(ev){
   disclaimer_he:'סיכויי שוק הימורים (Polymarket), לא סקר ולא תחזית רשמית. מתעדכן בדפדפן כל דקה.'
  };
 }
-function pmFidelityLabel(fid){
- if(fid===15)return '15 דק׳';
- if(fid===60)return 'שעה';
- if(fid===240)return '4 שעות';
- if(fid===360)return '6 שעות';
- if(fid===1440)return 'שבוע (יומי)';
- return fid+' דק׳';
+function pmRangeLabel(interval,fid){
+ if(interval==='1d')return 'יום';
+ if(fid<=5)return '15 דק׳';
+ if(fid<=15)return 'שעה';
+ if(fid<=60)return '4 שעות';
+ if(fid<=180)return '6 שעות';
+ return 'שבוע';
 }
-function nearestPmPoint(points,t){
+function interpolatePmAt(points,t){
  if(!points?.length)return null;
- let best=points[0],bestD=Math.abs(points[0].t-t);
- for(let i=1;i<points.length;i++){const d=Math.abs(points[i].t-t);if(d<bestD){bestD=d;best=points[i]}}
- return best;
+ if(t<=points[0].t)return {t,p:points[0].p};
+ if(t>=points.at(-1).t)return {t,p:points.at(-1).p};
+ let lo=0,hi=points.length-1;
+ while(hi-lo>1){const mid=(lo+hi)>>1;if(points[mid].t<=t)lo=mid;else hi=mid}
+ const a=points[lo],b=points[hi];
+ if(b.t===a.t)return {t,p:a.p};
+ const u=(t-a.t)/(b.t-a.t);
+ return {t,p:a.p+(b.p-a.p)*u};
 }
 function hidePmTip(){
  const tip=$('pmTip');if(!tip)return;
@@ -815,20 +821,23 @@ function renderPmMultiChart(series){
   const loc=pt.matrixTransform(ctm.inverse());
   if(loc.x<pad.l||loc.x>W-pad.r||loc.y<pad.t||loc.y>H-pad.b){hidePmTip();return}
   const t=x0+((loc.x-pad.l)/Math.max(1,W-pad.l-pad.r))*(x1-x0);
-  const samples=usable.map(s=>({...s,point:nearestPmPoint(s.points,t)})).filter(s=>s.point);
+  const cx=xScale(t);
+  const samples=usable.map(s=>{
+   const point=interpolatePmAt(s.points,t);
+   return point?{...s,point}:null;
+  }).filter(Boolean);
   if(!samples.length){hidePmTip();return}
-  const cx=xScale(samples.reduce((a,s)=>a+s.point.t,0)/samples.length);
   const guide=$('pmGuide');
   if(guide){guide.setAttribute('x1',cx);guide.setAttribute('x2',cx);guide.setAttribute('visibility','visible')}
   samples.forEach(s=>{
    const dot=svg.querySelector(`[data-pm-dot="${CSS.escape(s.name)}"]`);
    if(!dot)return;
-   dot.setAttribute('cx',xScale(s.point.t));
+   dot.setAttribute('cx',cx);
    dot.setAttribute('cy',yScale(s.point.p*100));
    dot.setAttribute('visibility','visible');
   });
   const ordered=[...samples].sort((a,b)=>b.point.p-a.point.p);
-  if($('pmTipTime'))$('pmTipTime').textContent=fmtT(ordered[0].point.t);
+  if($('pmTipTime'))$('pmTipTime').textContent=fmtT(t);
   rows.innerHTML=ordered.map(s=>`<div class="pm-tip-row"><span class="nm"><i style="--c:${s.color}"></i>${esc(s.name_he)}</span><span class="pv">${(s.point.p*100).toFixed(1)}%</span></div>`).join('');
   const topY=Math.min(...samples.map(s=>yScale(s.point.p*100)));
   const rect=stage.getBoundingClientRect();
@@ -840,12 +849,13 @@ function renderPmMultiChart(series){
  hit.onpointerleave=hidePmTip;
  hit.onpointerdown=onMove;
 }
-async function loadPmHistory(token,fidelity){
- const key=token+'|'+fidelity;
+function pmCacheKey(token,interval,fidelity){return token+'|'+interval+'|'+fidelity}
+async function loadPmHistory(token,interval,fidelity){
+ const key=pmCacheKey(token,interval,fidelity);
  if(state.pmHistoryCache.has(key))return state.pmHistoryCache.get(key);
  const u=new URL(PM_CLOB);
  u.searchParams.set('market',token);
- u.searchParams.set('interval','1w');
+ u.searchParams.set('interval',interval||'1w');
  u.searchParams.set('fidelity',String(fidelity));
  const res=await fetch(u,{cache:'no-store'});
  if(!res.ok)throw new Error('HTTP '+res.status);
@@ -854,10 +864,16 @@ async function loadPmHistory(token,fidelity){
  state.pmHistoryCache.set(key,history);
  return history;
 }
+function syncPmResButtons(){
+ $('pmRes')?.querySelectorAll('button').forEach(b=>{
+  const on=Number(b.dataset.fid)===state.pmFidelity&&(b.dataset.interval||'1w')===state.pmInterval;
+  b.classList.toggle('on',on);
+ });
+}
 async function loadPmMultiChart(){
  const wrap=$('pmChartWrap');if(!wrap)return;
  const candidates=(state.pm?.candidates||[]).filter(c=>c.yes_token);
- $('pmRes')?.querySelectorAll('button').forEach(b=>b.classList.toggle('on',Number(b.dataset.fid)===state.pmFidelity));
+ syncPmResButtons();
  const legend=$('pmLegend');
  if(legend){
   legend.innerHTML=candidates.map(c=>`<span><i style="--c:${c.color}"></i>${esc(c.name_he)}</span>`).join('');
@@ -867,17 +883,17 @@ async function loadPmMultiChart(){
   if($('pmChartStatus'))$('pmChartStatus').textContent='אין מזהי שוק למועמדים.';
   return;
  }
- const missing=candidates.some(c=>!state.pmHistoryCache.has(c.yes_token+'|'+state.pmFidelity));
+ const missing=candidates.some(c=>!state.pmHistoryCache.has(pmCacheKey(c.yes_token,state.pmInterval,state.pmFidelity)));
  if(missing&&$('pmChartStatus'))$('pmChartStatus').textContent='טוען היסטוריית מחירים…';
  state.pmHistoryLoading=true;
  try{
   const series=await Promise.all(candidates.map(async c=>{
-   const points=await loadPmHistory(c.yes_token,state.pmFidelity);
+   const points=await loadPmHistory(c.yes_token,state.pmInterval,state.pmFidelity);
    return {name:c.name,name_he:c.name_he,color:c.color,points};
   }));
   renderPmMultiChart(series);
   const n=series.reduce((s,x)=>s+x.points.length,0);
-  if($('pmChartStatus'))$('pmChartStatus').textContent=n?`שלושה קווים · ${pmFidelityLabel(state.pmFidelity)} · ${n} נקודות`:'אין נתוני היסטוריה לחלון זה';
+  if($('pmChartStatus'))$('pmChartStatus').textContent=n?`שלושה קווים · ${pmRangeLabel(state.pmInterval,state.pmFidelity)} · ${n} נקודות`:'אין נתוני היסטוריה לחלון זה';
  }catch(e){
   renderPmMultiChart([]);
   if($('pmChartStatus'))$('pmChartStatus').textContent='טעינת הגרף נכשלה: '+(e.message||e);
@@ -1112,7 +1128,8 @@ globalThis.api={state,rows,ingest,fetchFeed,newPulseStats,nationalLive,groupStat
   setInterval(()=>loadPolymarket(),60000);
   $('pmRes')?.querySelectorAll('button').forEach(btn=>{
    btn.onclick=()=>{
-    state.pmFidelity=Number(btn.dataset.fid)||60;
+    state.pmFidelity=Number(btn.dataset.fid)||5;
+    state.pmInterval=btn.dataset.interval||'1w';
     state.pmHistoryCache.clear();
     loadPmMultiChart();
    };
