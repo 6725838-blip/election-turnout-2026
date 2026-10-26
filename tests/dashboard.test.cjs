@@ -25,7 +25,7 @@ const context=vm.createContext({
 });
 context.globalThis=context;
 const script=html.match(/<script>\s*([\s\S]*?)<\/script>\s*<\/body>/)[1]
- .replace(/\}\)\(\);\s*$/, 'globalThis.api={state,rows,ingest,fetchFeed,newPulseStats,nationalLive,groupStats,buildHistoricalComparison,buildHistoricalInsights,primaryGroups};})();');
+ .replace(/\}\)\(\);\s*$/, 'globalThis.api={state,rows,ingest,fetchFeed,newPulseStats,nationalLive,groupStats,buildHistoricalComparison,buildHistoricalInsights,primaryGroups,nationalForecast,timeToMinutes,estimateHistoricalAtHour};})();');
 vm.runInContext(script,context);
 const {api}=context;
 assert.equal(api.rows.length,50);assert.equal(api.state.selected.size,44);assert.equal(api.state.live.size,0);
@@ -90,5 +90,17 @@ const empty={format_version:1,source:'Not connected',updated_at:null,national_tu
  }
  assert.ok(Math.abs(hist.groups.arab.delta_2021_to_2022_pp-8.77)<0.05);
  assert.ok(api.buildHistoricalInsights(hist).length<=3);
- console.log('Dashboard checks passed: board stats, preservation, partial coverage, demo isolation, refresh, empty snapshots, failures, races, historical panel.');
+ api.state.hourlyHistory=JSON.parse(fs.readFileSync('data/national_hourly_history.json','utf8'));
+ const fc=api.nationalForecast(12.5, api.timeToMinutes('10:00'));
+ assert.equal(fc.ok,true);
+ assert.equal(fc.n,5);
+ assert.ok(fc.mid>60&&fc.mid<75);
+ assert.ok(fc.lo<=fc.mid&&fc.mid<=fc.hi);
+ const noon=api.nationalForecast(27.4, api.timeToMinutes('12:00'));
+ assert.equal(noon.ok,true);
+ assert.notEqual(Math.round(fc.mid*10),Math.round(noon.mid*10));
+ assert.equal(api.nationalForecast(12.5,null),null);
+ const interp=api.estimateHistoricalAtHour(api.state.hourlyHistory.elections['2022-11'], api.timeToMinutes('11:00'));
+ assert.equal(interp.interpolated,true);
+ console.log('Dashboard checks passed: board stats, preservation, partial coverage, demo isolation, refresh, empty snapshots, failures, races, historical panel, national forecast.');
 })().catch(e=>{console.error(e);process.exitCode=1});

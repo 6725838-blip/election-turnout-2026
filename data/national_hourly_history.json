@@ -1,12 +1,87 @@
 {
   "format_version": 1,
-  "description": "Verified national turnout-by-hour for forecast models. Empty until sources are curated.",
-  "note": "Do not invent points. Interpolation only between two verified timestamps in the same election.",
+  "description": "Verified national turnout-by-hour for end-of-day forecast models (additive remaining-pp method).",
+  "note": "Daytime points are CEC/CBS cumulative reports during election day (sample or reporting stations). final_turnout_pct is the official post-count rate and may include double envelopes; remaining = final − daytime is intentional. Do not invent points. Interpolation only between two verified timestamps in the same election, max gap 120 minutes.",
+  "timezone": "Asia/Jerusalem",
+  "interpolation_max_gap_minutes": 120,
+  "min_elections_for_forecast": 3,
+  "curated_at": "2026-10-26",
   "elections": {
-    "2019-04": {"label": "אפריל 2019 · כנסת 21", "final_turnout_pct": 68.46, "points": []},
-    "2019-09": {"label": "ספטמבר 2019 · כנסת 22", "final_turnout_pct": 69.83, "points": []},
-    "2020-03": {"label": "מרץ 2020 · כנסת 23", "final_turnout_pct": 71.52, "points": []},
-    "2021-03": {"label": "מרץ 2021 · כנסת 24", "final_turnout_pct": 67.44, "points": []},
-    "2022-11": {"label": "נובמבר 2022 · כנסת 25", "final_turnout_pct": 70.63, "points": []}
+    "2019-04": {
+      "label": "אפריל 2019 · כנסת 21",
+      "date": "2019-04-09",
+      "final_turnout_pct": 68.46,
+      "final_source_url": "https://votes21.bechirot.gov.il/",
+      "final_source_type": "official",
+      "points": [
+        {"time": "10:00", "turnout_pct": 12.9, "source_url": "https://www.timesofisrael.com/election-liveblog-september-17-2019/", "source_type": "secondary_citing_official", "verified": true, "note": "נגזר מהשוואת ועדת הבחירות בשידור ספטמבר 2019 (15.0%−2.1)."},
+        {"time": "12:00", "turnout_pct": 24.8, "source_url": "https://www.timesofisrael.com/election-liveblog-september-17-2019/", "source_type": "secondary_citing_official", "verified": true, "note": "מצוטט כהשוואה רשמית בשידור ספטמבר 2019."},
+        {"time": "14:00", "turnout_pct": 35.8, "source_url": "https://www.ynet.co.il/articles/0,7340,L-5491757,00.html", "source_type": "secondary_citing_official", "verified": true, "note": "מנכ״לית ועדת הבחירות אורלי עדס; מאומת גם בהשוואות ספטמבר."},
+        {"time": "16:00", "turnout_pct": 42.8, "source_url": "https://www.timesofisrael.com/liveblog-march-2-2020/", "source_type": "secondary_citing_official", "verified": true, "note": "השוואת ועדה בשידור מרץ 2020."},
+        {"time": "18:00", "turnout_pct": 52.0, "source_url": "https://www.timesofisrael.com/liveblog-march-2-2020/", "source_type": "secondary_citing_official", "verified": true, "note": "השוואת ועדה בשידור מרץ 2020."},
+        {"time": "20:00", "turnout_pct": 61.3, "source_url": "https://www.ynetnews.com/article/5590770", "source_type": "secondary_citing_official", "verified": true, "note": "מצוטט כנתון ועדה בהשוואה לספטמבר 2019."}
+      ]
+    },
+    "2019-09": {
+      "label": "ספטמבר 2019 · כנסת 22",
+      "date": "2019-09-17",
+      "final_turnout_pct": 69.83,
+      "final_source_url": "https://votes22.bechirot.gov.il/",
+      "final_source_type": "official",
+      "points": [
+        {"time": "10:00", "turnout_pct": 15.0, "source_url": "https://www.timesofisrael.com/election-liveblog-september-17-2019/", "source_type": "secondary_citing_official", "verified": true, "note": "דיווח ועדת הבחירות בשידור Times of Israel."},
+        {"time": "12:00", "turnout_pct": 26.8, "source_url": "https://www.timesofisrael.com/election-liveblog-september-17-2019/", "source_type": "secondary_citing_official", "verified": true},
+        {"time": "14:00", "turnout_pct": 36.5, "source_url": "https://www.timesofisrael.com/election-liveblog-september-17-2019/", "source_type": "secondary_citing_official", "verified": true},
+        {"time": "16:00", "turnout_pct": 44.3, "source_url": "https://www.timesofisrael.com/election-liveblog-september-17-2019/", "source_type": "secondary_citing_official", "verified": true},
+        {"time": "18:00", "turnout_pct": 53.5, "source_url": "https://www.timesofisrael.com/election-liveblog-september-17-2019/", "source_type": "secondary_citing_official", "verified": true},
+        {"time": "20:00", "turnout_pct": 63.7, "source_url": "https://www.timesofisrael.com/election-liveblog-september-17-2019/", "source_type": "secondary_citing_official", "verified": true}
+      ]
+    },
+    "2020-03": {
+      "label": "מרץ 2020 · כנסת 23",
+      "date": "2020-03-02",
+      "final_turnout_pct": 71.52,
+      "final_source_url": "https://votes23.bechirot.gov.il/",
+      "final_source_type": "official",
+      "points": [
+        {"time": "10:00", "turnout_pct": 14.5, "source_url": "https://www.timesofisrael.com/liveblog-march-2-2020/", "source_type": "secondary_citing_official", "verified": true},
+        {"time": "12:00", "turnout_pct": 27.6, "source_url": "https://www.timesofisrael.com/liveblog-march-2-2020/", "source_type": "secondary_citing_official", "verified": true},
+        {"time": "14:00", "turnout_pct": 38.1, "source_url": "https://www.israelnationalnews.com/news/276701", "source_type": "secondary_citing_official", "verified": true},
+        {"time": "16:00", "turnout_pct": 47.0, "source_url": "https://www.timesofisrael.com/liveblog-march-2-2020/", "source_type": "secondary_citing_official", "verified": true},
+        {"time": "18:00", "turnout_pct": 56.3, "source_url": "https://www.timesofisrael.com/liveblog-march-2-2020/", "source_type": "secondary_citing_official", "verified": true},
+        {"time": "20:00", "turnout_pct": 65.5, "source_url": "https://www.timesofisrael.com/liveblog-march-2-2020/", "source_type": "secondary_citing_official", "verified": true, "note": "TheMarker דיווח 65.6%; נשמר 65.5 לפי TOI / Israel Hayom."}
+      ]
+    },
+    "2021-03": {
+      "label": "מרץ 2021 · כנסת 24",
+      "date": "2021-03-23",
+      "final_turnout_pct": 67.44,
+      "final_source_url": "https://votes24.bechirot.gov.il/",
+      "final_source_type": "official",
+      "points": [
+        {"time": "10:00", "turnout_pct": 14.8, "source_url": "https://www.israelhayom.co.il/article/863781", "source_type": "secondary_citing_official", "verified": true},
+        {"time": "12:00", "turnout_pct": 25.4, "source_url": "https://www.israelnationalnews.com/news/299055", "source_type": "secondary_citing_official", "verified": true},
+        {"time": "14:00", "turnout_pct": 34.6, "source_url": "https://www.israelhayom.co.il/article/863781", "source_type": "secondary_citing_official", "verified": true},
+        {"time": "16:00", "turnout_pct": 42.3, "source_url": "https://www.israelhayom.co.il/article/863781", "source_type": "secondary_citing_official", "verified": true},
+        {"time": "18:00", "turnout_pct": 51.5, "source_url": "https://www.israelhayom.co.il/article/863781", "source_type": "secondary_citing_official", "verified": true},
+        {"time": "20:00", "turnout_pct": 60.9, "source_url": "https://www.israelhayom.co.il/article/863781", "source_type": "secondary_citing_official", "verified": true}
+      ]
+    },
+    "2022-11": {
+      "label": "נובמבר 2022 · כנסת 25",
+      "date": "2022-11-01",
+      "final_turnout_pct": 70.63,
+      "final_source_url": "https://votes25.bechirot.gov.il/",
+      "final_source_type": "official",
+      "points": [
+        {"time": "10:00", "turnout_pct": 15.9, "source_url": "https://www.gov.il/he/pages/voting-by-hour", "source_type": "official", "verified": true, "note": "טבלת ועדת הבחירות / סקר מדגמי למ״ס."},
+        {"time": "12:00", "turnout_pct": 28.4, "source_url": "https://www.gov.il/he/pages/voting-by-hour", "source_type": "official", "verified": true},
+        {"time": "14:00", "turnout_pct": 38.9, "source_url": "https://www.gov.il/he/pages/voting-by-hour", "source_type": "official", "verified": true},
+        {"time": "16:00", "turnout_pct": 47.5, "source_url": "https://www.gov.il/he/pages/voting-by-hour", "source_type": "official", "verified": true},
+        {"time": "18:00", "turnout_pct": 57.7, "source_url": "https://www.gov.il/he/pages/voting-by-hour", "source_type": "official", "verified": true},
+        {"time": "20:00", "turnout_pct": 66.3, "source_url": "https://www.gov.il/he/pages/voting-by-hour", "source_type": "official", "verified": true},
+        {"time": "22:00", "turnout_pct": 70.6, "source_url": "https://www.gov.il/he/pages/voting-by-hour", "source_type": "official", "verified": true, "note": "סקר מדגמי בסגירה; הסופי הרשמי 70.63%."}
+      ]
+    }
   }
 }

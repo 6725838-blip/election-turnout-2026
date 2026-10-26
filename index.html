@@ -104,6 +104,17 @@ button,input,select{font:inherit}a{color:#0a5a6e}
 .national-card .forecast-box .tiny{color:#b7c4be}
 .national-card .forecast-box strong{display:block;font-size:1.35rem;font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate;text-align:end;color:#fff;margin:6px 0}
 .national-card .forecast-box small{color:#a8b8b1;font-size:.8125rem;line-height:1.55}
+.national-card .nat-fc-range{height:6px;margin:10px 0 4px;border-radius:2px;background:#2a3a44;position:relative;overflow:hidden}
+.national-card .nat-fc-range i{position:absolute;top:0;bottom:0;background:#7ddeb8;border-radius:2px;opacity:.85}
+.national-card .nat-fc-range b{position:absolute;top:-2px;bottom:-2px;width:2px;background:#fff;opacity:.9}
+.national-card .nat-fc-details{margin-top:10px;color:#c5d0cb;font-size:.75rem}
+.national-card .nat-fc-details summary{cursor:pointer;font-weight:700;color:#b7c4be}
+.national-card .nat-fc-detail-body{margin-top:8px;line-height:1.55}
+.national-card .nat-fc-detail-body table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;margin-top:6px}
+.national-card .nat-fc-detail-body th,.national-card .nat-fc-detail-body td{padding:5px 4px;border-bottom:1px solid #2a3a44;text-align:end;font-size:.72rem}
+.national-card .nat-fc-detail-body th{color:#8fa39b;font-weight:700}
+.national-card .nat-fc-detail-body a{color:#7ddeb8}
+.national-card .nat-fc-warn{color:#e2c894;margin-top:6px}
 .national-card input{background:#151f28;color:#eef2f0;border-color:#3a4c56!important}
 .national-card label.tiny{color:#b7c4be}
 .insights{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
@@ -268,13 +279,20 @@ button.primary:hover{background:#0a5748}
   <div class="big" id="nationalPct">—</div>
   <div class="meta" id="nationalMeta">ממתין לדיווח רשמי</div>
   <div class="forecast-box" id="nationalForecastBox">
-   <div class="tiny">תחזית סיום (תרחישים היסטוריים)</div>
+   <div class="tiny">תחזית שיעור ההצבעה בסיום</div>
    <strong id="nationalForecastValue">—</strong>
-   <small id="nationalForecastNote">אין עדיין נתוני שעה מאומתים לחמש המערכות — לא מוצגת תחזית מספרית.</small>
+   <small id="nationalForecastNote">טוען נתוני שעה היסטוריים…</small>
+   <div class="nat-fc-range" id="nationalForecastRange" hidden></div>
+   <details class="nat-fc-details noprint" id="nationalForecastDetails">
+    <summary>איך חושבה התחזית?</summary>
+    <div id="nationalForecastDetailBody" class="nat-fc-detail-body"></div>
+   </details>
   </div>
   <div class="noprint" style="margin-top:12px">
    <label class="tiny" for="nationalManual">הזנה ידנית (רק אם חסר בפיד)</label>
    <input id="nationalManual" type="number" min="0" max="100" step="0.01" placeholder="למשל 52.4" style="width:100%;margin-top:4px;padding:8px;border:1px solid var(--line);border-radius:var(--radius)">
+   <label class="tiny" for="nationalManualTime" style="display:block;margin-top:8px">שעת הדיווח שאליה מתייחס הנתון</label>
+   <input id="nationalManualTime" type="time" step="60" style="width:100%;margin-top:4px;padding:8px;border:1px solid var(--line);border-radius:var(--radius)">
   </div>
  </aside>
 </div>
@@ -393,7 +411,7 @@ let feedMode='live', requestVersion=0;
 const state={
  selected:new Set(rows.filter(x=>x.active).map(x=>x.key)),
  live:new Map(),feed:null,source:'לא מחובר',updatedAt:null,rawCount:0,nationalPct:null,
- nationalPreserved:false,history:[],hourlyHistory:null,showForecasts:false,openGroup:null,chartHidden:new Set(),
+ nationalPreserved:false,nationalAsOf:null,history:[],hourlyHistory:null,showForecasts:false,openGroup:null,chartHidden:new Set(),
  pm:null,pmSelected:null,pmFidelity:5,pmInterval:'1w',pmHistoryCache:new Map(),pmHistoryLoading:false,pmChartGeom:null
 };
 const PM_TRACKED=['Gadi Eizenkot','Benjamin Netanyahu','Naftali Bennett'];
@@ -533,16 +551,79 @@ function verifiedHourlyCount(){
  }
  return n;
 }
-function nationalForecast(nowPct, asOf){
- if(nowPct==null||verifiedHourlyCount()<3||!asOf)return null;
- // No numeric forecast until curated hourly points exist (currently empty by design).
- return null;
+function timeToMinutes(hhmm){
+ if(hhmm==null||hhmm==='')return null;
+ const m=String(hhmm).trim().match(/^(\d{1,2}):(\d{2})/);
+ if(!m)return null;
+ const h=Number(m[1]),mi=Number(m[2]);
+ if(!Number.isFinite(h)||!Number.isFinite(mi)||h>23||mi>59)return null;
+ return h*60+mi;
+}
+function minutesToTime(mins){const h=Math.floor(mins/60),m=mins%60;return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')}
+function reportMinutesFromIso(iso){
+ if(!iso)return null;
+ const d=new Date(iso);if(!Number.isFinite(+d))return null;
+ const parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Jerusalem',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(d);
+ const h=Number(parts.find(p=>p.type==='hour')?.value),mi=Number(parts.find(p=>p.type==='minute')?.value);
+ if(!Number.isFinite(h)||!Number.isFinite(mi))return null;
+ return h*60+mi;
+}
+function nationalReportMinutes(manual){
+ if(manual){
+  const t=$('nationalManualTime')?.value;
+  return timeToMinutes(t);
+ }
+ return reportMinutesFromIso(state.nationalAsOf||state.updatedAt);
+}
+function estimateHistoricalAtHour(election, targetMinutes){
+ const maxGap=Number(state.hourlyHistory?.interpolation_max_gap_minutes)||120;
+ const pts=(election.points||[]).map(p=>{
+  const mins=timeToMinutes(p.time),pct=val(p.turnout_pct);
+  if(mins==null||pct==null||pct<0||pct>100||p.verified===false)return null;
+  return {mins,pct,p};
+ }).filter(Boolean).sort((a,b)=>a.mins-b.mins);
+ if(!pts.length)return null;
+ const exact=pts.find(x=>x.mins===targetMinutes);
+ if(exact)return {turnout_pct:exact.pct,method:'exact',matched_time:minutesToTime(exact.mins),source_url:exact.p.source_url,source_type:exact.p.source_type,interpolated:false};
+ const before=[...pts].reverse().find(x=>x.mins<targetMinutes);
+ const after=pts.find(x=>x.mins>targetMinutes);
+ if(!before||!after)return null;
+ const gap=after.mins-before.mins;
+ if(!(gap>0)||gap>maxGap)return null;
+ const ratio=(targetMinutes-before.mins)/gap;
+ return {turnout_pct:before.pct+ratio*(after.pct-before.pct),method:'linear_interpolation',matched_time:minutesToTime(targetMinutes),from_time:minutesToTime(before.mins),to_time:minutesToTime(after.mins),source_url:before.p.source_url,source_type:'interpolated',interpolated:true};
+}
+function nationalForecast(nowPct, reportMins){
+ const minN=Number(state.hourlyHistory?.min_elections_for_forecast)||3;
+ if(nowPct==null||reportMins==null||verifiedHourlyCount()<minN)return null;
+ const elections=state.hourlyHistory?.elections||{};
+ const scenarios=[],skipped=[];
+ for(const [id,election] of Object.entries(elections)){
+  const final=val(election.final_turnout_pct);
+  if(final==null){skipped.push({id,reason:'missing_final'});continue;}
+  const est=estimateHistoricalAtHour(election,reportMins);
+  if(!est){skipped.push({id,reason:'no_matching_hour'});continue;}
+  const remaining=final-est.turnout_pct;
+  scenarios.push({
+   id,label:election.label||id,date:election.date,
+   historical_at_hour:est.turnout_pct,historical_final:final,historical_remaining_pp:remaining,
+   forecast_pct:nowPct+remaining,match:est,final_source_url:election.final_source_url
+  });
+ }
+ if(scenarios.length<minN)return {ok:false,reason:'insufficient_elections',n:scenarios.length,min_required:minN,scenarios,skipped,target_time:minutesToTime(reportMins),current_pct:nowPct};
+ const forecasts=scenarios.map(s=>s.forecast_pct);
+ const mid=forecasts.reduce((a,b)=>a+b,0)/forecasts.length;
+ const lo=Math.min(...forecasts),hi=Math.max(...forecasts);
+ const warnings=[];
+ if(mid+1e-9<nowPct)warnings.push('forecast_below_current');
+ if(forecasts.some(f=>f<0||f>100))warnings.push('range_outside_0_100');
+ return {ok:true,method:'additive_remaining_pp',n:scenarios.length,total_elections:Object.keys(elections).length,mid,lo,hi,scenarios,skipped,target_time:minutesToTime(reportMins),current_pct:nowPct,warnings};
 }
 function groupForecastRange(stats){
  if(!state.showForecasts)return null;
  if(!stats||stats.current==null||stats.partial||stats.fullCount<Math.ceil(stats.n*0.85))return null;
  if(verifiedHourlyCount()<3)return null;
- return null; // gated until national_hourly_history has verified points
+ return null; // group end-of-day scenarios stay gated; national card uses nationalForecast
 }
 function setStatus(message,type='warn'){
  const el=$('dataStatus');if(!el)return;
@@ -603,18 +684,48 @@ function renderBoard(){
 function renderNational(){
  const nat=nationalLive();
  $('nationalPct').textContent=nat.value==null?'—':nat.value.toFixed(1)+'%';
+ const reportMins=nationalReportMinutes(!!nat.manual);
  const bits=[];
- bits.push(nat.value==null?'ממתין לדיווח רשמי':('שעת דיווח: '+renderTime(state.updatedAt)));
+ if(nat.value==null)bits.push('ממתין לדיווח רשמי');
+ else if(reportMins!=null)bits.push('דיווח נכון ל־'+minutesToTime(reportMins));
+ else bits.push(nat.manual?'חסרה שעת דיווח לתחזית':'שעת עדכון: '+renderTime(state.updatedAt));
  bits.push('מקור: '+(nat.manual?'הזנה ידנית':(state.feed?state.source:'לא מחובר')));
  if(state.nationalPreserved)bits.push('נתון ארצי שנשמר מעדכון קודם');
  $('nationalMeta').textContent=bits.join(' · ');
- const fc=nationalForecast(nat.value,state.updatedAt);
- if(fc){
-  $('nationalForecastValue').textContent=fc.mid.toFixed(1)+'% · טווח '+fc.lo.toFixed(0)+'–'+fc.hi.toFixed(0)+'%';
-  $('nationalForecastNote').textContent='תרחישים היסטוריים לפי '+fc.n+' מערכות · לא רווח סמך סטטיסטי';
+ const fc=nationalForecast(nat.value,reportMins);
+ const rangeEl=$('nationalForecastRange'),detail=$('nationalForecastDetailBody'),detailsWrap=$('nationalForecastDetails');
+ if(fc?.ok){
+  $('nationalForecastValue').textContent=fc.mid.toFixed(1)+'%';
+  const partial=fc.n<fc.total_elections;
+  $('nationalForecastNote').textContent=`טווח תרחישים: ${fc.lo.toFixed(1)}%–${fc.hi.toFixed(1)}% · מבוסס על ${fc.n} מתוך ${fc.total_elections} מערכות בחירות · 2019–2022`+(partial?' · חלקי':'')+' · לא רווח סמך סטטיסטי';
+  if(rangeEl){
+   rangeEl.hidden=false;
+   const span=Math.max(fc.hi-fc.lo,0.01),left=Math.max(0,Math.min(100,((fc.lo-55)/(80-55))*100)),width=Math.max(2,Math.min(100-left,(span/(80-55))*100));
+   const midPos=Math.max(0,Math.min(100,((fc.mid-55)/(80-55))*100));
+   rangeEl.innerHTML=`<i style="inset-inline-start:${left}%;width:${width}%"></i><b style="inset-inline-start:${midPos}%"></b>`;
+  }
+  if(detail){
+   const rows=fc.scenarios.map(s=>{
+    const interp=s.match?.interpolated?` · אינטרפולציה ${esc(s.match.from_time||'')}–${esc(s.match.to_time||'')}`:'';
+    const src=s.match?.source_url?` <a href="${esc(s.match.source_url)}" target="_blank" rel="noopener">מקור שעה</a>`:'';
+    const fin=s.final_source_url?` <a href="${esc(s.final_source_url)}" target="_blank" rel="noopener">סופי</a>`:'';
+    return `<tr><td>${esc(s.label)}</td><td class="num">${s.historical_at_hour.toFixed(1)}%${interp}${src}</td><td class="num">${s.historical_final.toFixed(2)}%${fin}</td><td class="num">${s.forecast_pct.toFixed(1)}%</td></tr>`;
+   }).join('');
+   const warn=fc.warnings?.includes('forecast_below_current')?'<p class="nat-fc-warn">שים לב: התחזית המרכזית נמוכה מהשיעור שכבר נרשם — בדקו את שעת הדיווח ואת שלמות הנתונים.</p>':'';
+   detail.innerHTML=`<p>מודל תוספת נקודות אחוז: תחזית = נוכחי + (סופי היסטורי − שיעור בשעה המקבילה). שעת חישוב: ${esc(fc.target_time)}.</p>
+    <table><thead><tr><th>מערכת</th><th>בשעה המקבילה</th><th>סופי</th><th>תחזית ל־2026</th></tr></thead><tbody>${rows}</tbody></table>${warn}`;
+  }
+  if(detailsWrap)detailsWrap.hidden=false;
  }else{
   $('nationalForecastValue').textContent='—';
-  $('nationalForecastNote').textContent='אין עדיין נתוני שעה מאומתים לחמש המערכות — לא מוצגת תחזית מספרית.';
+  if(rangeEl){rangeEl.hidden=true;rangeEl.innerHTML='';}
+  if(detailsWrap)detailsWrap.hidden=true;
+  if(detail)detail.innerHTML='';
+  if(!state.hourlyHistory) $('nationalForecastNote').textContent='טוען נתוני שעה היסטוריים…';
+  else if(nat.value==null) $('nationalForecastNote').textContent='ממתינים לשיעור הצבעה ארצי כדי לחשב תחזית סיום.';
+  else if(reportMins==null) $('nationalForecastNote').textContent=nat.manual?'הזנה ידנית דורשת גם שעת דיווח לתחזית.':'אין שעת דיווח אמינה לנתון הארצי — מוצג השיעור בלבד.';
+  else if(fc&&fc.reason==='insufficient_elections') $('nationalForecastNote').textContent=`אין מספיק נתוני שעה מאומתים לשעה ${fc.target_time} (נמצאו ${fc.n} מתוך ${fc.min_required} הנדרשים).`;
+  else $('nationalForecastNote').textContent='לא ניתן לחשב תחזית כרגע.';
  }
 }
 function renderInsights(){
@@ -1110,7 +1221,7 @@ function render(){
 }
 function ingest(feed,method){
  requestVersion++;
- if(feedMode==='local'||method!=='עדכון אוטומטי'||feed?.national_turnout_pct!=null){if($('nationalManual'))$('nationalManual').value='';}
+ if(feedMode==='local'||method!=='עדכון אוטומטי'||feed?.national_turnout_pct!=null){if($('nationalManual'))$('nationalManual').value='';if($('nationalManualTime'))$('nationalManualTime').value='';}
  feedMode=method==='עדכון אוטומטי'?'live':'local';
  if(!feed||!Array.isArray(feed.records))throw Error('הקובץ חייב לכלול מערך records');
  const map=new Map(),issues=[];
@@ -1122,6 +1233,7 @@ function ingest(feed,method){
  state.live=map;state.feed=true;state.nationalPreserved=feed.national_preserved_previous===true;
  const n=val(feed.national_turnout_pct),ne=val(feed.national_eligible),nv=val(feed.national_voted);
  state.nationalPct=n!==null&&n>=0&&n<=100?n:ne>0&&nv!==null&&nv>=0&&nv<=ne?100*nv/ne:null;
+ state.nationalAsOf=feed.national_as_of||(state.nationalPct!=null?(feed.updated_at||null):null);
  state.source=feed.source||method||'ייבוא ידני';state.updatedAt=feed.updated_at||null;state.rawCount=feed.records.length;
  appendClientHistory(feed);
  render();
@@ -1233,6 +1345,7 @@ $('filterGroup').innerHTML='<option value="">כל הקבוצות</option>'+prima
 $('showForecasts').onchange=()=>{state.showForecasts=$('showForecasts').checked;renderBoard();};
 $('boardSort').onchange=()=>renderBoard();
 $('nationalManual').oninput=()=>render();
+$('nationalManualTime')&&($('nationalManualTime').oninput=()=>render());
 $('filterCity').oninput=()=>renderTable();$('filterGroup').onchange=()=>renderTable();$('sort').onchange=()=>renderTable();
 $('scenarioDemo').onclick=simulateAtEight;
 $('loadFullDemo').onclick=()=>{try{
@@ -1241,7 +1354,7 @@ $('loadFullDemo').onclick=()=>{try{
  ingest({source:'הדגמה מלאה — נתונים מומצאים בלבד',updated_at:'2026-10-27T16:00:00+02:00',national_turnout_pct:64.70,records:rec},'הדגמה מלאה');
 }catch(e){setStatus('ההדגמה נכשלה: '+e.message,'err')}};
 $('loadDemo').onclick=()=>{try{ingest(JSON.parse($('embedded-demo').textContent),'הדגמה מובנית')}catch(e){setStatus('נתוני הדגמה נכשלו: '+e.message,'err')}};
-$('returnLive').onclick=()=>{requestVersion++;feedMode='live';state.live=new Map();state.feed=null;state.source='לא מחובר';state.updatedAt=null;state.nationalPct=null;state.nationalPreserved=false;$('nationalManual').value='';$('feedUrl').value='./live-turnout.json';render();fetchFeed();};
+$('returnLive').onclick=()=>{requestVersion++;feedMode='live';state.live=new Map();state.feed=null;state.source='לא מחובר';state.updatedAt=null;state.nationalPct=null;state.nationalAsOf=null;state.nationalPreserved=false;$('nationalManual').value='';if($('nationalManualTime'))$('nationalManualTime').value='';$('feedUrl').value='./live-turnout.json';render();fetchFeed();};
 $('refresh').onclick=()=>fetchFeed();
 $('print').onclick=()=>window.print();
 $('upload').onchange=async ev=>{const f=ev.target.files?.[0];if(!f)return;try{const text=await f.text();const obj=f.name.toLowerCase().endsWith('.csv')?csvToFeed(text):JSON.parse(text);ingest(obj,'קובץ מקומי')}catch(e){setStatus('קובץ לא תקין: '+e.message,'err')}ev.target.value=''};
