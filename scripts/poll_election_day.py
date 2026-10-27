@@ -42,8 +42,19 @@ ALT_NAT_RE = re.compile(
     r'שיעור ההצבעה(?:\s+הארצי)?(?:\s+לשעה|\s+עד(?:\s+השעה)?)\s*(\d{1,2}):00[^\d%]{0,40}?(\d{1,2}(?:[.,]\d+)?)\s*%',
     re.U,
 )
+# e.g. 55.7% הצביעו עד השעה 16:00 / נכון לשעה 16:00 עומד על 55.7%
+PCT_FIRST_RE = re.compile(
+    r'(\d{1,2}(?:[.,]\d+)?)\s*%\s*הצביעו עד(?:\s+השעה)?\s*(\d{1,2}):00',
+    re.U,
+)
+PCT_AFTER_RE = re.compile(
+    r'(?:נכון ל|עד)(?:\s+השעה)?\s*(\d{1,2}):00[^\d%]{0,60}?(\d{1,2}(?:[.,]\d+)?)\s*%',
+    re.U,
+)
 ARTICLE_RE = re.compile(r'/news/article/([a-zA-Z0-9]+)')
 SEED_ARTICLES = (
+    'https://www.ynet.co.il/news/article/sypynnr2zx',
+    'https://www.ynet.co.il/news/article/hyzfwbrhmg',
     'https://www.ynet.co.il/news/article/bkkekx02mg',
     'https://www.ynet.co.il/news/article/hyiuqbc2zl',
     'https://www.ynet.co.il/news/article/s1dhwyrnme',
@@ -73,16 +84,38 @@ def govmap_ready() -> dict:
 
 
 def _extract_nat(text: str, url: str) -> dict | None:
-    m = HEADLINE_RE.search(text) or ALT_NAT_RE.search(text)
-    if not m:
+    def from_match(m: re.Match, hour_first: bool) -> tuple[int, float, str]:
+        if hour_first:
+            return int(m.group(1)), float(m.group(2).replace(',', '.')), m.group(0)
+        return int(m.group(2)), float(m.group(1).replace(',', '.')), m.group(0)
+
+    candidates: list[tuple[int, float, str]] = []
+    for rx, hour_first in (
+        (HEADLINE_RE, True),
+        (ALT_NAT_RE, True),
+        (PCT_AFTER_RE, True),
+        (PCT_FIRST_RE, False),
+    ):
+        m = rx.search(text)
+        if m:
+            candidates.append(from_match(m, hour_first))
+    if not candidates:
         title = re.search(r'<title>(.*?)</title>', text, re.I | re.S)
         if title:
             flat = re.sub(r'\s+', ' ', title.group(1))
-            m = HEADLINE_RE.search(flat) or ALT_NAT_RE.search(flat)
-    if not m:
+            for rx, hour_first in (
+                (HEADLINE_RE, True),
+                (ALT_NAT_RE, True),
+                (PCT_AFTER_RE, True),
+                (PCT_FIRST_RE, False),
+            ):
+                m = rx.search(flat)
+                if m:
+                    candidates.append(from_match(m, hour_first))
+    if not candidates:
         return None
-    hour = int(m.group(1))
-    pct = float(m.group(2).replace(',', '.'))
+    # Prefer the chronologically latest hour found on the page
+    hour, pct, snip = max(candidates, key=lambda t: t[0])
     cites_cec = any(
         k in text for k in ('ועדת הבחירות', 'דין ליבנה', 'ליבנה', 'מסע״ת', 'מסיבת עיתונאים')
     )
@@ -91,7 +124,7 @@ def _extract_nat(text: str, url: str) -> dict | None:
         'turnout_pct': pct,
         'source_url': url,
         'cites_cec': cites_cec,
-        'snippet': re.sub(r'\s+', ' ', m.group(0)),
+        'snippet': re.sub(r'\s+', ' ', snip),
     }
 
 
@@ -180,11 +213,15 @@ def apply_cities_from_votes26(now: datetime) -> dict:
         e, v = reg.get('eligible'), reg.get('voters')
         if not name or not isinstance(e, (int, float)) or not isinstance(v, (int, float)) or e <= 0:
             continue
+        reported = int(reg['reported']) if isinstance(reg.get('reported'), (int, float)) else None
+        stations = int(reg['stations']) if isinstance(reg.get('stations'), (int, float)) else None
+        if reported is not None and stations is not None and reported > stations:
+            reported = stations = None  # drop inconsistent station fields
         reg_counts[name] = {
             'eligible': int(e),
             'voted': int(v),
-            'reported_stations': int(reg['reported']) if isinstance(reg.get('reported'), (int, float)) else None,
-            'total_stations': int(reg['stations']) if isinstance(reg.get('stations'), (int, float)) else None,
+            'reported_stations': reported,
+            'total_stations': stations,
         }
 
     records = []
