@@ -60,6 +60,7 @@ PCT_AFTER_RE = re.compile(
 )
 ARTICLE_RE = re.compile(r'/news/article/([a-zA-Z0-9]+)')
 SEED_ARTICLES = (
+    'https://www.ynet.co.il/news/article/b1ti7d0hfl',
     'https://www.ynet.co.il/news/article/r1m8p8a3fe',
     'https://www.ynet.co.il/news/article/sypynnr2zx',
     'https://www.ynet.co.il/news/article/hyzfwbrhmg',

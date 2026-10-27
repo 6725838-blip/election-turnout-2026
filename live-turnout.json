@@ -1,377 +1,378 @@
 {
   "format_version": 1,
-  "source": "ועדת הבחירות המרכזית — ארצי ממסע״ת (עיתונות); יישובים מדיווחי קלפיות (Votes26, מאומת מול ynet)",
-  "updated_at": "2026-10-27T19:09:29+02:00",
-  "national_turnout_pct": 66.7,
-  "national_as_of": "2026-10-27T18:00:00+02:00",
-  "national_source_url": "https://www.ynet.co.il/news/article/r1m8p8a3fe",
+  "source": "ועדת הבחירות המרכזית — מסע״ת דין ליבנה כפי שפורסם ב־ynet; יישובים מדיווחי קלפיות",
+  "updated_at": "2026-10-27T21:07:12+02:00",
+  "national_turnout_pct": 74.3,
+  "national_as_of": "2026-10-27T20:00:00+02:00",
+  "national_source_url": "https://www.ynet.co.il/news/article/b1ti7d0hfl",
   "records": [
     {
       "city": "אום אל־פחם",
-      "turnout_pct": 56.15,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 70.11,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "אור יהודה",
-      "turnout_pct": 62.71,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 72.59,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "אילת",
-      "turnout_pct": 41.81,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 48.2,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "אלעד",
-      "turnout_pct": 71.15,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 80.05,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "אלקנה",
-      "turnout_pct": 71.68,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 83.12,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "אפרת",
-      "turnout_pct": 67.59,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 73.97,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "אשקלון",
-      "turnout_pct": 58.8,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 65.93,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי",
       "eligible": 137440,
-      "voted": 80810
+      "voted": 90608
     },
     {
       "city": "באר שבע",
-      "turnout_pct": 55.79,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 63.01,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי",
       "eligible": 169668,
-      "voted": 94658
+      "voted": 106911
     },
     {
       "city": "בית אל",
-      "turnout_pct": 71.51,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 77.22,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "בית שאן",
-      "turnout_pct": 62.37,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 71.46,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "ביתר עילית",
-      "turnout_pct": 63.63,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 74.49,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "בני ברק",
-      "turnout_pct": 64.34,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 72.46,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי",
       "eligible": 126100,
-      "voted": 81127
+      "voted": 91376
     },
     {
       "city": "גבעתיים",
-      "turnout_pct": 66.23,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 72.53,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "דימונה",
-      "turnout_pct": 56.12,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 63.47,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "הוד השרון",
-      "turnout_pct": 69.25,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 76.61,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "הרצליה",
-      "turnout_pct": 63.12,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 69.18,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי",
       "eligible": 96812,
-      "voted": 61104
+      "voted": 66977
     },
     {
       "city": "זכרון יעקב",
-      "turnout_pct": 66.72,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 73.98,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "טייבה",
-      "turnout_pct": 62.72,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 74.27,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "טירה",
-      "turnout_pct": 66.5,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 77.48,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "טירת כרמל",
-      "turnout_pct": 61.21,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 68.47,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "טלמון",
-      "turnout_pct": 74.91,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 78.58,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "טמרה",
-      "turnout_pct": 68.86,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 76.85,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "יד בנימין",
-      "turnout_pct": 68.4,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 75.61,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "כפר חב״ד",
-      "turnout_pct": 54.03,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 64.01,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "כפר סבא",
-      "turnout_pct": 66.27,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 72.44,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי",
       "eligible": 83769,
-      "voted": 55513
+      "voted": 60679
     },
     {
       "city": "כפר קאסם",
-      "turnout_pct": 73.87,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 81.33,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "מודיעין עילית",
-      "turnout_pct": 69.82,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 77.25,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "מודיעין־מכבים־רעות",
-      "turnout_pct": 70.12,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 76.46,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "מעלה אדומים",
-      "turnout_pct": 63.23,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 70.4,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "נס ציונה",
-      "turnout_pct": 69.43,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 76.71,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "נצרת",
-      "turnout_pct": 58.39,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 70.02,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "סחנין",
-      "turnout_pct": 71.39,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 83.52,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "עפולה",
-      "turnout_pct": 60.5,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 68.79,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "עראבה",
-      "turnout_pct": 64.15,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 75.74,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "קדומים",
-      "turnout_pct": 70.68,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 76.78,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "קריית אונו",
-      "turnout_pct": 69.65,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 77.17,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "קריית ארבע",
-      "turnout_pct": 62.3,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 68.21,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "קריית אתא",
-      "turnout_pct": 61.86,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 69.42,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "קריית גת",
-      "turnout_pct": 62.38,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 68.84,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "קריית מלאכי",
-      "turnout_pct": 63.24,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 70.71,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "קריית שמונה",
-      "turnout_pct": 53.04,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 59.29,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "קרני שומרון",
-      "turnout_pct": 70.7,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 76.12,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "רהט",
-      "turnout_pct": 72.19,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 79.82,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "רכסים",
-      "turnout_pct": 75.43,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 83.4,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "רמת גן",
-      "turnout_pct": 61.89,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 68.56,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי",
       "eligible": 149635,
-      "voted": 92610
+      "voted": 102597
     },
     {
       "city": "רמת השרון",
-      "turnout_pct": 67.84,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 74.29,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "רעננה",
-      "turnout_pct": 62.82,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 68.7,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "שדרות",
-      "turnout_pct": 62.17,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 69.02,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "שוהם",
-      "turnout_pct": 73.47,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 79.66,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     },
     {
       "city": "שפרעם",
-      "turnout_pct": 62.28,
-      "as_of": "2026-10-27T19:05:29+02:00",
+      "turnout_pct": 72.53,
+      "as_of": "2026-10-27T20:57:33+02:00",
       "partial": true,
       "source_note": "דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי"
     }
   ],
   "notes": [
-    "ארצי 66.7% · 2026-10-27T18:00:00+02:00",
-    "50 יישובי בסיס מסיכום קלפיות ועדה (as_of 2026-10-27T19:05:29+02:00); partial.",
-    "GovMap municipal_data.json לכנסת 26 עדיין לא JSON."
+    "ארצי 74.3% נכון ל־20:00 (ynet / דין ליבנה).",
+    "50 יישובי בסיס מסיכום קלפיות (as_of 2026-10-27T20:57:33+02:00); partial.",
+    "מקור ארצי: https://www.ynet.co.il/news/article/b1ti7d0hfl",
+    "GovMap municipal_data.json לכנסת 26 עדיין HTML."
   ]
 }
