@@ -22,15 +22,17 @@ VOTES26_TURNOUT = 'https://votes26.com/api/v1/elections/26/turnout'
 UA = {'User-Agent': 'PublicTurnoutDashboard/1.0', 'Accept': '*/*'}
 IL = ZoneInfo('Asia/Jerusalem')
 
-# CEC-citing press city % @12:00 — sanity check against Votes26 localities
+# CEC-citing press city % @16:00 (ynet hyzfwbrhmg / live-blog) — sanity vs Votes26
 PRESS_CITY_PCT = {
-    'באר שבע': 27.4, 'בני ברק': 28.4, 'קריית שמונה': 23.9, 'נצרת': 24.9,
-    'קריית אתא': 31.4, 'מודיעין־מכבים־רעות': 36.7, 'מודיעין עילית': 33.2,
-    'מעלה אדומים': 31.9, 'אשקלון': 29.0, 'שדרות': 30.3, 'דימונה': 28.8,
-    'אילת': 22.2, 'אום אל־פחם': 17.6, 'סחנין': 25.3, 'ביתר עילית': 28.3,
-    'אלעד': 32.0, 'רמת גן': 29.0, 'רמת השרון': 35.2, 'הוד השרון': 33.6,
-    'כפר סבא': 32.6, 'עפולה': 30.8, 'רהט': 36.9,
+    'תל אביב-יפו': 50.4, 'ירושלים': 47.7, 'חיפה': 46.2, 'ראשון לציון': 50.9,
+    'פתח תקווה': 52.8, 'נתניה': 41.5, 'אשדוד': 50.4, 'רמת גן': 52.9,
+    'חולון': 48.5, 'באר שבע': 46.8, 'בני ברק': 53.3, 'רחובות': 54.0,
+    'בת ים': 40.0, 'נצרת': 46.7, 'רהט': 60.6, 'מודיעין עילית': 58.8,
+    'שדרות': 51.6, 'קריית שמונה': 43.2, 'נהריה': 49.1, 'עכו': 43.8,
+    'אום אל־פחם': 41.7, 'שפרעם': 48.3, 'אלעד': 59.0, 'ביתר עילית': 52.0,
+    'בית שמש': 47.1,
 }
+DELTA_NOISE_RE = re.compile(r'(?:זינק|עלי(?:יה|ה)|ירד|ירדה|צמח|קפץ)\s*(?:ב|של)?\s*-?\s*\d', re.U)
 
 # e.g. שיעור ההצבעה עד 10:00 - 16.68% / עד השעה 12:00 ... 31.5%
 HEADLINE_RE = re.compile(
@@ -47,8 +49,12 @@ PCT_FIRST_RE = re.compile(
     r'(\d{1,2}(?:[.,]\d+)?)\s*%\s*הצביעו עד(?:\s+השעה)?\s*(\d{1,2}):00',
     re.U,
 )
+# Cumulative only — avoid «עד 16:00 … זינק ב-17.2%» deltas
 PCT_AFTER_RE = re.compile(
-    r'(?:נכון ל|עד)(?:\s+השעה)?\s*(\d{1,2}):00[^\d%]{0,60}?(\d{1,2}(?:[.,]\d+)?)\s*%',
+    r'(?:נכון ל|עד)(?:\s+השעה)?\s*(\d{1,2}):00'
+    r'(?:(?!(?:זינק|עלי(?:יה|ה)|ירד|ירדה|צמח|קפץ)).){0,50}?'
+    r'(?:שיעור ההצבעה|הצביעו|עומד על|אחוז ההצבעה)[^\d%]{0,20}?'
+    r'(\d{1,2}(?:[.,]\d+)?)\s*%',
     re.U,
 )
 ARTICLE_RE = re.compile(r'/news/article/([a-zA-Z0-9]+)')
@@ -98,7 +104,12 @@ def _extract_nat(text: str, url: str) -> dict | None:
     ):
         m = rx.search(text)
         if m:
-            candidates.append(from_match(m, hour_first))
+            hour, pct, snip = from_match(m, hour_first)
+            if DELTA_NOISE_RE.search(snip):
+                continue
+            if not (5.0 <= pct <= 95.0):
+                continue
+            candidates.append((hour, pct, snip))
     if not candidates:
         title = re.search(r'<title>(.*?)</title>', text, re.I | re.S)
         if title:
@@ -111,11 +122,16 @@ def _extract_nat(text: str, url: str) -> dict | None:
             ):
                 m = rx.search(flat)
                 if m:
-                    candidates.append(from_match(m, hour_first))
+                    hour, pct, snip = from_match(m, hour_first)
+                    if DELTA_NOISE_RE.search(snip):
+                        continue
+                    if not (5.0 <= pct <= 95.0):
+                        continue
+                    candidates.append((hour, pct, snip))
     if not candidates:
         return None
-    # Prefer the chronologically latest hour found on the page
-    hour, pct, snip = max(candidates, key=lambda t: t[0])
+    # Prefer the chronologically latest hour; for ties prefer higher cumulative %
+    hour, pct, snip = max(candidates, key=lambda t: (t[0], t[1]))
     cites_cec = any(
         k in text for k in ('ועדת הבחירות', 'דין ליבנה', 'ליבנה', 'מסע״ת', 'מסיבת עיתונאים')
     )
@@ -166,9 +182,15 @@ def scan_ynet() -> list[dict]:
         if not row['cites_cec']:
             continue
         prev = by_time.get(row['time'])
-        if prev is None or ('/article/' in row['source_url'] and '/article/' not in prev.get('source_url', '')):
+        if prev is None:
             by_time[row['time']] = row
-        elif prev['turnout_pct'] != row['turnout_pct'] and '/article/' in row['source_url']:
+            continue
+        # Prefer article URLs; never replace a higher cumulative % with a lower one
+        prev_art = '/article/' in prev.get('source_url', '')
+        row_art = '/article/' in row.get('source_url', '')
+        if float(row['turnout_pct']) > float(prev['turnout_pct']) + 1e-6:
+            by_time[row['time']] = row
+        elif abs(float(row['turnout_pct']) - float(prev['turnout_pct'])) <= 1e-6 and row_art and not prev_art:
             by_time[row['time']] = row
     return [by_time[k] for k in sorted(by_time)]
 
@@ -297,10 +319,19 @@ def apply_national(point: dict, now: datetime) -> dict:
     existing = {p['time']: p for p in points}
     changed = False
     t = point['time']
-    if t not in existing or abs(float(existing[t]['turnout_pct']) - float(point['turnout_pct'])) > 1e-6:
+    new_pct = float(point['turnout_pct'])
+    # Reject non-monotonic national points (turnout only rises during the day)
+    earlier = [p for p in points if p['time'] < t]
+    if earlier:
+        max_earlier = max(float(p['turnout_pct']) for p in earlier)
+        if new_pct + 0.05 < max_earlier:
+            return {'changed': False, 'skipped': 'non_monotonic', 'latest': max(points, key=lambda p: p['time'])}
+    if t in existing and float(existing[t]['turnout_pct']) > new_pct + 1e-6:
+        return {'changed': False, 'skipped': 'lower_than_existing', 'latest': max(points, key=lambda p: p['time'])}
+    if t not in existing or abs(float(existing[t]['turnout_pct']) - new_pct) > 1e-6:
         entry = {
             'time': t,
-            'turnout_pct': float(point['turnout_pct']),
+            'turnout_pct': new_pct,
             'source_url': point['source_url'],
             'source_type': 'secondary_citing_official',
             'verified': True,
