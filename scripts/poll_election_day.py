@@ -22,7 +22,8 @@ VOTES26_TURNOUT = 'https://votes26.com/api/v1/elections/26/turnout'
 UA = {'User-Agent': 'PublicTurnoutDashboard/1.0', 'Accept': '*/*'}
 IL = ZoneInfo('Asia/Jerusalem')
 
-# CEC-citing press city % @16:00 (ynet hyzfwbrhmg / live-blog) — sanity vs Votes26
+# CEC-citing press city % @16:00 (ynet hyzfwbrhmg) — only enforced near that hour
+PRESS_CITY_HOUR = 16
 PRESS_CITY_PCT = {
     'תל אביב-יפו': 50.4, 'ירושלים': 47.7, 'חיפה': 46.2, 'ראשון לציון': 50.9,
     'פתח תקווה': 52.8, 'נתניה': 41.5, 'אשדוד': 50.4, 'רמת גן': 52.9,
@@ -59,6 +60,7 @@ PCT_AFTER_RE = re.compile(
 )
 ARTICLE_RE = re.compile(r'/news/article/([a-zA-Z0-9]+)')
 SEED_ARTICLES = (
+    'https://www.ynet.co.il/news/article/r1m8p8a3fe',
     'https://www.ynet.co.il/news/article/sypynnr2zx',
     'https://www.ynet.co.il/news/article/hyzfwbrhmg',
     'https://www.ynet.co.il/news/article/bkkekx02mg',
@@ -153,6 +155,29 @@ def scan_ynet() -> list[dict]:
         html = raw.decode('utf-8', 'replace')
     except Exception:
         html = ''
+    # Category teasers often carry the latest CEC headline before article HTML is scraped
+    if html:
+        cat_row = _extract_nat(html, YNET_CAT)
+        if cat_row and cat_row.get('cites_cec'):
+            found.append(cat_row)
+        for rx in (HEADLINE_RE, PCT_FIRST_RE, ALT_NAT_RE):
+            for m in rx.finditer(html):
+                if rx is PCT_FIRST_RE:
+                    hour, pct = int(m.group(2)), float(m.group(1).replace(',', '.'))
+                else:
+                    hour, pct = int(m.group(1)), float(m.group(2).replace(',', '.'))
+                if DELTA_NOISE_RE.search(m.group(0)) or not (5.0 <= pct <= 95.0):
+                    continue
+                prefix = html[max(0, m.start() - 500):m.start()]
+                ids = ARTICLE_RE.findall(prefix)
+                url = f'https://www.ynet.co.il/news/article/{ids[-1]}' if ids else YNET_CAT
+                found.append({
+                    'time': f'{hour:02d}:00',
+                    'turnout_pct': pct,
+                    'source_url': url,
+                    'cites_cec': True,
+                    'snippet': m.group(0),
+                })
     for art_id in dict.fromkeys(ARTICLE_RE.findall(html)):
         urls.append(f'https://www.ynet.co.il/news/article/{art_id}')
     for url in dict.fromkeys(urls):
@@ -164,19 +189,6 @@ def scan_ynet() -> list[dict]:
         row = _extract_nat(text, url)
         if row:
             found.append(row)
-    for m in HEADLINE_RE.finditer(html):
-        hour = int(m.group(1))
-        pct = float(m.group(2).replace(',', '.'))
-        prefix = html[max(0, m.start() - 500):m.start()]
-        ids = ARTICLE_RE.findall(prefix)
-        url = f'https://www.ynet.co.il/news/article/{ids[-1]}' if ids else YNET_CAT
-        found.append({
-            'time': f'{hour:02d}:00',
-            'turnout_pct': pct,
-            'source_url': url,
-            'cites_cec': True,
-            'snippet': m.group(0),
-        })
     by_time: dict[str, dict] = {}
     for row in found:
         if not row['cites_cec']:
@@ -215,16 +227,36 @@ def apply_cities_from_votes26(now: datetime) -> dict:
     rep = reports[-1]
     at = datetime.fromisoformat(str(rep['at']).replace('Z', '+00:00')).astimezone(IL)
     as_of = at.replace(microsecond=0).isoformat()
+    rep_hour = float(rep.get('hour') or 0)
 
     loc_pct: dict[str, float] = {}
     for row in rep['localities']:
         name = by_code.get(str(row[0]))
         if name:
             loc_pct[name] = round(float(row[1]) * 100.0, 2)
-    for name, press in PRESS_CITY_PCT.items():
-        got = loc_pct.get(name)
-        if got is not None and abs(got - press) > 0.35:
-            return {'changed': False, 'error': f'press mismatch {name}: {press} vs {got}'}
+    # Press cross-check only for the snapshot hour those % were curated for
+    if abs(rep_hour - PRESS_CITY_HOUR) <= 0.5:
+        for name, press in PRESS_CITY_PCT.items():
+            got = loc_pct.get(name)
+            if got is not None and abs(got - press) > 0.35:
+                return {'changed': False, 'error': f'press mismatch {name}: {press} vs {got}'}
+    else:
+        # Later waves: most cities should not drop vs previous live rows
+        prev_live = _load_json(LIVE) if LIVE.exists() else {}
+        drops = 0
+        compared = 0
+        for row in prev_live.get('records') or []:
+            name, old = row.get('city'), row.get('turnout_pct')
+            if name not in loc_pct or not isinstance(old, (int, float)):
+                continue
+            compared += 1
+            if loc_pct[name] + 0.5 < float(old):
+                drops += 1
+        if compared >= 10 and drops > compared * 0.25:
+            return {
+                'changed': False,
+                'error': f'monotonic city check failed: {drops}/{compared} drops',
+            }
 
     reg_counts: dict[str, dict] = {}
     for reg in rep.get('regions') or []:

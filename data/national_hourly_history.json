@@ -14,12 +14,54 @@
       "final_source_url": "https://votes21.bechirot.gov.il/",
       "final_source_type": "official",
       "points": [
-        {"time": "10:00", "turnout_pct": 12.9, "source_url": "https://www.timesofisrael.com/election-liveblog-september-17-2019/", "source_type": "secondary_citing_official", "verified": true, "note": "נגזר מהשוואת ועדת הבחירות בשידור ספטמבר 2019 (15.0%−2.1)."},
-        {"time": "12:00", "turnout_pct": 24.8, "source_url": "https://www.timesofisrael.com/election-liveblog-september-17-2019/", "source_type": "secondary_citing_official", "verified": true, "note": "מצוטט כהשוואה רשמית בשידור ספטמבר 2019."},
-        {"time": "14:00", "turnout_pct": 35.8, "source_url": "https://www.ynet.co.il/articles/0,7340,L-5491757,00.html", "source_type": "secondary_citing_official", "verified": true, "note": "מנכ״לית ועדת הבחירות אורלי עדס; מאומת גם בהשוואות ספטמבר."},
-        {"time": "16:00", "turnout_pct": 42.8, "source_url": "https://www.timesofisrael.com/liveblog-march-2-2020/", "source_type": "secondary_citing_official", "verified": true, "note": "השוואת ועדה בשידור מרץ 2020."},
-        {"time": "18:00", "turnout_pct": 52.0, "source_url": "https://www.timesofisrael.com/liveblog-march-2-2020/", "source_type": "secondary_citing_official", "verified": true, "note": "השוואת ועדה בשידור מרץ 2020."},
-        {"time": "20:00", "turnout_pct": 61.3, "source_url": "https://www.ynetnews.com/article/5590770", "source_type": "secondary_citing_official", "verified": true, "note": "מצוטט כנתון ועדה בהשוואה לספטמבר 2019."}
+        {
+          "time": "10:00",
+          "turnout_pct": 12.9,
+          "source_url": "https://www.timesofisrael.com/election-liveblog-september-17-2019/",
+          "source_type": "secondary_citing_official",
+          "verified": true,
+          "note": "נגזר מהשוואת ועדת הבחירות בשידור ספטמבר 2019 (15.0%−2.1)."
+        },
+        {
+          "time": "12:00",
+          "turnout_pct": 24.8,
+          "source_url": "https://www.timesofisrael.com/election-liveblog-september-17-2019/",
+          "source_type": "secondary_citing_official",
+          "verified": true,
+          "note": "מצוטט כהשוואה רשמית בשידור ספטמבר 2019."
+        },
+        {
+          "time": "14:00",
+          "turnout_pct": 35.8,
+          "source_url": "https://www.ynet.co.il/articles/0,7340,L-5491757,00.html",
+          "source_type": "secondary_citing_official",
+          "verified": true,
+          "note": "מנכ״לית ועדת הבחירות אורלי עדס; מאומת גם בהשוואות ספטמבר."
+        },
+        {
+          "time": "16:00",
+          "turnout_pct": 42.8,
+          "source_url": "https://www.timesofisrael.com/liveblog-march-2-2020/",
+          "source_type": "secondary_citing_official",
+          "verified": true,
+          "note": "השוואת ועדה בשידור מרץ 2020."
+        },
+        {
+          "time": "18:00",
+          "turnout_pct": 52.0,
+          "source_url": "https://www.timesofisrael.com/liveblog-march-2-2020/",
+          "source_type": "secondary_citing_official",
+          "verified": true,
+          "note": "השוואת ועדה בשידור מרץ 2020."
+        },
+        {
+          "time": "20:00",
+          "turnout_pct": 61.3,
+          "source_url": "https://www.ynetnews.com/article/5590770",
+          "source_type": "secondary_citing_official",
+          "verified": true,
+          "note": "מצוטט כנתון ועדה בהשוואה לספטמבר 2019."
+        }
       ]
     },
     "2019-09": {
@@ -29,12 +71,49 @@
       "final_source_url": "https://votes22.bechirot.gov.il/",
       "final_source_type": "official",
       "points": [
-        {"time": "10:00", "turnout_pct": 15.0, "source_url": "https://www.timesofisrael.com/election-liveblog-september-17-2019/", "source_type": "secondary_citing_official", "verified": true, "note": "דיווח ועדת הבחירות בשידור Times of Israel."},
-        {"time": "12:00", "turnout_pct": 26.8, "source_url": "https://www.timesofisrael.com/election-liveblog-september-17-2019/", "source_type": "secondary_citing_official", "verified": true},
-        {"time": "14:00", "turnout_pct": 36.5, "source_url": "https://www.timesofisrael.com/election-liveblog-september-17-2019/", "source_type": "secondary_citing_official", "verified": true},
-        {"time": "16:00", "turnout_pct": 44.3, "source_url": "https://www.timesofisrael.com/election-liveblog-september-17-2019/", "source_type": "secondary_citing_official", "verified": true},
-        {"time": "18:00", "turnout_pct": 53.5, "source_url": "https://www.timesofisrael.com/election-liveblog-september-17-2019/", "source_type": "secondary_citing_official", "verified": true},
-        {"time": "20:00", "turnout_pct": 63.7, "source_url": "https://www.timesofisrael.com/election-liveblog-september-17-2019/", "source_type": "secondary_citing_official", "verified": true}
+        {
+          "time": "10:00",
+          "turnout_pct": 15.0,
+          "source_url": "https://www.timesofisrael.com/election-liveblog-september-17-2019/",
+          "source_type": "secondary_citing_official",
+          "verified": true,
+          "note": "דיווח ועדת הבחירות בשידור Times of Israel."
+        },
+        {
+          "time": "12:00",
+          "turnout_pct": 26.8,
+          "source_url": "https://www.timesofisrael.com/election-liveblog-september-17-2019/",
+          "source_type": "secondary_citing_official",
+          "verified": true
+        },
+        {
+          "time": "14:00",
+          "turnout_pct": 36.5,
+          "source_url": "https://www.timesofisrael.com/election-liveblog-september-17-2019/",
+          "source_type": "secondary_citing_official",
+          "verified": true
+        },
+        {
+          "time": "16:00",
+          "turnout_pct": 44.3,
+          "source_url": "https://www.timesofisrael.com/election-liveblog-september-17-2019/",
+          "source_type": "secondary_citing_official",
+          "verified": true
+        },
+        {
+          "time": "18:00",
+          "turnout_pct": 53.5,
+          "source_url": "https://www.timesofisrael.com/election-liveblog-september-17-2019/",
+          "source_type": "secondary_citing_official",
+          "verified": true
+        },
+        {
+          "time": "20:00",
+          "turnout_pct": 63.7,
+          "source_url": "https://www.timesofisrael.com/election-liveblog-september-17-2019/",
+          "source_type": "secondary_citing_official",
+          "verified": true
+        }
       ]
     },
     "2020-03": {
@@ -44,12 +123,49 @@
       "final_source_url": "https://votes23.bechirot.gov.il/",
       "final_source_type": "official",
       "points": [
-        {"time": "10:00", "turnout_pct": 14.5, "source_url": "https://www.timesofisrael.com/liveblog-march-2-2020/", "source_type": "secondary_citing_official", "verified": true},
-        {"time": "12:00", "turnout_pct": 27.6, "source_url": "https://www.timesofisrael.com/liveblog-march-2-2020/", "source_type": "secondary_citing_official", "verified": true},
-        {"time": "14:00", "turnout_pct": 38.1, "source_url": "https://www.israelnationalnews.com/news/276701", "source_type": "secondary_citing_official", "verified": true},
-        {"time": "16:00", "turnout_pct": 47.0, "source_url": "https://www.timesofisrael.com/liveblog-march-2-2020/", "source_type": "secondary_citing_official", "verified": true},
-        {"time": "18:00", "turnout_pct": 56.3, "source_url": "https://www.timesofisrael.com/liveblog-march-2-2020/", "source_type": "secondary_citing_official", "verified": true},
-        {"time": "20:00", "turnout_pct": 65.5, "source_url": "https://www.timesofisrael.com/liveblog-march-2-2020/", "source_type": "secondary_citing_official", "verified": true, "note": "TheMarker דיווח 65.6%; נשמר 65.5 לפי TOI / Israel Hayom."}
+        {
+          "time": "10:00",
+          "turnout_pct": 14.5,
+          "source_url": "https://www.timesofisrael.com/liveblog-march-2-2020/",
+          "source_type": "secondary_citing_official",
+          "verified": true
+        },
+        {
+          "time": "12:00",
+          "turnout_pct": 27.6,
+          "source_url": "https://www.timesofisrael.com/liveblog-march-2-2020/",
+          "source_type": "secondary_citing_official",
+          "verified": true
+        },
+        {
+          "time": "14:00",
+          "turnout_pct": 38.1,
+          "source_url": "https://www.israelnationalnews.com/news/276701",
+          "source_type": "secondary_citing_official",
+          "verified": true
+        },
+        {
+          "time": "16:00",
+          "turnout_pct": 47.0,
+          "source_url": "https://www.timesofisrael.com/liveblog-march-2-2020/",
+          "source_type": "secondary_citing_official",
+          "verified": true
+        },
+        {
+          "time": "18:00",
+          "turnout_pct": 56.3,
+          "source_url": "https://www.timesofisrael.com/liveblog-march-2-2020/",
+          "source_type": "secondary_citing_official",
+          "verified": true
+        },
+        {
+          "time": "20:00",
+          "turnout_pct": 65.5,
+          "source_url": "https://www.timesofisrael.com/liveblog-march-2-2020/",
+          "source_type": "secondary_citing_official",
+          "verified": true,
+          "note": "TheMarker דיווח 65.6%; נשמר 65.5 לפי TOI / Israel Hayom."
+        }
       ]
     },
     "2021-03": {
@@ -59,12 +175,48 @@
       "final_source_url": "https://votes24.bechirot.gov.il/",
       "final_source_type": "official",
       "points": [
-        {"time": "10:00", "turnout_pct": 14.8, "source_url": "https://www.israelhayom.co.il/article/863781", "source_type": "secondary_citing_official", "verified": true},
-        {"time": "12:00", "turnout_pct": 25.4, "source_url": "https://www.israelnationalnews.com/news/299055", "source_type": "secondary_citing_official", "verified": true},
-        {"time": "14:00", "turnout_pct": 34.6, "source_url": "https://www.israelhayom.co.il/article/863781", "source_type": "secondary_citing_official", "verified": true},
-        {"time": "16:00", "turnout_pct": 42.3, "source_url": "https://www.israelhayom.co.il/article/863781", "source_type": "secondary_citing_official", "verified": true},
-        {"time": "18:00", "turnout_pct": 51.5, "source_url": "https://www.israelhayom.co.il/article/863781", "source_type": "secondary_citing_official", "verified": true},
-        {"time": "20:00", "turnout_pct": 60.9, "source_url": "https://www.israelhayom.co.il/article/863781", "source_type": "secondary_citing_official", "verified": true}
+        {
+          "time": "10:00",
+          "turnout_pct": 14.8,
+          "source_url": "https://www.israelhayom.co.il/article/863781",
+          "source_type": "secondary_citing_official",
+          "verified": true
+        },
+        {
+          "time": "12:00",
+          "turnout_pct": 25.4,
+          "source_url": "https://www.israelnationalnews.com/news/299055",
+          "source_type": "secondary_citing_official",
+          "verified": true
+        },
+        {
+          "time": "14:00",
+          "turnout_pct": 34.6,
+          "source_url": "https://www.israelhayom.co.il/article/863781",
+          "source_type": "secondary_citing_official",
+          "verified": true
+        },
+        {
+          "time": "16:00",
+          "turnout_pct": 42.3,
+          "source_url": "https://www.israelhayom.co.il/article/863781",
+          "source_type": "secondary_citing_official",
+          "verified": true
+        },
+        {
+          "time": "18:00",
+          "turnout_pct": 51.5,
+          "source_url": "https://www.israelhayom.co.il/article/863781",
+          "source_type": "secondary_citing_official",
+          "verified": true
+        },
+        {
+          "time": "20:00",
+          "turnout_pct": 60.9,
+          "source_url": "https://www.israelhayom.co.il/article/863781",
+          "source_type": "secondary_citing_official",
+          "verified": true
+        }
       ]
     },
     "2022-11": {
@@ -74,13 +226,57 @@
       "final_source_url": "https://votes25.bechirot.gov.il/",
       "final_source_type": "official",
       "points": [
-        {"time": "10:00", "turnout_pct": 15.9, "source_url": "https://www.gov.il/he/pages/voting-by-hour", "source_type": "official", "verified": true, "note": "טבלת ועדת הבחירות / סקר מדגמי למ״ס."},
-        {"time": "12:00", "turnout_pct": 28.4, "source_url": "https://www.gov.il/he/pages/voting-by-hour", "source_type": "official", "verified": true},
-        {"time": "14:00", "turnout_pct": 38.9, "source_url": "https://www.gov.il/he/pages/voting-by-hour", "source_type": "official", "verified": true},
-        {"time": "16:00", "turnout_pct": 47.5, "source_url": "https://www.gov.il/he/pages/voting-by-hour", "source_type": "official", "verified": true},
-        {"time": "18:00", "turnout_pct": 57.7, "source_url": "https://www.gov.il/he/pages/voting-by-hour", "source_type": "official", "verified": true},
-        {"time": "20:00", "turnout_pct": 66.3, "source_url": "https://www.gov.il/he/pages/voting-by-hour", "source_type": "official", "verified": true},
-        {"time": "22:00", "turnout_pct": 70.6, "source_url": "https://www.gov.il/he/pages/voting-by-hour", "source_type": "official", "verified": true, "note": "סקר מדגמי בסגירה; הסופי הרשמי 70.63%."}
+        {
+          "time": "10:00",
+          "turnout_pct": 15.9,
+          "source_url": "https://www.gov.il/he/pages/voting-by-hour",
+          "source_type": "official",
+          "verified": true,
+          "note": "טבלת ועדת הבחירות / סקר מדגמי למ״ס."
+        },
+        {
+          "time": "12:00",
+          "turnout_pct": 28.4,
+          "source_url": "https://www.gov.il/he/pages/voting-by-hour",
+          "source_type": "official",
+          "verified": true
+        },
+        {
+          "time": "14:00",
+          "turnout_pct": 38.9,
+          "source_url": "https://www.gov.il/he/pages/voting-by-hour",
+          "source_type": "official",
+          "verified": true
+        },
+        {
+          "time": "16:00",
+          "turnout_pct": 47.5,
+          "source_url": "https://www.gov.il/he/pages/voting-by-hour",
+          "source_type": "official",
+          "verified": true
+        },
+        {
+          "time": "18:00",
+          "turnout_pct": 57.7,
+          "source_url": "https://www.gov.il/he/pages/voting-by-hour",
+          "source_type": "official",
+          "verified": true
+        },
+        {
+          "time": "20:00",
+          "turnout_pct": 66.3,
+          "source_url": "https://www.gov.il/he/pages/voting-by-hour",
+          "source_type": "official",
+          "verified": true
+        },
+        {
+          "time": "22:00",
+          "turnout_pct": 70.6,
+          "source_url": "https://www.gov.il/he/pages/voting-by-hour",
+          "source_type": "official",
+          "verified": true,
+          "note": "סקר מדגמי בסגירה; הסופי הרשמי 70.63%."
+        }
       ]
     },
     "2026-10": {
@@ -121,10 +317,15 @@
           "source_type": "secondary_citing_official",
           "verified": true,
           "note": "ממלא מקום מנכ״ל ועדת הבחירות דין ליבנה; מצוטט ב־ynet. מול 47.5% ב־2022."
+        },
+        {
+          "time": "18:00",
+          "turnout_pct": 66.7,
+          "source_url": "https://www.ynet.co.il/news/article/r1m8p8a3fe",
+          "source_type": "secondary_citing_official",
+          "verified": true,
+          "note": "ממלא מקום מנכ״ל ועדת הבחירות דין ליבנה; מצוטט ב־ynet/ישראל היום. מול 57.7% ב־2022."
         }
-
-
-
       ]
     }
   }
