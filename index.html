@@ -475,6 +475,17 @@ function livePct(l){if(!l)return null;const e=val(l.eligible),v=val(l.voted);if(
 function stationPartial(l){if(!l)return false;const r=val(l.reported_stations),t=val(l.total_stations);if(r===null&&t===null)return false;return (r??0)<(t??0)}
 function reportFull(l){return !!l&&l.partial!==true&&!stationPartial(l)}
 function complete(l){return reportFull(l)&&!l.preserved_previous}
+/** Usable daytime row: real counts, or turnout_pct (even when marked partial). */
+function liveReported(l){return !!l&&!l.preserved_previous&&livePct(l)!=null}
+/** Weight for group aggregate: prefer 2026 counts; else turnout_pct × eligible2022 (display only). */
+function cityLiveWeight(r){
+ const l=getLive(r.name);if(!liveReported(l))return null;
+ const e=val(l.eligible),v=val(l.voted);
+ if(e>0&&v!==null&&v>=0&&v<=e)return {e,v,fromCounts:true};
+ const p=livePct(l),be=val(r.eligible2022);
+ if(p==null||!(be>0))return null;
+ return {e:be,v:be*p/100,fromCounts:false};
+}
 function nationalLive(){
  const manual=val($('nationalManual')?.value);
  if(manual!==null&&manual>=0&&manual<=100)return {value:manual,manual:true};
@@ -491,17 +502,19 @@ function weightedFinal(pick, yearField){
 }
 function groupStats(id){
  const selected=selectedInGroup(id);
- const full=selected.filter(r=>{const l=getLive(r.name);return complete(l)&&val(l.eligible)>0&&val(l.voted)!=null});
+ const reported=selected.filter(r=>liveReported(getLive(r.name)));
+ const full=reported.filter(r=>complete(getLive(r.name)));
+ const weights=reported.map(r=>({r,w:cityLiveWeight(r)})).filter(x=>x.w);
  let current=null,votedSum=null,eligSum=null;
- if(full.length){
-  eligSum=full.reduce((s,r)=>s+val(getLive(r.name).eligible),0);
-  votedSum=full.reduce((s,r)=>s+val(getLive(r.name).voted),0);
+ if(weights.length){
+  eligSum=weights.reduce((s,x)=>s+x.w.e,0);
+  votedSum=weights.reduce((s,x)=>s+x.w.v,0);
   current=eligSum>0?100*votedSum/eligSum:null;
  }
  // 2022 reference for progress uses the same reported cities; display baseline uses full group when none reported.
  let baselineReported=null;
- if(full.length&&full.every(r=>val(r.eligible2022)>0&&val(r.voters2022)!=null)){
-  const be=full.reduce((s,r)=>s+r.eligible2022,0),bv=full.reduce((s,r)=>s+r.voters2022,0);
+ if(reported.length&&reported.every(r=>val(r.eligible2022)>0&&val(r.voters2022)!=null)){
+  const be=reported.reduce((s,r)=>s+r.eligible2022,0),bv=reported.reduce((s,r)=>s+r.voters2022,0);
   baselineReported=be>0?100*bv/be:null;
  }
  let baselineAll=null;
@@ -510,12 +523,13 @@ function groupStats(id){
   baselineAll=be>0?100*bv/be:null;
  }
  const baseline=baselineReported??baselineAll;
- const baselineIsPartial=!!(baselineReported!=null&&full.length>0&&full.length<selected.length);
+ const baselineIsPartial=!!(baselineReported!=null&&reported.length>0&&reported.length<selected.length);
  const baseEligAll=selected.every(r=>val(r.eligible2022)>0)?selected.reduce((s,r)=>s+r.eligible2022,0):null;
- const baseEligFull=full.length&&full.every(r=>val(r.eligible2022)>0)?full.reduce((s,r)=>s+r.eligible2022,0):null;
- const eligibleCoverage=baseEligAll>0&&baseEligFull!=null?baseEligFull/baseEligAll:null;
+ const baseEligReported=reported.length&&reported.every(r=>val(r.eligible2022)>0)?reported.reduce((s,r)=>s+r.eligible2022,0):null;
+ const eligibleCoverage=baseEligAll>0&&baseEligReported!=null?baseEligReported/baseEligAll:null;
  const progress=current!=null&&baselineReported>0?100*current/baselineReported:null;
- return {id,n:selected.length,fullCount:full.length,current,baseline,baselineReported,baselineAll,baselineIsPartial,progress,eligibleCoverage,votedSum,eligSum,cityKeys:full.map(r=>r.key),partial:full.length>0&&full.length<selected.length,empty:full.length===0};
+ const anyPartial=reported.some(r=>!complete(getLive(r.name)));
+ return {id,n:selected.length,fullCount:reported.length,completeCount:full.length,current,baseline,baselineReported,baselineAll,baselineIsPartial,progress,eligibleCoverage,votedSum,eligSum,cityKeys:reported.map(r=>r.key),partial:reported.length>0&&(reported.length<selected.length||anyPartial),empty:reported.length===0};
 }
 /** Alias used by older tests expecting all-or-nothing completeCount semantics for demos. */
 function newPulseStats(pick){
@@ -873,7 +887,7 @@ function renderTable(){
  const q=norm(qRaw);
  const order=$('sort')?.value||'name';
  const dir=state.tableSortDir||1;
- const prog=r=>{const p=complete(getLive(r.name))?livePct(getLive(r.name)):null;return p!=null&&r.p2022>0?100*p/r.p2022:null};
+ const prog=r=>{const p=liveReported(getLive(r.name))?livePct(getLive(r.name)):null;return p!=null&&r.p2022>0?100*p/r.p2022:null};
  const statusRank=r=>{const l=getLive(r.name);if(!l)return 0;if(l.preserved_previous)return 1;if(!complete(l))return 2;return 3};
  const sortList=list=>{
   const copy=[...list];
@@ -904,7 +918,7 @@ function renderTable(){
   const g=groupById[gid];
   let list=rows.filter(r=>state.selected.has(r.key)&&r.group===gid);
   const total=list.length;
-  const reported=list.filter(r=>complete(getLive(r.name))).length;
+  const reported=list.filter(r=>liveReported(getLive(r.name))).length;
   const hits=q?list.filter(r=>norm(r.name).includes(q)):[];
   if(q)list=hits;
   list=sortList(list);
