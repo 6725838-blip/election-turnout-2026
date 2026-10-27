@@ -15,10 +15,22 @@ from zoneinfo import ZoneInfo
 ROOT = Path(__file__).resolve().parents[1]
 LIVE = ROOT / 'live-turnout.json'
 HISTORY = ROOT / 'data' / 'national_hourly_history.json'
+CODES = ROOT / 'scripts' / 'city_codes.json'
 YNET_CAT = 'https://www.ynet.co.il/news/category/184'
 GOVMAP = 'https://elections.govmap.gov.il/data/votes/latest/municipal_data.json'
+VOTES26_TURNOUT = 'https://votes26.com/api/v1/elections/26/turnout'
 UA = {'User-Agent': 'PublicTurnoutDashboard/1.0', 'Accept': '*/*'}
 IL = ZoneInfo('Asia/Jerusalem')
+
+# CEC-citing press city % @12:00 — sanity check against Votes26 localities
+PRESS_CITY_PCT = {
+    'באר שבע': 27.4, 'בני ברק': 28.4, 'קריית שמונה': 23.9, 'נצרת': 24.9,
+    'קריית אתא': 31.4, 'מודיעין־מכבים־רעות': 36.7, 'מודיעין עילית': 33.2,
+    'מעלה אדומים': 31.9, 'אשקלון': 29.0, 'שדרות': 30.3, 'דימונה': 28.8,
+    'אילת': 22.2, 'אום אל־פחם': 17.6, 'סחנין': 25.3, 'ביתר עילית': 28.3,
+    'אלעד': 32.0, 'רמת גן': 29.0, 'רמת השרון': 35.2, 'הוד השרון': 33.6,
+    'כפר סבא': 32.6, 'עפולה': 30.8, 'רהט': 36.9,
+}
 
 # e.g. שיעור ההצבעה עד 10:00 - 16.68% / עד השעה 12:00 ... 31.5%
 HEADLINE_RE = re.compile(
@@ -132,6 +144,107 @@ def _load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding='utf-8-sig'))
 
 
+def apply_cities_from_votes26(now: datetime) -> dict:
+    """Refresh baseline city rows from CEC station-file localities via Votes26."""
+    codes = _load_json(CODES)
+    by_code = {str(k): v for k, v in codes['by_code'].items()}
+    name_to_code = {v: str(k) for k, v in by_code.items()}
+    status, ctype, raw = _get(VOTES26_TURNOUT, timeout=40)
+    if 'json' not in (ctype or '').lower() and not raw.lstrip().startswith(b'{'):
+        return {'changed': False, 'error': f'unexpected ctype {ctype}'}
+    data = json.loads(raw.decode('utf-8'))
+    reports = [r for r in data.get('reports') or [] if r.get('localities')]
+    if not reports:
+        return {'changed': False, 'error': 'no localities'}
+    reports.sort(key=lambda r: r.get('at') or '')
+    rep = reports[-1]
+    at = datetime.fromisoformat(str(rep['at']).replace('Z', '+00:00')).astimezone(IL)
+    as_of = at.replace(microsecond=0).isoformat()
+
+    loc_pct: dict[str, float] = {}
+    for row in rep['localities']:
+        name = by_code.get(str(row[0]))
+        if name:
+            loc_pct[name] = round(float(row[1]) * 100.0, 2)
+    for name, press in PRESS_CITY_PCT.items():
+        got = loc_pct.get(name)
+        if got is not None and abs(got - press) > 0.35:
+            return {'changed': False, 'error': f'press mismatch {name}: {press} vs {got}'}
+
+    reg_counts: dict[str, dict] = {}
+    for reg in rep.get('regions') or []:
+        rid = str(reg.get('id') or '')
+        if not rid.startswith('city-'):
+            continue
+        name = by_code.get(rid.split('-', 1)[1])
+        e, v = reg.get('eligible'), reg.get('voters')
+        if not name or not isinstance(e, (int, float)) or not isinstance(v, (int, float)) or e <= 0:
+            continue
+        reg_counts[name] = {
+            'eligible': int(e),
+            'voted': int(v),
+            'reported_stations': int(reg['reported']) if isinstance(reg.get('reported'), (int, float)) else None,
+            'total_stations': int(reg['stations']) if isinstance(reg.get('stations'), (int, float)) else None,
+        }
+
+    records = []
+    for name in sorted(name_to_code):
+        pct = loc_pct.get(name)
+        if pct is None:
+            continue
+        row: dict = {
+            'city': name,
+            'turnout_pct': pct,
+            'as_of': as_of,
+            'partial': True,
+            'source_note': 'דיווחי קלפיות ועדת הבחירות (סיכום יישוב); coverage חלקי',
+        }
+        counts = reg_counts.get(name)
+        if counts:
+            row['eligible'] = counts['eligible']
+            row['voted'] = counts['voted']
+            row['turnout_pct'] = round(100.0 * counts['voted'] / counts['eligible'], 2)
+            if counts['reported_stations'] is not None:
+                row['reported_stations'] = counts['reported_stations']
+            if counts['total_stations'] is not None:
+                row['total_stations'] = counts['total_stations']
+        records.append(row)
+
+    prev = _load_json(LIVE) if LIVE.exists() else {}
+    prev_fp = json.dumps(
+        [(r.get('city'), r.get('turnout_pct'), r.get('voted'), r.get('as_of')) for r in (prev.get('records') or [])],
+        ensure_ascii=False, sort_keys=True,
+    )
+    new_fp = json.dumps(
+        [(r.get('city'), r.get('turnout_pct'), r.get('voted'), r.get('as_of')) for r in records],
+        ensure_ascii=False, sort_keys=True,
+    )
+    if prev_fp == new_fp:
+        return {'changed': False, 'cities': len(records), 'as_of': as_of}
+
+    live = dict(prev) if prev else {'format_version': 1}
+    live['format_version'] = 1
+    live['updated_at'] = now.isoformat(timespec='seconds')
+    live['records'] = records
+    live['source'] = (
+        'ועדת הבחירות המרכזית — ארצי ממסע״ת (עיתונות); '
+        'יישובים מדיווחי קלפיות (Votes26, מאומת מול ynet)'
+    )
+    live['notes'] = [
+        f"ארצי {live.get('national_turnout_pct')}% · {live.get('national_as_of')}",
+        f"{len(records)} יישובי בסיס מסיכום קלפיות ועדה (as_of {as_of}); partial.",
+        'GovMap municipal_data.json לכנסת 26 עדיין לא JSON.',
+    ]
+    LIVE.write_text(json.dumps(live, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    return {
+        'changed': True,
+        'cities': len(records),
+        'with_counts': sum(1 for r in records if 'eligible' in r),
+        'as_of': as_of,
+        'status': status,
+    }
+
+
 def apply_national(point: dict, now: datetime) -> dict:
     hist = _load_json(HISTORY)
     elections = hist.setdefault('elections', {})
@@ -234,11 +347,18 @@ def main() -> int:
         report['changed'] = True
         report['applied'] = result
     else:
-        # Refresh live timestamp only if we already have data? No — avoid noisy commits.
         report['changed'] = False
         if known:
             latest_t = max(known)
             report['current_latest'] = {'time': latest_t, 'turnout_pct': known[latest_t]}
+
+    try:
+        cities = apply_cities_from_votes26(now)
+    except Exception as exc:  # noqa: BLE001
+        cities = {'changed': False, 'error': str(exc)}
+    report['cities'] = cities
+    if cities.get('changed'):
+        report['changed'] = True
 
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return 0
