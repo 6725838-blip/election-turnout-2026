@@ -15,13 +15,23 @@ class NationalForecastTests(unittest.TestCase):
     def setUpClass(cls):
         cls.history = load_history()
 
-    def test_five_elections_with_points(self):
+    def test_complete_elections_with_points(self):
         elections = self.history['elections']
-        self.assertEqual(len(elections), 5)
-        for eid, e in elections.items():
+        complete = {
+            eid: e for eid, e in elections.items()
+            if e.get('final_turnout_pct') is not None
+        }
+        # At least the five curated completed elections remain usable for remaining-pp.
+        self.assertGreaterEqual(len(complete), 5)
+        for eid, e in complete.items():
             self.assertGreaterEqual(len(e['points']), 6, eid)
             self.assertTrue(all(p.get('verified') for p in e['points']))
-            self.assertIsNotNone(e.get('final_turnout_pct'))
+        # In-progress election day may appear without a final yet.
+        live = elections.get('2026-10')
+        if live is not None:
+            self.assertIsNone(live.get('final_turnout_pct'))
+            self.assertGreaterEqual(len(live.get('points') or []), 1)
+            self.assertTrue(all(p.get('verified') for p in live['points']))
 
     def test_exact_match_no_invention(self):
         e = self.history['elections']['2022-11']
