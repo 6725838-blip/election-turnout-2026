@@ -82,6 +82,23 @@
         {"time": "20:00", "turnout_pct": 66.3, "source_url": "https://www.gov.il/he/pages/voting-by-hour", "source_type": "official", "verified": true},
         {"time": "22:00", "turnout_pct": 70.6, "source_url": "https://www.gov.il/he/pages/voting-by-hour", "source_type": "official", "verified": true, "note": "סקר מדגמי בסגירה; הסופי הרשמי 70.63%."}
       ]
+    },
+    "2026-10": {
+      "label": "אוקטובר 2026 · כנסת 26",
+      "date": "2026-10-27",
+      "final_turnout_pct": null,
+      "final_source_url": null,
+      "final_source_type": null,
+      "points": [
+        {
+          "time": "10:00",
+          "turnout_pct": 16.68,
+          "source_url": "https://www.ynet.co.il/news/article/s1dhwyrnme",
+          "source_type": "secondary_citing_official",
+          "verified": true,
+          "note": "ממלא מקום מנכ״ל ועדת הבחירות דין ליבנה במסע״ת; מצוטט ב־ynet. מול 15.9% ב־2022."
+        }
+      ]
     }
   }
 }

@@ -1,7 +1,13 @@
 {
   "format_version": 1,
-  "source": "טרם חובר מקור נתוני השתתפות רשמי — הזנת אמת כבויה",
-  "updated_at": null,
-  "national_turnout_pct": null,
-  "records": []
+  "source": "ועדת הבחירות המרכזית — דיווח מסע״ת (דין ליבנה) כפי שפורסם ב־ynet",
+  "updated_at": "2026-10-27T11:05:00+02:00",
+  "national_turnout_pct": 16.68,
+  "national_as_of": "2026-10-27T10:00:00+02:00",
+  "national_source_url": "https://www.ynet.co.il/news/article/s1dhwyrnme",
+  "records": [],
+  "notes": [
+    "ארצי בלבד עד ש־GovMap municipal_data.json לכנסת 26 ייפתח",
+    "16.68% נכון לשעה 10:00; מול 15.9% ב־2022 באותה שעה"
+  ]
 }
