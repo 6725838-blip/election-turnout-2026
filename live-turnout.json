@@ -1,10 +1,10 @@
 {
   "format_version": 1,
-  "source": "ועדת הבחירות המרכזית — מסע״ת דין ליבנה כפי שפורסם ב־ynet / ישראל היום",
-  "updated_at": "2026-10-27T15:00:37+02:00",
-  "national_turnout_pct": 31.5,
-  "national_as_of": "2026-10-27T12:00:00+02:00",
-  "national_source_url": "https://www.ynet.co.il/news/article/hyiuqbc2zl",
+  "source": "ועדת הבחירות המרכזית — מסע״ת דין ליבנה כפי שפורסם ב־ynet",
+  "updated_at": "2026-10-27T15:11:20+02:00",
+  "national_turnout_pct": 44.9,
+  "national_as_of": "2026-10-27T14:00:00+02:00",
+  "national_source_url": "https://www.ynet.co.il/news/article/bkkekx02mg",
   "records": [
     {
       "city": "אום אל־פחם",
@@ -162,9 +162,8 @@
     }
   ],
   "notes": [
-    "ארצי 31.5% נכון ל־12:00 (ynet / דין ליבנה).",
-    "יישובים מסיכום ועדת הבחירות ב־ynet ובישראל היום; מסומנים partial כי נתוני יישוב חלקיים ומתעדכנים באיחור.",
-    "GovMap municipal_data.json לכנסת 26 עדיין מחזיר HTML — אין פיד ערים מלא עם בזב/מצביעים.",
-    "מקורות ערים: https://www.ynet.co.il/news/blogs/article/hkbbhw6nzg · https://www.israelhayom.co.il/news/politics/article/21716830"
+    "ארצי 44.9% נכון ל־14:00 (ynet / דין ליבנה).",
+    "רשומות יישוב עדיין לפי דיווח 12:00 (partial) עד שיתפרסם סיכום ערים חדש מהוועדה או ייפתח GovMap.",
+    "מקור ארצי: https://www.ynet.co.il/news/article/bkkekx02mg"
   ]
 }

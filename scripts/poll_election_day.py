@@ -32,6 +32,7 @@ ALT_NAT_RE = re.compile(
 )
 ARTICLE_RE = re.compile(r'/news/article/([a-zA-Z0-9]+)')
 SEED_ARTICLES = (
+    'https://www.ynet.co.il/news/article/bkkekx02mg',
     'https://www.ynet.co.il/news/article/hyiuqbc2zl',
     'https://www.ynet.co.il/news/article/s1dhwyrnme',
     'https://www.ynet.co.il/news/blogs/article/hkbbhw6nzg',

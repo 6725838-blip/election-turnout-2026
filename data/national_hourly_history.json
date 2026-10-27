@@ -105,7 +105,16 @@
           "source_type": "secondary_citing_official",
           "verified": true,
           "note": "ממלא מקום מנכ״ל ועדת הבחירות דין ליבנה; מצוטט ב־ynet. מול 28.4% ב־2022."
+        },
+        {
+          "time": "14:00",
+          "turnout_pct": 44.9,
+          "source_url": "https://www.ynet.co.il/news/article/bkkekx02mg",
+          "source_type": "secondary_citing_official",
+          "verified": true,
+          "note": "ממלא מקום מנכ״ל ועדת הבחירות דין ליבנה; מצוטט ב־ynet. עלייה של כ־6 נק׳ מול 38.9% ב־2022."
         }
+
 
       ]
     }
